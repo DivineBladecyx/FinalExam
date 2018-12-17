@@ -1,3 +1,4 @@
-spring:
-  datasource:
-    driver-class-name: com.mysql.jdbc.Driver
+dev:
+  name: вод╟╥ия╘
+  age: 26
+  id: 365
