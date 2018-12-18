@@ -5,7 +5,7 @@
 </head>
 
 <body>
-Welcome<br/>
+欢迎来到聊天室<br/>
 <input id="text" type="text" /><button onclick="send()">Send</button>    <button onclick="closeWebSocket()">Close</button>
 <div id="message">
 </div>
@@ -16,7 +16,7 @@ Welcome<br/>
 
     //判断当前浏览器是否支持WebSocket
     if('WebSocket' in window){
-        websocket = new WebSocket("ws://192.168.43.231:8080/WebSocket/1");
+        websocket = new WebSocket("ws://192.168.43.231:8080/WebSocket/2");
     }
     else{
         alert('Not support websocket')
