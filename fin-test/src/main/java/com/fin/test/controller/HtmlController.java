@@ -17,4 +17,8 @@ public class HtmlController {
     public String html2() {
         return "/index2.html";
     }
+    @GetMapping("/servlet")
+    public String servlet1() {
+        return "/UserServlet";
+    }
 }

@@ -9,58 +9,67 @@ import java.sql.Date;
 public class Messages {
     @Id
     @GeneratedValue
-    private String id;
-    private String formuser_id;
-    private String touser_id;
+    private String message_id;
+    private String message_fromuser_id;
+    private String message_touser_id;
     private Date message_time;
-    private String type;
-    private String infor;
+    private String message_type;
+    private String message_infor;
 
-    public String getId() {
-        return id;
+    public Messages(String message_fromuser_id, String message_touser_id, Date message_time, String message_type, String message_infor) {
+        this.message_fromuser_id = message_fromuser_id;
+        this.message_touser_id = message_touser_id;
+        this.message_time = message_time;
+        this.message_type = message_type;
+        this.message_infor = message_infor;
+
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String getMessage_id() {
+        return message_id;
     }
 
-    public String getFormuser_id() {
-        return formuser_id;
+    public void setMessage_id(String message_id) {
+        this.message_id = message_id;
     }
 
-    public void setFormuser_id(String formuser_id) {
-        this.formuser_id = formuser_id;
+    public String getMessage_fromuser_id() {
+        return message_fromuser_id;
     }
 
-    public String getTouser_id() {
-        return touser_id;
+    public void setMessage_fromuser_id(String message_fromuser_id) {
+        this.message_fromuser_id = message_fromuser_id;
     }
 
-    public void setTouser_id(String touser_id) {
-        this.touser_id = touser_id;
+    public String getMessage_touser_id() {
+        return message_touser_id;
     }
 
-    public Date getMessagetime() {
+    public void setMessage_touser_id(String message_touser_id) {
+        this.message_touser_id = message_touser_id;
+    }
+
+    public Date getMessage_time() {
         return message_time;
     }
 
-    public void setMessagetime(Date message_time) {
+    public void setMessage_time(Date message_time) {
         this.message_time = message_time;
     }
 
-    public String getType() {
-        return type;
+    public String getMessage_type() {
+        return message_type;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setMessage_type(String message_type) {
+        this.message_type = message_type;
     }
 
-    public String getInfor() {
-        return infor;
+    public String getMessage_infor() {
+        return message_infor;
     }
 
-    public void setInfor(String infor) {
-        this.infor = infor;
+    public void setMessage_infor(String message_infor) {
+        this.message_infor = message_infor;
     }
 }

@@ -1,14 +1,18 @@
 package com.fin.test.WebSocketCore;
 
+import com.fin.test.dimin.Entity.Messages;
+import com.fin.test.service.MessageService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
@@ -19,6 +23,8 @@ public class WebSocketServer {
     private Session session;
     private static Logger log = LogManager.getLogger(WebSocketServer.class);
     private String id = "";
+    @Autowired
+    private MessageService messageService;
 
     @OnOpen
     public void onOpen(@PathParam(value = "id") String id, Session session) {
@@ -47,6 +53,7 @@ public class WebSocketServer {
         //可以自己约定字符串内容，比如 内容|0 表示信息群发，内容|X 表示信息发给id为X的用户
         String sendMessage = message.split("[|]")[0];
         String sendUserId = message.split("[|]")[1];
+
         try {
             if (sendUserId.equals("0"))
                 sendtoAll(sendMessage);
@@ -67,10 +74,16 @@ public class WebSocketServer {
     }
     public void sendtoUser(String message,String sendUserId) throws IOException {
         if (webSocketSet.get(sendUserId) != null) {
-            if(!id.equals(sendUserId))
-                webSocketSet.get(sendUserId).sendMessage( "用户" + id + "发来消息：" + " <br/> " + message);
-            else
+            if(!id.equals(sendUserId)) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Date date = new Date(System.currentTimeMillis());
+                Messages amessage=new Messages(id,sendUserId,date, "0",message);
+                messageService.saveMessages(amessage);
+                webSocketSet.get(sendUserId).sendMessage("用户" + id + "发来消息：" + " <br/> " + message);
+            }
+            else {
                 webSocketSet.get(sendUserId).sendMessage(message);
+            }
         } else {
             //如果用户不在线则返回不在线信息给自己
             sendtoUser("当前用户不在线",id);
