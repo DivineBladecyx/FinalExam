@@ -25,7 +25,6 @@ public class WebSocketServer {
     private String id = "";
     @Autowired
     private MessageService messageService;
-
     @OnOpen
     public void onOpen(@PathParam(value = "id") String id, Session session) {
         this.session = session;
