@@ -2,13 +2,14 @@ package com.fin.test.dimin.Entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.sql.Date;
 
 @Entity
 public class Messages {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String message_id;
     private String message_fromuser_id;
     private String message_touser_id;
@@ -16,14 +17,14 @@ public class Messages {
     private String message_type;
     private String message_infor;
 
-    public Messages(String message_fromuser_id, String message_touser_id, Date message_time, String message_type, String message_infor) {
+   /* public Messages(String message_fromuser_id, String message_touser_id, Date message_time, String message_type, String message_infor) {
         this.message_fromuser_id = message_fromuser_id;
         this.message_touser_id = message_touser_id;
         this.message_time = message_time;
         this.message_type = message_type;
         this.message_infor = message_infor;
 
-    }
+    }*/
 
     public String getMessage_id() {
         return message_id;

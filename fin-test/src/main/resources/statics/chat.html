@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" >
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <title>WebSocket</title>
 </head>
@@ -11,12 +11,14 @@
 </div>
 </body>
 
-<script type="text/javascript">
+<p th:text="'欢迎您！用户： ' + ${user_id} + '!'" ></p>
+<script th:inline="javascript">
+    var id = [[${user_id}]];
     var websocket = null;
 
     //判断当前浏览器是否支持WebSocket
     if('WebSocket' in window){
-        websocket = new WebSocket("ws://localhost:8080/WebSocket/1");
+        websocket = new WebSocket("ws://localhost:8080/WebSocket/"+id);
     }
     else{
         alert('Not support websocket')

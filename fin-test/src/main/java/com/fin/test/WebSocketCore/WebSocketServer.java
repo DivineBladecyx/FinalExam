@@ -1,12 +1,18 @@
 package com.fin.test.WebSocketCore;
 
+import com.fin.test.controller.MessagesController;
 import com.fin.test.dimin.Entity.Messages;
+import com.fin.test.dimin.Repository.MessagesRepository;
 import com.fin.test.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
@@ -17,18 +23,22 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 @ServerEndpoint(value="/WebSocket/{id}")
-public class WebSocketServer {
+public class WebSocketServer  {
     private static int onlineCount = 0;
     private static ConcurrentHashMap<String, WebSocketServer> webSocketSet = new ConcurrentHashMap<>();
     private Session session;
     private static Logger log = LogManager.getLogger(WebSocketServer.class);
+    private static ApplicationContext applicationContext=null;
     private String id = "";
-    @Autowired
-    private MessageService messageService;
+    public static void setApplicationContext(ApplicationContext Context){
+        applicationContext=Context;
+    }
+
     @OnOpen
     public void onOpen(@PathParam(value = "id") String id, Session session) {
         this.session = session;
         this.id = id;
+
         webSocketSet.put(id, this);
         addOnlineCount();
         log.info("用户" + id + "加入！当前在线人数为" + getOnlineCount());
@@ -71,14 +81,22 @@ public class WebSocketServer {
     public void sendMessage(String message) throws IOException {
         this.session.getBasicRemote().sendText(message);
     }
+    @Autowired
+    private MessageService messageService;
+    @PostMapping("")
     public void sendtoUser(String message,String sendUserId) throws IOException {
+        messageService=applicationContext.getBean(MessageService.class);
         if (webSocketSet.get(sendUserId) != null) {
             if(!id.equals(sendUserId)) {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 Date date = new Date(System.currentTimeMillis());
-                Messages amessage=new Messages(id,sendUserId,date, "0",message);
-                messageService.saveMessages(amessage);
+                Messages amessage=new Messages();
+                amessage.setMessage_fromuser_id(id);
+                amessage.setMessage_touser_id(sendUserId);
+               amessage.setMessage_time(date);
+                amessage.setMessage_infor(message);
+               amessage.setMessage_type("0");
                 webSocketSet.get(sendUserId).sendMessage("用户" + id + "发来消息：" + " <br/> " + message);
+                messageService.saveMessages(amessage);
             }
             else {
                 webSocketSet.get(sendUserId).sendMessage(message);
@@ -108,7 +126,6 @@ public class WebSocketServer {
     public static synchronized void subOnlineCount() {
         WebSocketServer.onlineCount--;
     }
-
 
 }
 
