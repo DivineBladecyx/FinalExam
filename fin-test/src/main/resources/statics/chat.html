@@ -7,11 +7,12 @@
 <body>
 欢迎来到聊天室<br/>
 <input id="text" type="text" /><button onclick="send()">Send</button>    <button onclick="closeWebSocket()">Close</button>
+<p th:text="'欢迎您！用户： ' + ${user_id} + '!'" ></p>
 <div id="message">
 </div>
 </body>
 
-<p th:text="'欢迎您！用户： ' + ${user_id} + '!'" ></p>
+
 <script th:inline="javascript">
     var id = [[${user_id}]];
     var websocket = null;

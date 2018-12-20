@@ -15,19 +15,16 @@ import java.util.HashMap;
 
 
 public class HtmlController {
-    @RequestMapping("/UserLogin")
-    public String thymeleaf(Model model){
-        model.addAttribute("name","yuanfei");
-        return "Login";
+    @GetMapping("/Start")
+    public String Start() {
+        return "/Start.html";
     }
-
-    @GetMapping("/html2")
-    public String html2() {
-        return "/index2.html";
+    @GetMapping("/Login")
+    public String Login() {
+        return "/Login.html";
     }
-    @GetMapping("/servlet")
-    public String servlet1() {
-        return "/UserServlet";
+    @GetMapping("/Register")
+    public String Register() {
+        return "/Register.html";
     }
-
 }
