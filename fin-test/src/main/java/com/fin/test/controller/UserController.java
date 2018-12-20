@@ -23,7 +23,7 @@ public class UserController {
         if(user1!=null) {
             if (user.getUser_password().equals(user1.getUser_password())) {
                 model.addAttribute("user_id", user.getUser_id());//将user存放到session
-                return "chat";
+                return "redirect:/FriendsController/showfriends?user_id="+user.getUser_id();
             } else {
                 System.out.println("用户" + user.getUser_id() + "用户名或密码错误");
                 return "Login";

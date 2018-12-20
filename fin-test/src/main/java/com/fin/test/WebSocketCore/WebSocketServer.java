@@ -60,16 +60,27 @@ public class WebSocketServer  {
     public void onMessage(String message, Session session) {
         log.info("来自客户端的消息:" + message);
         //可以自己约定字符串内容，比如 内容|0 表示信息群发，内容|X 表示信息发给id为X的用户
-        String sendMessage = message.split("[|]")[0];
-        String sendUserId = message.split("[|]")[1];
+        String[] Message=message.split("[|]");
 
-        try {
-            if (sendUserId.equals("0"))
+        if(Message.length==2) {
+            String sendMessage = Message[0];
+            String sendUserId = Message[1];
+            try {
+                    sendtoUser(sendMessage, sendUserId);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else{
+            String sendMessage=Message[0];
+            for(int i=1;i<Message.length;i++){
+                webSocketSet.put(Message[i],this);
+            }
+            try {
                 sendtoAll(sendMessage);
-            else
-                sendtoUser(sendMessage, sendUserId);
-        } catch (IOException e) {
-            e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
     }

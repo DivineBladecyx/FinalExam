@@ -10,49 +10,40 @@ import java.sql.Date;
 public class Friends {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
-    private String user_id;
-    private String friend_id;
-    private String group_id;
-    private String crowd_id;
+    private String f_id;
+    private String f_user_id;
+    private String f_friend_id;
+    private String f_group_id;
 
-    public String getId() {
-        return id;
+    public String getF_id() {
+        return f_id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setF_id(String f_id) {
+        this.f_id = f_id;
     }
 
-    public String getUser_id() {
-        return user_id;
+    public String getF_user_id() {
+        return f_user_id;
     }
 
-    public void setUser_id(String user_id) {
-        this.user_id = user_id;
+    public void setF_user_id(String f_user_id) {
+        this.f_user_id = f_user_id;
     }
 
-    public String getFriend_id() {
-        return friend_id;
+    public String getF_friend_id() {
+        return f_friend_id;
     }
 
-    public void setFriend_id(String friend_id) {
-        this.friend_id = friend_id;
+    public void setF_friend_id(String f_friend_id) {
+        this.f_friend_id = f_friend_id;
     }
 
-    public String getGroup_id() {
-        return group_id;
+    public String getF_group_id() {
+        return f_group_id;
     }
 
-    public void setGroup_id(String group_id) {
-        this.group_id = group_id;
-    }
-
-    public String getCrowd_id() {
-        return crowd_id;
-    }
-
-    public void setCrowd_id(String crowd_id) {
-        this.crowd_id = crowd_id;
+    public void setF_group_id(String f_group_id) {
+        this.f_group_id = f_group_id;
     }
 }

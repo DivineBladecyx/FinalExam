@@ -3,17 +3,23 @@
 <head>
     <title>WebSocket</title>
 </head>
-
-<body>
-欢迎来到聊天室<br/>
-<input id="text" type="text" /><button onclick="send()">Send</button>    <button onclick="closeWebSocket()">Close</button>
-<p th:text="'欢迎您！用户： ' + ${user_id} + '!'" ></p>
-<div id="message">
-</div>
-</body>
-
-
 <script th:inline="javascript">
+    var send_id="";
+    var send_id_array;
+    var crowdsIdList;
+    function openchat(send_user_id) {
+        send_id_array=new Array([[${crowdsList.size()}]]);
+        crowdsIdList=[[${crowdsIdList}]];
+        send_id=send_user_id;
+        document.getElementById("message").style.display="block";
+       for(var i=0;i<[[${crowdsList.size()}]];i++)
+       {
+          if(crowdsIdList.get(i)==[[${send_id}]]){
+             send_id_array.add([[${crowdsList.get(i).getCrowd_member()}]]);
+          }
+       }
+        alert(send_id_array);
+    }
     var id = [[${user_id}]];
     var websocket = null;
 
@@ -62,8 +68,54 @@
 
     //发送消息
     function send(){
-        var message = document.getElementById('text').value;
-        websocket.send(message);
+        if(send_id<1000) {
+            var message = document.getElementById('text').value;
+            var Finmessage = message + "|" + send_id;
+            websocket.send(Finmessage);
+        }
+        else{
+
+            var message = document.getElementById('text').value;
+            for(var i=0;i<send_id_array.length;i++){
+
+            }
+        }
     }
+
 </script>
+<body>
+<div id="message" style="text-align: center;display: none">
+    <br>
+    <input id="text" type="text" /><br>
+    <button onclick="send()">发送</button><br>
+</div>
+
+<p th:text="'欢迎您！用户： ' + ${user_id} + '!'" ></p>
+<table>
+    <h1>好友列表</h1>
+    <th>用户名</th>
+    <th>昵称</th>
+    <th>年龄</th>
+    <th>性别</th>
+    <th>注册时间</th>
+    <th>备注</th>
+<tr th:each="friend : ${userfriendList}">
+    <td><a  th:href="@{'javascript:openchat('+${friend.getUser_id()}+')'}"  th:text="${friend.getUser_id()}">Title ...</a></td>
+    <td><a href="#" th:text="${friend.getUser_nickname()}">Title ...</a></td>
+    <td><a href="#" th:text="${friend.getUser_age()}">Title ...</a></td>
+    <td><a href="#" th:text="${friend.getUser_sex()}">Title ...</a></td>
+   <td><a href="#" th:text="${friend.getUser_registime()}">Title ...</a></td>
+    <td><a href="#" th:text="${friend.getUser_comments()}">Title ...</a></td>
+</tr>
+</table>
+<table>
+    <h1>群列表</h1>
+    <th>群id</th>
+    <tr th:each="crowds : ${crowdsList}">
+        <td><a  th:onclick="javascript:openchat('+${crowds.getCrowd_id()}+')"  th:text="${crowds.getCrowd_id()}">Title ...</a></td>
+    </tr>
+</table>
+<div id="ww"></div>
+
+</body>
 </html>
