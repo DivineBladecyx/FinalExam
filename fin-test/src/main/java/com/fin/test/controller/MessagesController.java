@@ -24,6 +24,4 @@ public class MessagesController {
     public void saveMessages(Messages messages){
         messageService.saveMessages(messages);
     }
-
-
 }

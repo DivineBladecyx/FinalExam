@@ -6,10 +6,12 @@ import com.fin.test.dimin.Entity.User;
 import com.fin.test.service.CrowdsService;
 import com.fin.test.service.FriendsService;
 import com.fin.test.service.UserService;
+import org.apache.tomcat.util.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +25,7 @@ public class FriendsController {
 private UserService userService;
 @Autowired
 private CrowdsService crowdsService;
+
 @RequestMapping("/showfriends")
     public String showfriends(User user, Model model){
     List<Friends>friendsList=friendsService.findALL();
@@ -58,6 +61,7 @@ private CrowdsService crowdsService;
         crowdsIdList.add(crowdsList.get(i).getCrowd_id());
     }
     model.addAttribute("crowdsIdList",crowdsIdList);
+
 
     return "chat";
 }

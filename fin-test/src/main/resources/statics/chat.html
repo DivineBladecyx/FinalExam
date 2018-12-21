@@ -6,19 +6,27 @@
 <script th:inline="javascript">
     var send_id="";
     var send_id_array;
-    var crowdsIdList;
+    var crowdsList;
+    var result=[];
+
     function openchat(send_user_id) {
-        send_id_array=new Array([[${crowdsList.size()}]]);
-        crowdsIdList=[[${crowdsIdList}]];
-        send_id=send_user_id;
         document.getElementById("message").style.display="block";
-       for(var i=0;i<[[${crowdsList.size()}]];i++)
-       {
-          if(crowdsIdList.get(i)==[[${send_id}]]){
-             send_id_array.add([[${crowdsList.get(i).getCrowd_member()}]]);
-          }
-       }
-        alert(send_id_array);
+        send_id_array=new Array([[${crowdsList.size()}]]);
+        crowdsList=[[${crowdsList}]];
+
+        send_id = send_user_id;
+        for(var i=0;i<crowdsList.length;i++) {
+            alert(crowdsList.get(i).getCrowd_id());
+            var js = {};
+
+            js.Crowd_id = js[i].getCrowd_id();
+            if(js.Crowd_id.equals(send_id)) {
+                send_id_array.add(js[i].getCrowd_member());
+                result.push(js);
+            }
+        }
+
+
     }
     var id = [[${user_id}]];
     var websocket = null;
@@ -76,9 +84,8 @@
         else{
 
             var message = document.getElementById('text').value;
-            for(var i=0;i<send_id_array.length;i++){
+                alert(send_id);
 
-            }
         }
     }
 
@@ -112,7 +119,7 @@
     <h1>群列表</h1>
     <th>群id</th>
     <tr th:each="crowds : ${crowdsList}">
-        <td><a  th:onclick="javascript:openchat('+${crowds.getCrowd_id()}+')"  th:text="${crowds.getCrowd_id()}">Title ...</a></td>
+        <td><a  th:href="@{'javascript:openchat('+${crowds.getCrowd_id()}+')'}"  th:text="${crowds.getCrowd_id()}">Title ...</a></td>
     </tr>
 </table>
 <div id="ww"></div>
