@@ -14,5 +14,8 @@ public class CrowdsService {
     public List<Crowds> findAll(){
         return crowdsRepository.findAll();
     }
+    public void saveCrowds(Crowds crowds) {
+        crowdsRepository.save(crowds);
+    }
 
 }

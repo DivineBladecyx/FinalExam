@@ -89,6 +89,17 @@ function reject() {
     websocket.send(adddefeat);
     location.reload();
 }
+function agreecrowd() {
+    var sendid = fromuser_id;
+    var Finmessage="100007"+"|"+sendid+"|"+crowd_id;
+    websocket.send(Finmessage);
+}
+function rejectcrowd() {
+    var sendid = fromuser_id;
+    var Finmessage="100014"+"|"+sendid+"|"+crowd_id;
+    websocket.send(Finmessage);
+}
+
 
 
 

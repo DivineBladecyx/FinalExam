@@ -10,7 +10,7 @@
     var fromuser_id;
     var id = [[${user_id}]];
     var websocket = null;
-
+var crowd_id;
     //判断当前浏览器是否支持WebSocket
     if('WebSocket' in window){
         websocket = new WebSocket("ws://localhost:8080/WebSocket/"+id);
@@ -119,8 +119,24 @@
                 }
                 setAddMessageInnerHTML(Finmessage);
             }
-
-
+            else if(tag=='100006'){
+                var fromuserid = Message[1];
+                var crowdid=Message[2];
+                var Finmessage = "<div>" + "用户" + fromuserid + ":  请求加群" +crowdid+ "</div>" + " <a href='javascript:agreecrowd()'>同意</a><a href='javascript:rejectcrowd()'>拒绝</a><br/>";
+               fromuser_id=fromuserid;
+               crowd_id=crowdid
+                setAddMessageInnerHTML(Finmessage)
+            }
+            else if(tag=='100007'){
+                var crowdid=Message[2];
+                Finmessage = "<div>" + "您已加入群" + crowdid  + "</div>" + "<button onclick='location.reload()'>确认</button>";
+                setAddMessageInnerHTML(Finmessage);
+            }
+            else if(tag=='100014'){
+                var crowdid=Message[2];
+                Finmessage = "<div>" + "您已被拒绝加入群" + crowdid  + "</div>" + "<button onclick='location.reload()'>确认</button>";
+                setAddMessageInnerHTML(Finmessage)
+            }
             //fromuser_id = message.split("|")[1];
             //setAddMessageInnerHTML(message.split("|")[0]+message.split("|")[1]+message.split("|")[2]);
         }

@@ -164,6 +164,55 @@ public class WebSocketServer  {
         } else if (Integer.valueOf(Message[0]) > 100000) {//群聊和群操作
             String tag = Message[0];
             switch (tag) {
+                case "100007": {//加群成功
+                    crowdsService = applicationContext.getBean(CrowdsService.class);
+                    List<Crowds> crowdsList = crowdsService.findAll();
+                    String crowdid = Message[2];
+                    String sendid=Message[1];
+                    Crowds crowds=new Crowds();
+                    for (int i = 0; i < crowdsList.size(); i++) {
+                        if (crowdid.equals(crowdsList.get(i).getCrowd_id())) {
+                         crowds.setCrowd_id(crowdid);
+                         crowds.setCrowd_member(sendid);
+                         crowds.setCrowd_owner_id(crowdsList.get(i).getCrowd_owner_id());
+                         crowdsService.saveCrowds(crowds);
+                         break;
+                        }
+                    }
+                    try {
+                        sendOperateMessage(message,sendid);
+                        break;
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                case "100014": {//拒绝加群
+                    crowdsService = applicationContext.getBean(CrowdsService.class);
+                    String sendid = Message[1];
+                    try {
+                        sendOperateMessage(message, sendid);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                case "100006": {//群添加
+                    crowdsService = applicationContext.getBean(CrowdsService.class);
+                    List<Crowds> crowdsList = crowdsService.findAll();
+                    String crowdid = Message[2];
+
+
+                        for (int i = 0; i < crowdsList.size(); i++) {
+                            if (crowdid.equals(crowdsList.get(i).getCrowd_id())) {
+                                try {
+                                    sendOperateMessage(message,crowdsList.get(i).getCrowd_owner_id());
+                                    break;
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                        }
+                    }
+                }
+                break;
                 case "100011": {//查询群成员信息
                     crowdsService = applicationContext.getBean(CrowdsService.class);
                     String crowdid=Message[2];
