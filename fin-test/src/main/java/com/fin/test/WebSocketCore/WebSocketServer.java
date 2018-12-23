@@ -59,19 +59,86 @@ public class WebSocketServer  {
     @OnMessage
     public void onMessage(String message, Session session) {
         log.info("来自客户端的消息:" + message);
-        //可以自己约定字符串内容，比如 内容|0 表示信息群发，内容|X 表示信息发给id为X的用户
         String[] Message=message.split("[|]");
 
-        if(Message.length==2) {
-            String sendMessage = Message[0];
-            String sendUserId = Message[1];
-            try {
-                    sendtoUser(sendMessage, sendUserId);
-            } catch (IOException e) {
-                e.printStackTrace();
+       // System.out.println(Message[1]);
+        if(Message.length==4) {//聊天信息
+            String tag=Message[2];
+            switch (tag) {
+                case "100001": {//1.单对单
+                    String sendmessage = message;
+                    String sendid = Message[3];
+                    try {
+                        sendtoUser(sendmessage, sendid);
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+                case "100002": {//2.群聊
+
+                }
+                break;
+
+                case "100009": {//9.视频消息
+
+                }
+                break;
             }
         }
-        else{
+        else if (Message.length==3) {//操作信息
+            String tag=Message[1];
+            switch (tag) {
+                case "100003": {//3.好友添加
+                    String sendid = Message[2];
+                    try {
+
+                        sendAdd(message, sendid);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+                case "100004": {//4.好友添加成功
+                     String sendid=Message[0];
+                    try {
+
+                        sendAdd(message, sendid);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+                case "100008": {//8.图片消息
+                    String sendid=Message[0];
+                    try {
+
+                        sendAdd(message, sendid);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+                case "100005": {//5.删除好友
+
+                }
+                break;
+                case "100006": {//6.群添加
+
+                }
+                break;
+                case "100007": {//7.加群成功
+
+                }
+                break;
+            }
+        }
+        else{//群聊
+            String tag=Message[2];
+        }
+
+      /*  else if(Message.length>2&&!message.split("[|]")[0].equals("")){//群聊
             String sendMessage=Message[0];
             for(int i=1;i<Message.length;i++){
                 webSocketSet.put(Message[i],this);
@@ -82,7 +149,32 @@ public class WebSocketServer  {
                 e.printStackTrace();
             }
         }
+      else if(Message.length==3&&!message.split("[|]")[0].equals("`")){//说明是添加好友成功的信息
+            try {
+                sendtoUseradd("您和"+message.split("[|]")[2]+"已加为好友,开始聊天吧！",message.split("[|]")[1]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else if(Message.length==3&&message.split("[|]")[0].equals("`")){
+            try {
+                sendtoUseradd(message.split("[|]")[2]+"已拒绝",message.split("[|]")[1]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else if(Message.length==1&&Integer.valueOf(message)<1000){//说明是添加好友的信息
+            try {
 
+                sendtoUseradd("用户"+"|"+id+"|"+"请求加您为好友",message);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else if(Message.length==1&&Integer.valueOf(message)>1000){//说明是加群信息
+        }
+        else{//加群成功信息
+        }*/
     }
     @OnError
     public void onError(Session session, Throwable error) {
@@ -95,7 +187,21 @@ public class WebSocketServer  {
     @Autowired
     private MessageService messageService;
     @PostMapping("")
-    public void sendtoUser(String message,String sendUserId) throws IOException {
+    public void sendAdd(String message,String sendUserId) throws IOException {//添加好友
+
+        if (webSocketSet.get(sendUserId) != null) {
+            if(!id.equals(sendUserId)) {
+                    webSocketSet.get(sendUserId).sendMessage(message);//添加好友的消息
+            }
+            else {
+                webSocketSet.get(sendUserId).sendMessage(message);
+            }
+        } else {
+            //如果用户不在线则返回不在线信息给自己
+            sendtoUser("当前用户不在线",id);
+        }
+    }
+    public void sendtoUser(String message,String sendUserId) throws IOException {//聊天信息
         messageService=applicationContext.getBean(MessageService.class);
         if (webSocketSet.get(sendUserId) != null) {
             if(!id.equals(sendUserId)) {
@@ -106,7 +212,7 @@ public class WebSocketServer  {
                amessage.setMessage_time(date);
                 amessage.setMessage_infor(message);
                amessage.setMessage_type("0");
-                webSocketSet.get(sendUserId).sendMessage("用户" + id + "发来消息：" + " <br/> " + message);
+                webSocketSet.get(sendUserId).sendMessage(message);
                 messageService.saveMessages(amessage);
             }
             else {
