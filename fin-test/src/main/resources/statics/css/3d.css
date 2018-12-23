@@ -1,0 +1,56 @@
+.head_string{
+/*
+    font-size: 4em;
+    font-family: "microsoft yahei";
+    color: #FFFFFF;
+    font-weight: bold;
+*/
+	position: absolute;
+	top: 35px;
+	font-family: "华文行楷";
+	font-weight: bold;
+	font-size: 52px;
+	color: #7F969B;
+	text-shadow: 5px 5px 2px #697C55;
+}   
+.head_string > span{
+    position: relative;
+    display: inline-block;
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    -webkit-perspective: 500;
+    -moz-perspective: 500;
+    -ms-perspective: 500;
+    perspective: 500;
+    -webkit-font-smoothing: antialiased;
+}
+span:before,span:after{
+    position: absolute;
+    top: -3px;
+    left: -1px;
+    content: attr(data-text);
+    -webkit-transform-origin: left top;
+    -moz-transform-origin: left top;
+    -ms-transform-origin: left top;
+    transform-origin: left top;
+    -webkit-transition: all ease-out 0.3s;
+    -moz-transition: all ease-out 0.3s;
+    -ms-transition: all ease-out 0.3s;
+    transition: all ease-out 0.3s;
+}
+span:before{
+    color: rgba(0,0,0,0.3);
+    -webkit-transform: scale(1.1,1) skew(0,20deg);
+    -moz-transform: scale(1.1,1) skew(0,20deg);
+    -ms-transform: scale(1.1,1) skew(0,20deg);
+    transform: scale(1.1,1) skew(0,20deg);
+}
+span:after{
+    color: #9B9B70;
+    -webkit-transform: rotateY(-40deg);
+    -moz-transform: rotateY(-40deg);
+    -ms-transform: rotateY(-40deg);
+    transform: rotateY(-40deg);
+    text-shadow: -1px 0 1px #6B6D43, 1px 0 1px rgba(0,0,0,0.8);
+}

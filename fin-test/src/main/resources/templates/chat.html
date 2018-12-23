@@ -31,6 +31,7 @@ var crowd_id;
 
     //接收到消息的回调方法
     websocket.onmessage = function(event) {
+
         var message = event.data;
         var Message = message.split("|");
         if (Message.length == 4 && Message[0] < 100000) {//处理聊天消息

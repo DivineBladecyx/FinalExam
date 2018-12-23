@@ -27,4 +27,16 @@ public class HtmlController {
     public String Register() {
         return "/Register.html";
     }
+    @GetMapping("/load_1")
+    public String load_1() {
+        return "/load_1.html";
+    }
+    @GetMapping("/onchat")
+    public String onchat() {
+        return "/onchat.html";
+    }
+    @GetMapping("/user_infor")
+    public String user_infor() {
+        return "/user_infro.html";
+    }
 }

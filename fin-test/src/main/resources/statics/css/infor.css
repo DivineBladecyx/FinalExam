@@ -1,0 +1,68 @@
+
+body{
+	background: #3C9687;
+}
+
+
+
+.user_image{
+	
+	position: absolute;
+	top: 80px;
+	left: 60px;
+	
+	width: 130px;
+	height: 130px;
+}
+.user_id{
+	position: absolute;
+	top: 110px;
+	left: 230px;
+	
+	font-weight: 200;
+	font-size: 18px;
+}
+.form01{
+	position: absolute;
+	top: 250px;
+	left: 60px;
+}
+.input01{
+	width: 200px;
+}
+
+.loc01{
+	position: absolute;
+	top: 0px;
+	left: 300px;
+}
+.btn-lo{
+	position: absolute;
+	top: -170px;
+	left: 380px;
+}
+.btn-bt{
+	
+	width: 80px;
+	height: 25px;
+	border: 0;
+	background-color: #548CC6;
+	border-radius: 5px;
+}
+.btn-bt:hover{
+	background-color: #2AD9B8;
+}
+.bj{
+	position: absolute;
+	top: 165px;
+	left: 440px;
+}
+.img-lo{
+	position: absolute;
+	top: -100px;
+	left: 170px;
+	
+}
+.file-bt{
+	
+}

@@ -1,0 +1,139 @@
+@charset "utf-8";
+
+ .chatbox {
+	 		
+	 
+            width: 235px;
+            background: #fff;
+            border-radius: 6px;
+            overflow: hidden;
+            height: 490px;
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            margin-left: -115px;
+            overflow-y: auto;
+	 		border-radius: 10px;
+        }
+
+        .topmenu {
+            height: 69px;
+            width: 250px;
+            border-bottom: 1px solid #d8dfe3;
+        }
+
+
+
+        .friendslist {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 250px;
+            height: 800px;
+            border: 1px
+        }
+
+        .abl {
+            position: absolute;
+            top: 80px;
+            visibility: hidden;
+        }
+
+        .friend {
+            height: 100px;
+            width: 250px;
+            border-bottom: 1px solid #e7ebee;
+            position: relative;
+
+
+        }
+
+        .friend:hover {
+            background: #f1f4f6;
+            cursor: pointer;
+        }
+
+        .cluster {
+            height: 100px;
+            width: 250px;
+            border-bottom: 1px solid #e7ebee;
+            position: relative;
+        }
+
+        .cluster:hover {
+            background: #f1f4f6;
+            cursor: pointer;
+        }
+
+        .history {
+            height: 100px;
+            width: 250px;
+            border-bottom: 1px solid #e7ebee;
+            position: relative;
+        }
+
+        .history:hover {
+            background: #f1f4f6;
+            cursor: pointer;
+        }
+
+        .img {
+            width: 40px;
+            border-radius: 50%;
+            margin: 15px;
+            float: left;
+        }
+
+        .floatingImg {
+            width: 40px;
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 12px;
+            border: 3px solid #fff;
+        }
+
+        .p {
+            padding: 15px 0 0 0;
+            float: left;
+            width: 180px;
+        }
+
+        .p strong {
+            font-weight: 600;
+            font-size: 15px;
+            color: #597a96;
+        }
+
+        .p span {
+            font-size: 13px;
+            font-weight: 400;
+            color: #aab8c2;
+        }
+
+        .status {
+            background: #26c281;
+            border-radius: 50%;
+            width: 9px;
+            height: 9px;
+            position: absolute;
+            top: 31px;
+            right: 17px;
+        }
+
+        .status.away {
+            background: #ffce54;
+        }
+
+        .status.inactive {
+            background: #eaeef0;
+        }
+
+        .line {
+            background-color: rgb(63, 63, 141);
+            size: 1.5px
+        }
+
+        li {
+            list-style: none;
+        }
