@@ -34,7 +34,7 @@ private CrowdsService crowdsService;
 
     @RequestMapping(value = "getfriend" ,method = RequestMethod.POST)
     @ResponseBody
-    public String getfriend(@RequestParam(value = "friend",defaultValue = "")String friend) {
+    public User getfriend(@RequestParam(value = "friend",defaultValue = "")String friend,Model model) {
         List<User>userList=userService.findALL();
         User friend1=new User();
         for (int i=0;i<userList.size();i++){
@@ -43,10 +43,7 @@ private CrowdsService crowdsService;
                 break;
             }
         }
-
-
-        
-        return "/showfriends";
+        return friend1;
     }
     @RequestMapping(value = "getStringParam" ,method = RequestMethod.POST)
     @ResponseBody
@@ -77,8 +74,15 @@ private CrowdsService crowdsService;
     List<Crowds>crowdsList=new ArrayList<Crowds>();
     List<User>crowdsMemberList=new ArrayList<User>();
     for(int i=0;i<allcrowdsList.size();i++){
-        if(allcrowdsList.get(i).getCrowd_member().equals(user.getUser_id())||allcrowdsList.get(i).getCrowd_owner_id().equals(user.getUser_id())){
-            crowdsList.add(allcrowdsList.get(i));
+            if (allcrowdsList.get(i).getCrowd_member().equals(user.getUser_id()) || allcrowdsList.get(i).getCrowd_owner_id().equals(user.getUser_id())) {
+                crowdsList.add(allcrowdsList.get(i));
+        }
+    }
+    for (int i = 0; i < crowdsList.size() - 1; i++) {
+        for (int j = crowdsList.size() - 1; j > i; j--) {
+            if (crowdsList.get(j).getCrowd_id().equals(crowdsList.get(i).getCrowd_id())) {
+                crowdsList.remove(j);
+            }
         }
     }
     for(int i=0;i<friendsList.size();i++){
@@ -97,8 +101,6 @@ private CrowdsService crowdsService;
     model.addAttribute("user_id",user.getUser_id());
     model.addAttribute("userfriendList",friendList);
     model.addAttribute("crowdsList",crowdsList);
-
-
     return "chat";
 }
 }

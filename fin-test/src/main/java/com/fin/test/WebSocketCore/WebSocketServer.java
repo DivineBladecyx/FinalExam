@@ -1,9 +1,15 @@
 package com.fin.test.WebSocketCore;
 
 import com.fin.test.controller.MessagesController;
+import com.fin.test.dimin.Entity.Crowds;
+import com.fin.test.dimin.Entity.Friends;
 import com.fin.test.dimin.Entity.Messages;
+import com.fin.test.dimin.Entity.User;
 import com.fin.test.dimin.Repository.MessagesRepository;
+import com.fin.test.service.CrowdsService;
+import com.fin.test.service.FriendsService;
 import com.fin.test.service.MessageService;
+import com.fin.test.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -19,6 +25,7 @@ import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
@@ -33,7 +40,10 @@ public class WebSocketServer  {
     public static void setApplicationContext(ApplicationContext Context){
         applicationContext=Context;
     }
-
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private CrowdsService crowdsService;
     @OnOpen
     public void onOpen(@PathParam(value = "id") String id, Session session) {
         this.session = session;
@@ -59,11 +69,11 @@ public class WebSocketServer  {
     @OnMessage
     public void onMessage(String message, Session session) {
         log.info("来自客户端的消息:" + message);
-        String[] Message=message.split("[|]");
+        String[] Message = message.split("[|]");
 
-       // System.out.println(Message[1]);
-        if(Message.length==4) {//聊天信息
-            String tag=Message[2];
+        // System.out.println(Message[1]);
+        if (Message.length == 4 && Integer.valueOf(Message[0]) < 100000) {//单聊天信息
+            String tag = Message[2];
             switch (tag) {
                 case "100001": {//1.单对单
                     String sendmessage = message;
@@ -86,42 +96,60 @@ public class WebSocketServer  {
                 }
                 break;
             }
-        }
-        else if (Message.length==3) {//操作信息
-            String tag=Message[1];
+        } else if (Message.length == 3 && Integer.valueOf(Message[0]) < 100000) {//操作信息
+            String tag = Message[1];
             switch (tag) {
                 case "100003": {//3.好友添加
                     String sendid = Message[2];
                     try {
 
-                        sendAdd(message, sendid);
+                        sendOperateMessage(message, sendid);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
                 break;
                 case "100004": {//4.好友添加成功
-                     String sendid=Message[0];
+                    String sendid = Message[0];
                     try {
 
-                        sendAdd(message, sendid);
+                        sendOperateMessage(message, sendid);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
                 break;
-                case "100008": {//8.图片消息
-                    String sendid=Message[0];
+                case "100008": {//8.拒绝添加
+                    String sendid = Message[0];
                     try {
 
-                        sendAdd(message, sendid);
+                        sendOperateMessage(message, sendid);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
                 break;
-                case "100005": {//5.删除好友
+                case "100009": {//查询好友信息
 
+                    userService = applicationContext.getBean(UserService.class);
+                    String sendid = Message[0];
+                    String findid = Message[2];
+
+                    List<User> userList = userService.findALL();
+                    User friend = new User();
+                    for (int i = 0; i < userList.size(); i++) {
+                        if (findid.equals(userList.get(i).getUser_id())) {
+                            friend = userList.get(i);
+                            break;
+                        }
+                    }
+                    String friendmessage = sendid + "|" + "100010" + "|" + friend.getUser_id() + "|" + friend.getUser_nickname() + "|" + friend.getUser_age() +
+                            "|" + friend.getUser_sex() + "|" + friend.getUser_registime() + "|" + friend.getUser_comments();
+                    try {
+                        sendOperateMessage(friendmessage, sendid);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
                 break;
                 case "100006": {//6.群添加
@@ -133,48 +161,86 @@ public class WebSocketServer  {
                 }
                 break;
             }
-        }
-        else{//群聊
-            String tag=Message[2];
-        }
+        } else if (Integer.valueOf(Message[0]) > 100000) {//群聊和群操作
+            String tag = Message[0];
+            switch (tag) {
+                case "100011": {//查询群成员信息
+                    crowdsService = applicationContext.getBean(CrowdsService.class);
+                    String crowdid=Message[2];
+                    String sendid = Message[1];
+                    String Finmessage="100012"+"|"+sendid+"|"+crowdid;
+                    List<Crowds> crowdsList = crowdsService.findAll();
+                    for (int i = 0; i < crowdsList.size(); i++) {
+                        if (crowdid.equals(crowdsList.get(i).getCrowd_id())) {
+                            Finmessage=Finmessage+"|"+crowdsList.get(i).getCrowd_owner_id();
+                            break;
+                        }
+                    }
+                    for (int i = 0; i < crowdsList.size(); i++) {
+                        if (crowdid.equals(crowdsList.get(i).getCrowd_id())) {
+                            Finmessage=Finmessage+"|"+crowdsList.get(i).getCrowd_member();
+                        }
+                    }
+                    try {
 
-      /*  else if(Message.length>2&&!message.split("[|]")[0].equals("")){//群聊
-            String sendMessage=Message[0];
-            for(int i=1;i<Message.length;i++){
-                webSocketSet.put(Message[i],this);
-            }
-            try {
-                sendtoAll(sendMessage);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-      else if(Message.length==3&&!message.split("[|]")[0].equals("`")){//说明是添加好友成功的信息
-            try {
-                sendtoUseradd("您和"+message.split("[|]")[2]+"已加为好友,开始聊天吧！",message.split("[|]")[1]);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        else if(Message.length==3&&message.split("[|]")[0].equals("`")){
-            try {
-                sendtoUseradd(message.split("[|]")[2]+"已拒绝",message.split("[|]")[1]);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        else if(Message.length==1&&Integer.valueOf(message)<1000){//说明是添加好友的信息
-            try {
+                        sendOperateMessage(Finmessage, sendid);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+                case "100012": {//查询到的群成员信息
+                    String sendid = Message[2];
+                    try {
 
-                sendtoUseradd("用户"+"|"+id+"|"+"请求加您为好友",message);
-            } catch (IOException e) {
-                e.printStackTrace();
+                        sendOperateMessage(message, sendid);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+                case "100002": {//群聊
+                    String crowdid = Message[3];
+                    List<Crowds> crowdsList = crowdsService.findAll();
+                    for (int i = 0; i < crowdsList.size(); i++) {
+                        if (crowdid.equals(crowdsList.get(i).getCrowd_id())) {
+                            try {
+                                sendtoCrowd(message,crowdsList.get(i).getCrowd_member());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }
+                break;
+                case "100015": {//查询群资料
+                    crowdsService = applicationContext.getBean(CrowdsService.class);
+                    String crowdid=Message[2];
+                    String sendid = Message[1];
+                    String Finmessage="100016"+"|"+sendid+"|"+crowdid;
+                    List<Crowds> crowdsList = crowdsService.findAll();
+                    for (int i = 0; i < crowdsList.size(); i++) {
+                        if (crowdid.equals(crowdsList.get(i).getCrowd_id())) {
+                            Finmessage=Finmessage+"|"+crowdsList.get(i).getCrowd_owner_id();
+                            break;
+                        }
+                    }
+                    for (int i = 0; i < crowdsList.size(); i++) {
+                        if (crowdid.equals(crowdsList.get(i).getCrowd_id())) {
+                            Finmessage=Finmessage+"|"+crowdsList.get(i).getCrowd_member();
+                        }
+                    }
+                    try {
+
+                        sendOperateMessage(Finmessage, sendid);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
             }
+
         }
-        else if(Message.length==1&&Integer.valueOf(message)>1000){//说明是加群信息
-        }
-        else{//加群成功信息
-        }*/
     }
     @OnError
     public void onError(Session session, Throwable error) {
@@ -187,11 +253,27 @@ public class WebSocketServer  {
     @Autowired
     private MessageService messageService;
     @PostMapping("")
-    public void sendAdd(String message,String sendUserId) throws IOException {//添加好友
+    public void sendOperateMessage(String message,String sendUserId) throws IOException {//添加好友
 
         if (webSocketSet.get(sendUserId) != null) {
             if(!id.equals(sendUserId)) {
                     webSocketSet.get(sendUserId).sendMessage(message);//添加好友的消息
+            }
+            else {
+                webSocketSet.get(sendUserId).sendMessage(message);
+            }
+        } else {
+            //如果用户不在线则返回不在线信息给自己
+            sendtoUser("当前用户不在线",id);
+        }
+    }
+    public void sendtoCrowd(String message,String sendUserId) throws IOException {//聊天信息
+       // messageService=applicationContext.getBean(MessageService.class);
+        if (webSocketSet.get(sendUserId) != null) {
+            if(!id.equals(sendUserId)) {
+               /* Date date = new Date(System.currentTimeMillis());
+                messageService.saveMessages(amessage);*/
+                webSocketSet.get(sendUserId).sendMessage(message);
             }
             else {
                 webSocketSet.get(sendUserId).sendMessage(message);
