@@ -192,7 +192,7 @@ public class WebSocketServer  {
                 }
                 break;
             }
-        } else if (Integer.valueOf(Message[0]) > 100000) {//群聊和群操作
+        } else if (Integer.valueOf(Message[0]) > 100000) {//群聊和群操作还有聊天记录
             String tag = Message[0];
             switch (tag) {
                 case "100007": {//加群成功
@@ -217,6 +217,7 @@ public class WebSocketServer  {
                         e.printStackTrace();
                     }
                 }
+                break;
                 case "100014": {//拒绝加群
                     crowdsService = applicationContext.getBean(CrowdsService.class);
                     String sendid = Message[1];
@@ -226,6 +227,7 @@ public class WebSocketServer  {
                         e.printStackTrace();
                     }
                 }
+                break;
                 case "100006": {//群添加
                     crowdsService = applicationContext.getBean(CrowdsService.class);
                     List<Crowds> crowdsList = crowdsService.findAll();
@@ -319,6 +321,34 @@ public class WebSocketServer  {
                     }
                 }
                 break;
+                case "100019":{
+                    String fromuserid=Message[1];
+                    String senduserid=Message[2];
+                    messageService = applicationContext.getBean(MessageService.class);
+                    List<Messages>messagesList=messageService.findALL();
+                    for(int i=0;i<messagesList.size();i++){
+                        if(messagesList.get(i).getMessage_fromuser_id().equals(fromuserid)&&messagesList.get(i).getMessage_touser_id().equals(senduserid)){
+                            String Finmessage="100019"+"|"+messagesList.get(i).getMessage_infor()+"|"+"1";
+                            try {
+
+                                sendOperateMessage(Finmessage, fromuserid);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        else if(messagesList.get(i).getMessage_fromuser_id().equals(senduserid)&&messagesList.get(i).getMessage_touser_id().equals(fromuserid)){
+                            String Finmessage="100019"+"|"+messagesList.get(i).getMessage_infor()+"|"+"2";
+                            try {
+
+                                sendOperateMessage(Finmessage, fromuserid);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                }
+                break;
             }
 
         }
@@ -338,7 +368,8 @@ public class WebSocketServer  {
 
         if (webSocketSet.get(sendUserId) != null) {
                     webSocketSet.get(sendUserId).sendMessage(message);//添加好友的消息
-        } else {
+        }
+        else {
             //如果用户不在线则返回不在线信息给自己
             sendtoUser("当前用户不在线",id);
         }

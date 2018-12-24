@@ -2,8 +2,10 @@
 //打开聊天窗口
 function openchat(send_user_id) {
     // document.getElementById("message").style.display="block";
+    document.getElementById('mess').innerHTML="";
         send_id = send_user_id;
-    document.getElementById('mess');
+        var Finmessage=100019+"|"+id+"|"+send_user_id;
+        websocket.send(Finmessage);
     document.getElementById("show_others").style.visibility="hidden";
     document.getElementById("show_ana").style.visibility="visible";
     setTimeout( function(){

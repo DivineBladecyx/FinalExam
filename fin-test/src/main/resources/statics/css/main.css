@@ -2,25 +2,25 @@
 /* CSS Document */
 
 body {
-	
-	
-/*	background: #F5E5C5 url(../image/img_body.jpg) repeat left top;*/
-/*	background: #BED09C url(images/img01.jpg) repeat;*/
-/*	background: url(../image/bg01.jpg) no-repeat;*/
-	
-/*	background-size: cover;*/
-/*
-	font-size: 11px;
-	text-align: justify;
-	color: #ABABAB;
-	
-*/
+
+
+	/*	background: #F5E5C5 url(../image/img_body.jpg) repeat left top;*/
+	/*	background: #BED09C url(images/img01.jpg) repeat;*/
+	/*	background: url(../image/bg01.jpg) no-repeat;*/
+
+	/*	background-size: cover;*/
+	/*
+        font-size: 11px;
+        text-align: justify;
+        color: #ABABAB;
+
+    */
 	background-color: #CCFFCC;
-	
+
 }
 .header{
-	
-	
+
+
 }
 
 
@@ -29,16 +29,16 @@ body {
 .head_string{
 	position: absolute;
 	top: 0px;
-	
+
 }
 */
 .wrapper {
-	
+
 	height: 120px;
-/*	background: url(../image/img_head.jpg) repeat-x left top;*/
+	/*	background: url(../image/img_head.jpg) repeat-x left top;*/
 	background-color: #99CC99;
-/*	border-radius: 16px;*/
-	
+	/*	border-radius: 16px;*/
+
 }
 
 .menu_c{
@@ -53,7 +53,7 @@ body {
 	border: 0;
 	color: #1B5DB9;
 	font-size: 16px;
-	
+
 }
 .btn-bt:hover{
 	background-color: #99CCFF;
@@ -63,7 +63,7 @@ body {
 	position: absolute;
 	top: 120px;
 	left: 460px;
-	
+
 }
 .icons_set{
 	position: absolute;
@@ -75,7 +75,7 @@ body {
 	position: absolute;
 	top: 130px;
 	left: 120px;
-	
+
 }
 .head_photo{
 	position: relative;
@@ -83,7 +83,7 @@ body {
 	left: 5px;
 	width: 80px;
 	height: 80px;
-	
+
 }
 .head_photo:hover{
 	position: relative;
@@ -91,14 +91,14 @@ body {
 	left: 3px;
 	width: 85px;
 	height: 85px;
-	
+
 }
 .head_name{
 	position: relative;
 	top: -75px;
 	left: 100px;
 	font-size: 20px;
-	font-weight: 500;
+	font-weight: 450;
 	color: #128362
 }
 
@@ -108,7 +108,7 @@ body {
 	left: 100px;
 	width: 252px;
 	height: 505px;
-	
+
 	border: 1px solid #84AF64;
 	margin: 3px;
 	padding: 5px;
@@ -123,7 +123,7 @@ body {
 	height: 504px;
 }
 .shut_down{
-	background: url(image/shutDown.png);
+	background: url(/image/shutDown.png);
 	width: 20px;
 	height: 20px;
 	position: absolute;
@@ -140,7 +140,7 @@ body {
 	left: 550px;
 	width: 600px;
 	height: 500px;
-	
+
 	border: 1px solid #84AF64;
 	margin: 3px;
 	padding: 5px;
@@ -154,17 +154,19 @@ body {
 	left: 548px;
 	width: 600px;
 	height: 502px;
-	
+
 }
 .show_info_set{
-/*	src: url(../html/show_info.html);*/
+	/*	src: url(../html/show_info.html);*/
 	border: 1px solid #E19923;
 	margin: 5px;
 	padding: 5px;
 	border-radius: 10px;
 	box-shadow: 2px 2px 5px #5ED7F3;
+	overflow:auto;
 
-	overflow-y: scroll;
+
+
 
 	position: absolute;
 	top: 85%;
@@ -173,15 +175,36 @@ body {
 	height: 120px;
 	visibility: hidden;
 }
+.show_info_set::-webkit-scrollbar{
+	width: 5px;
+	border: 3px;
+}
 
+.show_info_set::-webkit-scrollbar-button{/*滚动条两端的按钮，可以用display:none让其不显示，也可以添加背景图片，颜色改变显示效果*/
+	display: none;
+}
+
+.show_info_set::-webkit-scrollbar-thumb{/*滚动条里面可以拖动的那部分*/
+	background:#9F9B93;
+	border-radius:4px;
+}
+.show_info_set::-webkit-scrollbar-corner {/*边角*/
+	background:#D9D9D9;
+	border: 3px;
+}
+
+#ssas{
+	height: auto;
+
+}
 .gonggao{
 	position: absolute;
 	top: 180px;
 	left: 1235px;
-	
+
 	width: 200px;
-	height: 600px;
-	
+
+
 }
 .gg-font{
 	font-size: 30px;
@@ -213,7 +236,7 @@ footer{
 	text-align: center;
 	padding: 5px;
 	font-size: 13px;
-	
+
 	position: absolute;
 	top: 820px;
 	width: 100%;

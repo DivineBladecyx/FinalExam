@@ -168,7 +168,7 @@
 
 
     <div class="chatbox">
-        <div class="friendslist">
+
 
 
             <div class="topmenu">
@@ -177,7 +177,7 @@
                 <button class="top_button" onClick="show3()">历史</button>
             </div>
             <div class="fenge"></div>
-
+        <div class="friendslist">
             <div class="friends abl" id="friend">
 
 
@@ -187,8 +187,8 @@
                     <div th:each="friend : ${userfriendList}" class="friend sav" onMouseOver="mouse_show('1','2','sdgdfg得分sfg1234我')" onMouseOut="mouse_gone()">
                         <img src="image/head_test.png" class="imgaa1"/>
                         <div class="pp1">
-                            <strong><a  th:href="@{'javascript:openchat('+${friend.getUser_id()}+')'}"  th:text="${friend.getUser_id()}">Title ...</a></strong><br>
-                            <span>这是id</span>
+                            <strong th:text="${friend.getUser_nickname()}"></strong><br>
+                            <span><a  th:href="@{'javascript:openchat('+${friend.getUser_id()}+')'}"  th:text="${friend.getUser_id()}">Title ...</a></span>
                         </div>
                     </div>
                 </div>
@@ -223,21 +223,11 @@
 
                 <button class="list_button" onClick="group_a(1)">群</button>
                 <div id="clusters_ul1"style="display:none">
-                    <div class="friend sav">
+                    <div  th:each="crowds : ${crowdsList}" class="friend sav">
                         <img src="image/head_test.png" class="imgaa1"/>
                         <div class="pp1">
-                            <strong><a>昵称</a></strong><br>
-                            <span>这是id</span>
-                        </div>
-                    </div>
-
-
-
-                    <div class="friend sav">
-                        <img src="image/head_test.png" class="imgaa1"/>
-                        <div class="pp1">
-                            <strong><a>昵称</a></strong><br>
-                            <span>这是id</span>
+                            <strong>多人聊天</strong><br>
+                            <span><a  th:href="@{'javascript:opencrowdchat('+${crowds.getCrowd_id()}+')'}"  th:text="${crowds.getCrowd_id()}">Title ...</a></span>
                         </div>
                     </div>
                 </div>
@@ -331,7 +321,7 @@
     setInterval(function() {mytime()},1000);
 </script>
 <!--		<div id="oth_mess" style="visibility: hidden;">-->
-<div id="container">   
+<div id="container" >
         <div class="header11">   
             <span id="sendid" style="text-align:right;"></span>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   
@@ -344,7 +334,6 @@
 	
         <ul class="content" id="mess">
 
-			
         </ul>   
 		
         <div id="foot" class="footer">
@@ -494,6 +483,20 @@
                 Finmessage = "<div>" + "您已被拒绝加入群" + crowdid  + "</div>" + "<button onclick='location.reload()'>确认</button>";
                 setAddMessageInnerHTML(Finmessage)
             }
+            else if(tag=='100019'){
+                if(Message[5]=='1'){
+                    var realmessage = Message[2];
+                    var fromuserid = Message[1];
+                    var Finmessage = "<li><img src='+arrIcon[1]+' class='imgright img01'><span class='spanright'>"+realmessage+"</span></li>";
+                    setMessageDocumentInnerHTML(Finmessage,fromuserid);
+                }
+                else if(Message[5]=='2'){
+                    var realmessage = Message[2];
+                    var fromuserid = Message[1];
+                    var Finmessage = "<li><img  src='+arrIcon[1]+' class='imgleft img01'><span class='spanleft'>"+realmessage+"</span></li>";
+                    setMessageDocumentInnerHTML(Finmessage,fromuserid);
+                }
+            }
             //fromuser_id = message.split("|")[1];
             //setAddMessageInnerHTML(message.split("|")[0]+message.split("|")[1]+message.split("|")[2]);
         }//群消息群操作
@@ -505,6 +508,11 @@
         }
     }
     //将信息显示在页面上
+    function setMessageDocumentInnerHTML(innerHTML,fromuserid) {
+        document.getElementById('mess').innerHTML+=innerHTML;
+        document.getElementById('sendid').innerHTML=fromuserid;
+        mess.scrollTop=mess.scrollHeight;
+    }
     function setMessageInnerHTML(innerHTML,fromuserid) {
         document.getElementById('mess').innerHTML +=innerHTML;
         document.getElementById('sendid').innerHTML=fromuserid;
