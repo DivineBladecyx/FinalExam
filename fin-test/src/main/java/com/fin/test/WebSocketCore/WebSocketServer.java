@@ -249,6 +249,7 @@ public class WebSocketServer  {
                 }
                 break;
                 case "100002": {//群聊
+                    crowdsService = applicationContext.getBean(CrowdsService.class);
                     String crowdid = Message[3];
                     List<Crowds> crowdsList = crowdsService.findAll();
                     for (int i = 0; i < crowdsList.size(); i++) {

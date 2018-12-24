@@ -1,12 +1,31 @@
 
 //打开聊天窗口
 function openchat(send_user_id) {
-    document.getElementById("message").style.display="block";
-    send_id = send_user_id;
+    // document.getElementById("message").style.display="block";
+        send_id = send_user_id;
+    document.getElementById('mess');
+    document.getElementById("show_others").style.visibility="hidden";
+    document.getElementById("show_ana").style.visibility="visible";
+    setTimeout( function(){
+        document.getElementById("show_ana").style.visibility="hidden";
+        document.getElementById("show_others").style.visibility="visible";
+        document.getElementById("shutdown").style.visibility="visible";
+        // document.getElementById("mess").innerHTML="";
+
+
+
+//
+//		ss=get_oth_mess();
+//                document.getElementById("show_others").innerHTML = ss;
+
+    }, 1.2 * 1000 );
 }
 
+function openaddfriend() {
+    document.getElementById('addmessage').style.visibility="visible";
+}
 function opencrowdchat(send_crowd_id) {
-    document.getElementById("crowdmessage").style.display="block";
+    //document.getElementById("crowdmessage").style.display="block";
     send_id = send_crowd_id;
     findcmid(send_id);
 }
@@ -111,14 +130,16 @@ function rejectcrowd() {
 
 
 //将信息显示在页面上
-function setMessageInnerHTML(innerHTML) {
-    document.getElementById('message').innerHTML +=innerHTML;
+function setMessageInnerHTML(innerHTML,fromuserid) {
+    document.getElementById('mess').innerHTML +=innerHTML;
+    document.getElementById('sendid').value=fromuserid;
+    mess.scrollTop=mess.scrollHeight;
 }
 function  setAddMessageInnerHTML(innerHTML) {
     document.getElementById('addmessage').innerHTML += innerHTML ;
 }
 function  setCrowdMessageInnerHTML(innerHTML) {
-    document.getElementById('crowdmessage').innerHTML += innerHTML ;
+    document.getElementById('mess').innerHTML += innerHTML ;
 }
 //关闭连接
 function closeWebSocket(){

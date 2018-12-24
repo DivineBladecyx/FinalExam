@@ -101,6 +101,6 @@ private CrowdsService crowdsService;
     model.addAttribute("user_id",user.getUser_id());
     model.addAttribute("userfriendList",friendList);
     model.addAttribute("crowdsList",crowdsList);
-    return "chat";
+    return "onchat";
 }
 }

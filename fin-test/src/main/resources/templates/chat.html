@@ -40,10 +40,9 @@ var crowd_id;
                 case '100001':
                     var realmessage = Message[1];
                     var fromuserid = Message[0];
-                    var Finmessage = "<div>" + "用户" + fromuserid + ":  " + realmessage + "</div>"
+                    var Finmessage = "<li><img  src='+arrIcon[1]+' class='imgleft img01'><span class='spanleft'>"+realmessage+"</span></li>"
                     setMessageInnerHTML(Finmessage);
                     break;
-
             }
         }
         else if (Message.length == 3 && Message[0] < 100000) {//处理操作消息
