@@ -109,7 +109,7 @@ body {
 	width: 252px;
 	height: 505px;
 	
-	border: 2px solid #84AF64;
+	border: 1px solid #84AF64;
 	margin: 3px;
 	padding: 5px;
 	border-radius: 10px;
@@ -141,7 +141,7 @@ body {
 	width: 600px;
 	height: 500px;
 	
-	border: 2px solid #84AF64;
+	border: 1px solid #84AF64;
 	margin: 3px;
 	padding: 5px;
 	border-radius: 15px;
@@ -163,7 +163,9 @@ body {
 	padding: 5px;
 	border-radius: 10px;
 	box-shadow: 2px 2px 5px #5ED7F3;
-	
+
+	overflow-y: scroll;
+
 	position: absolute;
 	top: 85%;
 	left: 80%;

@@ -45,23 +45,22 @@ public class WebSocketServer  {
     @Autowired
     private CrowdsService crowdsService;
     @OnOpen
-    public void onOpen(@PathParam(value = "id") String id, Session session) {
-        this.session = session;
-        this.id = id;
-
-        webSocketSet.put(id, this);
-        addOnlineCount();
-        log.info("用户" + id + "加入！当前在线人数为" + getOnlineCount());
-        try {
-            sendMessage("连接成功");
-        } catch (IOException e) {
-            log.error("websocket IO异常");
-        }
+    public void onOpen(@PathParam(value = "id") String Id, Session session) {
+            this.session = session;
+            this.id = Id;
+            webSocketSet.put(Id, this);
+            addOnlineCount();
+            log.info("用户" + Id + "加入！当前在线人数为" + getOnlineCount());
+            try {
+                sendMessage("连接成功");
+            } catch (IOException e) {
+                log.error("websocket IO异常");
+            }
     }
 
     @OnClose
     public void onClose() {
-        webSocketSet.remove(this);  //从set中删除
+        webSocketSet.remove(this.id);  //从set中删除
         subOnlineCount();           //在线数减1
         log.info("有一连接关闭！当前在线人数为" + getOnlineCount());
     }
@@ -80,7 +79,6 @@ public class WebSocketServer  {
                     String sendid = Message[3];
                     try {
                         sendtoUser(sendmessage, sendid);
-
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -96,7 +94,40 @@ public class WebSocketServer  {
                 }
                 break;
             }
-        } else if (Message.length == 3 && Integer.valueOf(Message[0]) < 100000) {//操作信息
+        }
+        else if(Message.length==2){
+            String tag = Message[1];
+            switch (tag) {
+                case "100017": {//查询离线信息请求
+                    messageService = applicationContext.getBean(MessageService.class);
+                    List<Messages>messagesList=messageService.findALL();
+                    String sendid = Message[0];
+                    for(int i=0;i<messagesList.size();i++) {
+                        if(messagesList.get(i).getMessage_touser_id().equals(sendid)&&messagesList.get(i).getMessage_type().equals("0")){
+                            {
+                                String Finmessage=messagesList.get(i).getMessage_infor()+"|"+"100018";
+                                try {
+                                    webSocketSet.get(sendid).sendMessage(Finmessage);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+                case "100002": {//2.群聊
+
+                }
+                break;
+
+                case "100009": {//9.视频消息
+
+                }
+                break;
+            }
+        }
+        else if (Message.length == 3 && Integer.valueOf(Message[0]) < 100000) {//操作信息
             String tag = Message[1];
             switch (tag) {
                 case "100003": {//3.好友添加
@@ -306,12 +337,7 @@ public class WebSocketServer  {
     public void sendOperateMessage(String message,String sendUserId) throws IOException {//添加好友
 
         if (webSocketSet.get(sendUserId) != null) {
-            if(!id.equals(sendUserId)) {
                     webSocketSet.get(sendUserId).sendMessage(message);//添加好友的消息
-            }
-            else {
-                webSocketSet.get(sendUserId).sendMessage(message);
-            }
         } else {
             //如果用户不在线则返回不在线信息给自己
             sendtoUser("当前用户不在线",id);
@@ -320,15 +346,12 @@ public class WebSocketServer  {
     public void sendtoCrowd(String message,String sendUserId) throws IOException {//聊天信息
        // messageService=applicationContext.getBean(MessageService.class);
         if (webSocketSet.get(sendUserId) != null) {
-            if(!id.equals(sendUserId)) {
                /* Date date = new Date(System.currentTimeMillis());
                 messageService.saveMessages(amessage);*/
                 webSocketSet.get(sendUserId).sendMessage(message);
-            }
-            else {
-                webSocketSet.get(sendUserId).sendMessage(message);
-            }
-        } else {
+
+        }
+        else {
             //如果用户不在线则返回不在线信息给自己
             sendtoUser("当前用户不在线",id);
         }
@@ -336,23 +359,25 @@ public class WebSocketServer  {
     public void sendtoUser(String message,String sendUserId) throws IOException {//聊天信息
         messageService=applicationContext.getBean(MessageService.class);
         if (webSocketSet.get(sendUserId) != null) {
-            if(!id.equals(sendUserId)) {
                 Date date = new Date(System.currentTimeMillis());
                 Messages amessage=new Messages();
                 amessage.setMessage_fromuser_id(id);
                 amessage.setMessage_touser_id(sendUserId);
                amessage.setMessage_time(date);
                 amessage.setMessage_infor(message);
-               amessage.setMessage_type("0");
+               amessage.setMessage_type("1");
                 webSocketSet.get(sendUserId).sendMessage(message);
                 messageService.saveMessages(amessage);
-            }
-            else {
-                webSocketSet.get(sendUserId).sendMessage(message);
-            }
-        } else {
-            //如果用户不在线则返回不在线信息给自己
-            sendtoUser("当前用户不在线",id);
+        }
+        else {
+            Date date = new Date(System.currentTimeMillis());
+            Messages amessage=new Messages();
+            amessage.setMessage_fromuser_id(id);
+            amessage.setMessage_touser_id(sendUserId);
+            amessage.setMessage_time(date);
+            amessage.setMessage_infor(message);
+            amessage.setMessage_type("0");
+            messageService.saveMessages(amessage);
         }
     }
     public void sendtoAll(String message) throws IOException {

@@ -1,4 +1,4 @@
-.head_string{
+.head_string1{
 /*
     font-size: 4em;
     font-family: "microsoft yahei";
@@ -13,7 +13,7 @@
 	color: #7F969B;
 	text-shadow: 5px 5px 2px #697C55;
 }   
-.head_string > span{
+.head_string1 > span{
     position: relative;
     display: inline-block;
     -webkit-transform-style: preserve-3d;

@@ -24,6 +24,9 @@ function openchat(send_user_id) {
 function openaddfriend() {
     document.getElementById('addmessage').style.visibility="visible";
 }
+function openaddcrowd() {
+    document.getElementById('addcrowdmessage').style.visibility="visible";
+}
 function opencrowdchat(send_crowd_id) {
     //document.getElementById("crowdmessage").style.display="block";
     send_id = send_crowd_id;
@@ -129,22 +132,7 @@ function rejectcrowd() {
 
 
 
-//将信息显示在页面上
-function setMessageInnerHTML(innerHTML,fromuserid) {
-    document.getElementById('mess').innerHTML +=innerHTML;
-    document.getElementById('sendid').value=fromuserid;
-    mess.scrollTop=mess.scrollHeight;
-}
-function  setAddMessageInnerHTML(innerHTML) {
-    document.getElementById('addmessage').innerHTML += innerHTML ;
-}
-function  setCrowdMessageInnerHTML(innerHTML) {
-    document.getElementById('mess').innerHTML += innerHTML ;
-}
-//关闭连接
-function closeWebSocket(){
-    websocket.close();
-}
+
 
 
 

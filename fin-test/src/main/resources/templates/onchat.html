@@ -8,11 +8,363 @@
 	
 <body>
 <script th:inline="javascript" th:src="@{/js/chatjs.js}"></script>
+
+	<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="/js/jquery-1.8.3.min.js"></script>
+	<script src="/js/commons.js"></script>
+	<script src="/js/show.js"></script>
+    <script th:inline="javascript" th:src="@{/js/chatjs.js}"></script>
+<!--	<link rel="stylesheet" type="text/css" href="https://web2.qq.com/css/mq.css">-->
+	<link rel="stylesheet" type="text/css" href="/css/qqicon.css">
+	
+
+	<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+	
+<!--	<link rel="stylesheet" type="text/css" href="http://222.204.3.154/static/bootstrap/css/bootstrap.css" media="screen">-->
+<!--	<link rel="stylesheet" type="text/css" href="http://222.204.3.154/static/css/main.css">-->
+	<link rel="stylesheet" type="text/css" href="/css/main.css">
+<!--	<link rel="stylesheet" type="text/css" href="../css/footer.css">-->
+	<link rel="stylesheet" type="text/css" href="/css/3d.css">
+
+<!--头部设计	-->
+<!--
+	<nav>
+  <div class="container">
+    <h1>Doc</h1>
+    <div id="menu">
+      <ul class="toplinks">
+        <li><a href="#">Opineo Website </a></li>
+        <li><a href="http://www.egrappler.com/">eGrappler</a></li>
+        <li><a href="../doc-template/docs.html">Blue Theme</a></li>
+        <li><a href="../doc-template-red/docs.html">Red Theme</a></li>
+      </ul>
+    </div>
+    <a id="menu-toggle" href="#" class=" ">&#9776;</a> </div>
+</nav>
+-->
+	<div class="header">
+		<div class="wrapper"></div>
+		
+<!--
+		<header>
+ 		 <div class="container">
+   		 <h2 class="docs-header"> Opineo - User Documentation</h2>
+		  </div>
+		</header>
+-->
+		
+		<div class="head_string1">
+			<span data-text=""></span>
+            <span data-text=""></span>
+			<span data-text="网">网</span>
+			<span data-text="页">页</span>
+			<span data-text="在">在</span>
+			<span data-text="线">线</span>
+            <span data-text="聊">聊</span>
+            <span data-text="天">天</span>
+            <span data-text="系">系</span>
+            <span data-text="统">统</span>
+		</div>
+		
+	
+	</div>
+<!--	添加右边动态设计-->
+	
+		
+<!--	菜单功能-->
+	<div class="menu_c">
+	<button onClick="" class="btn-bt">设置</button>
+		<button onClick="openaddfriend()" class="btn-bt">添加好友</button>
+		<button onClick="openaddcrowd()" class="btn-bt">添加群</button>
+		<button onClick="" class="btn-bt">查看资料</button>
+		<button onClick="" class="btn-bt">注销</button>
+		
+	</div>
+<div id="addmessage" style="visibility: hidden">
+    添加好友id:<input id="addtext" type="text"><br>
+    <button onclick="findfriend()">查询</button><br>
+    <button onclick="addsend()"  >发送请求</button><br>
+</div>
+<div id="addcrowdmessage"  style="visibility: hidden">
+    添加群id:<input id="addcrowdtext" type="text"><br>
+    <button onclick="findcrowd(document.getElementById('addcrowdtext').value)">查询群资料</button><br>
+    <button onclick="addcrowdsend()"  >发送请求</button><br>
+</div>
+	
+	<!-- 中部分割线-->
+	 <div class="span1">
+            <img src="/image/middle.png" class="middle">
+     </div>
+	
+<!--	头像以及昵称-->
+	<div class="head_portait">
+	<a href="" title="显示资料"><img src="/image/head_test.png" class="head_photo" alt="头像"></a>
+	<div  th:text="'用户： ' + ${user_id} " class="head_name"></div>
+	</div>
+	
+
+	
+<!--	扩展功能-->
+	<div class="icons_list icons_set">
+		<a href="https://qzone.qq.com" class="i_qzone" target="_blank" title="QQ空间">QQ空间</a>
+		<a href="https://mail.qq.com" class="i_mail" target="_blank" title="QQ邮箱">QQ邮箱</a>
+		<a href="https://t.qq.com" class="i_weibo" target="_blank" title="腾讯微博">腾讯微博</a>
+		<a href="https://v.qq.com" class="i_video" target="_blank" title="腾讯视频">腾讯视频</a>
+		<a href="https://www.qq.com" class="i_qqwebsite" target="_blank" title="腾讯网">腾讯网</a>
+		<a href="https://y.qq.com" class="i_music" target="_blank" title="QQ音乐">QQ音乐</a>
+		<a href="https://wallet.tenpay.com/web/" class="i_wallet" target="_blank" title="QQ钱包">QQ钱包</a>
+		<a href="https://www.pengyou.com" class="i_pengyou" target="_blank" title="朋友网">朋友网</a>
+		<a href="https://www.weiyun.com" class="i_weiyun" target="_blank" title="微云">微云</a>
+	</div>
+	
+<!--	好友列表-->
+	
+<!--	<iframe src="show_friends.html" allowtransparency="true" id="show_friends" class="show_friends_set"></iframe>-->
+<script language="javascript">
+    function show1() {
+        document.getElementById("friend").style.visibility = "visible";
+        document.getElementById("cluster").style.visibility = "hidden";
+        document.getElementById("history").style.visibility = "hidden";
+
+    }
+    function show2() {
+        document.getElementById("friend").style.visibility = "hidden";
+        document.getElementById("cluster").style.visibility = "visible";
+        document.getElementById("history").style.visibility = "hidden";
+        // document.getElementById("friend").innerHTML="";
+    }
+    function show3() {
+        document.getElementById("friend").style.visibility = "hidden";
+        document.getElementById("cluster").style.visibility = "hidden";
+        document.getElementById("history").style.visibility = "visible";
+        // document.getElementById("friend").innerHTML="";
+    }
+    function group(index) {
+
+
+        var sss=document.getElementById('list_ul'+index).style.display;
+
+        if(sss=="block")
+            document.getElementById('list_ul'+index).style.display="none";
+        if(sss=="none")
+            document.getElementById('list_ul'+index).style.display="block";
+    }
+    function group_a(index) {
+
+
+        var sss=document.getElementById('clusters_ul'+index).style.display;
+
+        if(sss=="block")
+            document.getElementById('clusters_ul'+index).style.display="none";
+        if(sss=="none")
+            document.getElementById('clusters_ul'+index).style.display="block";
+    }
+</script>
+	<link rel="stylesheet" type="text/css" href="/css/friends.css">
+<div id="show_friends" class="show_friends_set">
+
+
+    <div class="chatbox">
+        <div class="friendslist">
+
+
+            <div class="topmenu">
+                <button class="top_button" onClick="show1()">好友</button>
+                <button class="top_button" onClick="show2()">群</button>
+                <button class="top_button" onClick="show3()">历史</button>
+            </div>
+            <div class="fenge"></div>
+
+            <div class="friends abl" id="friend">
+
+
+                <button class="list_button"id="list_button" onClick="group(1)">我的好友</button>
+
+                <div id="list_ul1" style="display:none">
+                    <div th:each="friend : ${userfriendList}" class="friend sav" onMouseOver="mouse_show('1','2','sdgdfg得分sfg1234我')" onMouseOut="mouse_gone()">
+                        <img src="image/head_test.png" class="imgaa1"/>
+                        <div class="pp1">
+                            <strong><a  th:href="@{'javascript:openchat('+${friend.getUser_id()}+')'}"  th:text="${friend.getUser_id()}">Title ...</a></strong><br>
+                            <span>这是id</span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <button class="list_button" onClick="group(2)">同学</button>
+                <div id="list_ul2"style="display:none">
+                    <div class="friend sav">
+                        <img src="image/head_test.png" class="imgaa1"/>
+                        <div class="pp1">
+                            <strong><a>昵称</a></strong><br>
+                            <span>这是id</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <button class="list_button" onClick="group(3)">未分组</button>
+                <div id="list_ul3"style="display:none">
+                    <div class="friend sav">
+                        <img src="image/head_test.png" class="imgaa1"/>
+                        <div class="pp1">
+                            <strong><a>昵称</a></strong><br>
+                            <span>这是id</span>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="clusters abl" id="cluster">
+
+                <button class="list_button" onClick="group_a(1)">群</button>
+                <div id="clusters_ul1"style="display:none">
+                    <div class="friend sav">
+                        <img src="image/head_test.png" class="imgaa1"/>
+                        <div class="pp1">
+                            <strong><a>昵称</a></strong><br>
+                            <span>这是id</span>
+                        </div>
+                    </div>
+
+
+
+                    <div class="friend sav">
+                        <img src="image/head_test.png" class="imgaa1"/>
+                        <div class="pp1">
+                            <strong><a>昵称</a></strong><br>
+                            <span>这是id</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="list_button" onClick="group_a(2)">群2</button>
+                <div id="clusters_ul2"style="display:none">
+                    <div class="friend sav">
+                        <img src="image/head_test.png" class="imgaa1"/>
+                        <div class="pp1">
+                            <strong><a>昵称</a></strong><br>
+                            <span>这是id</span>
+                        </div>
+                    </div>
+
+
+
+                    <div class="friend sav">
+                        <img src="image/head_test.png" class="imgaa1"/>
+                        <div class="pp1">
+                            <strong><a>昵称</a></strong><br>
+                            <span>这是id</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="historys abl" id="history">
+                <div class="history" id="historya">
+                    <div class="friend sav">
+                        <img src="image/head_test.png" class="imgaa1"/>
+                        <div class="pp1">
+                            <strong><a>昵称</a></strong><br>
+                            <span>这是id</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--	鼠标悬停框-->
+            <div id="show_div" style="display: none">
+                年龄：<b id="show_div_age"></b><br>
+                生日：<b id="show_div_borth"></b><br>
+                好友印象：<br><b id="show_div_yinxiang"></b><br>
+                <br><a href="#" target="_blank">查看详情</a>
+            </div><!--	鼠标悬停框-->
+        </div>
+    </div>
+
+</div><!--	好友列表-->
+
+
+
+<script>
+    function mouse_show(age,borth,yinxaing){
+        var showDiv = document.getElementById('show_div');
+        showDiv.style.left = (event.clientX-90)+"px";
+        showDiv.style.top = (event.clientY-240)+"px";
+        showDiv.style.display = 'block';
+        document.getElementById('show_div_age').innerHTML=age;
+        document.getElementById('show_div_borth').innerHTML=borth;
+        document.getElementById('show_div_yinxiang').innerHTML=yinxaing;
+
+    }
+    function mouse_gone(){
+
+        setTimeout( function(){document.getElementById('show_div').style.display = 'none';}, 3 * 1000 );
+    }
+</script>
+
+
+
+
+
+
+
+
+<iframe src="/load_1" allowtransparency="true" scrolling="no" id="show_ana" class="show_others_set"></iframe>
+	
+	<!--	聊天界面，信息资料显示-->
+	<div id="show_others" class="show_others_set">
+	
+		
+		<link rel="stylesheet" type="text/css" href="/css/others.css">
+<!--	<script src="../js/others.js"></script>-->
+	
+<script>
+    function mytime(){
+        var a = new Date();
+        var b = a.toLocaleTimeString();
+        var c = a.toLocaleDateString();
+        document.getElementById("time1").innerHTML = c+"&nbsp"+b;
+        }
+    setInterval(function() {mytime()},1000);
+</script>
+<!--		<div id="oth_mess" style="visibility: hidden;">-->
+<div id="container">   
+        <div class="header11">   
+            <span id="sendid" style="text-align:right;"></span>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   
+             <span id="time1" style="color: blueviolet;text-align:left;"></span>
+	<input type="button" value="另一个人" style="background:#FFFF00;" id="anopeople">
+        </div>
+<div style="position:absolute;left:200px;" > 
+<input type="button" value="查询消息" style="background:#FFFF00;" onclick="javascript:mymessage.innerHTML='这里是输入文字的。'">
+</div>   
+	
+        <ul class="content" id="mess">
+
+			
+        </ul>   
+		
+        <div id="foot" class="footer">
+            <div id="user_face_icon">   
+                <img src="/image/1.jpg" alt="" class="img01">
+            </div>   
+            <input id="text" type="text" placeholder="说点什么吧..." >   
+            <span id="btn">发送</span>   
+        </div>   
+    </div> 
+<div style="position:absolute;top:42px;left:406px;" class="oldnews" id="mymessage">
+
+</div>  
+		
+<!--		</div>-->
+	</div>
+	
+		
 <script th:inline="javascript">
     var fromuser_id;
     var id = [[${user_id}]];
     var websocket = null;
-    var crowd_id;
     //判断当前浏览器是否支持WebSocket
     if('WebSocket' in window){
         websocket = new WebSocket("ws://localhost:8080/WebSocket/"+id);
@@ -28,11 +380,13 @@
 
     //连接成功建立的回调方法
     websocket.onopen = function(event){
-        setMessageInnerHTML("open");
+        var Findinlinemessage=id+"|"+"100017";
+        websocket.send(Findinlinemessage);
     }
 
     //接收到消息的回调方法
     websocket.onmessage = function(event) {
+
         var message = event.data;
         var Message = message.split("|");
         if (Message.length == 4 && Message[0] < 100000) {//处理聊天消息
@@ -41,10 +395,9 @@
                 case '100001':
                     var realmessage = Message[1];
                     var fromuserid = Message[0];
-                    var Finmessage = "<div>" + "用户" + fromuserid + ":  " + realmessage + "</div>"
-                    setMessageInnerHTML(Finmessage);
+                    var Finmessage = "<li><img  src='+arrIcon[1]+' class='imgleft img01'><span class='spanleft'>"+realmessage+"</span></li>"
+                    setMessageInnerHTML(Finmessage,fromuserid);
                     break;
-
             }
         }
         else if (Message.length == 3 && Message[0] < 100000) {//处理操作消息
@@ -141,317 +494,45 @@
             }
             //fromuser_id = message.split("|")[1];
             //setAddMessageInnerHTML(message.split("|")[0]+message.split("|")[1]+message.split("|")[2]);
+        }//群消息群操作
+        else if(Message.length==5&&Message[0]<100000){//离线消息发送
+            var realmessage = Message[1];
+            var fromuserid = Message[0];
+            var Finmessage = "<li>用户:"+fromuserid+"说：<span class='spanleft'>"+realmessage+"</span></li>"
+            setinlineMessageInnerHTML(Finmessage);
         }
+    }
+    //将信息显示在页面上
+    function setMessageInnerHTML(innerHTML,fromuserid) {
+        document.getElementById('mess').innerHTML +=innerHTML;
+        document.getElementById('sendid').innerHTML=fromuserid;
+        mess.scrollTop=mess.scrollHeight;
+    }
+    function setinlineMessageInnerHTML(innerHTML) {
+        document.getElementById('show_info').style.visibility="visible";
+        document.getElementById('show_info').innerHTML +=innerHTML;
+    }
+    function sethistoryMessageInnerHTML(innerHTML) {
+        document.getElementById('show_infor').innerHTML +=innerHTML;
+    }
+    function  setAddMessageInnerHTML(innerHTML) {
+        document.getElementById('addmessage').innerHTML += innerHTML ;
+    }
+    function  setCrowdMessageInnerHTML(innerHTML) {
+        document.getElementById('mess').innerHTML += innerHTML ;
+    }
+    //关闭连接
+    function closeWebSocket(){
+        websocket.close();
     }
     //连接关闭的回调方法
     websocket.onclose = function(){
         setMessageInnerHTML("close");
     }
     //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
-    window.onbeforeunload = function(){
-        websocket.close();
-    }
-</script>
-	<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	<script src="/js/jquery-1.8.3.min.js"></script>
-	<script src="/js/commons.js"></script>
-	<script src="/js/show.js"></script>
-    <script th:inline="javascript" th:src="@{/js/chatjs.js}"></script>
-<!--	<link rel="stylesheet" type="text/css" href="https://web2.qq.com/css/mq.css">-->
-	<link rel="stylesheet" type="text/css" href="/css/qqicon.css">
-	
-
-	<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
-	
-<!--	<link rel="stylesheet" type="text/css" href="http://222.204.3.154/static/bootstrap/css/bootstrap.css" media="screen">-->
-<!--	<link rel="stylesheet" type="text/css" href="http://222.204.3.154/static/css/main.css">-->
-	<link rel="stylesheet" type="text/css" href="/css/main.css">
-<!--	<link rel="stylesheet" type="text/css" href="../css/footer.css">-->
-	<link rel="stylesheet" type="text/css" href="/css/3d.css">
-
-<!--头部设计	-->
-<!--
-	<nav>
-  <div class="container">
-    <h1>Doc</h1>
-    <div id="menu">
-      <ul class="toplinks">
-        <li><a href="#">Opineo Website </a></li>
-        <li><a href="http://www.egrappler.com/">eGrappler</a></li>
-        <li><a href="../doc-template/docs.html">Blue Theme</a></li>
-        <li><a href="../doc-template-red/docs.html">Red Theme</a></li>
-      </ul>
-    </div>
-    <a id="menu-toggle" href="#" class=" ">&#9776;</a> </div>
-</nav>
--->
-	<div class="header">
-		<div class="wrapper"></div>
-		
-<!--
-		<header>
- 		 <div class="container">
-   		 <h2 class="docs-header"> Opineo - User Documentation</h2>
-		  </div>
-		</header>
--->
-		
-		<div class="head_string">
-			<span data-text=""></span>
-            <span data-text=""></span>
-			<span data-text="网">网</span>
-			<span data-text="页">页</span>
-			<span data-text="在">在</span>
-			<span data-text="线">线</span>
-            <span data-text="聊">聊</span>
-            <span data-text="天">天</span>
-            <span data-text="系">系</span>
-            <span data-text="统">统</span>
-		</div>
-		
-	
-	</div>
-<!--	添加右边动态设计-->
-	
-		
-<!--	菜单功能-->
-	<div class="menu_c">
-	<button onClick="" class="btn-bt">设置</button>
-		<button onClick="openaddfriend()" class="btn-bt">添加好友</button>
-		<button onClick="" class="btn-bt">添加群</button>
-		<button onClick="" class="btn-bt">查看资料</button>
-		<button onClick="" class="btn-bt">注销</button>
-		
-	</div>
-<div id="addmessage" style="visibility: hidden">
-    添加好友id:<input id="addtext" type="text"><br>
-    <button onclick="findfriend()">查询</button><br>
-    <button onclick="addsend()"  >发送请求</button><br>
-</div>
-	
-	
-	<!-- 中部分割线-->
-	 <div class="span1">
-            <img src="/image/middle.png" class="middle">
-     </div>
-	
-<!--	头像以及昵称-->
-	<div class="head_portait">
-	<a href="" title="显示资料"><img src="/image/head_test.png" class="head_photo" alt="头像"></a>
-	<div  th:text="'用户： ' + ${user_id} " class="head_name"></div>
-	</div>
-	
-
-	
-<!--	扩展功能-->
-	<div class="icons_list icons_set">
-		<a href="https://qzone.qq.com" class="i_qzone" target="_blank" title="QQ空间">QQ空间</a>
-		<a href="https://mail.qq.com" class="i_mail" target="_blank" title="QQ邮箱">QQ邮箱</a>
-		<a href="https://t.qq.com" class="i_weibo" target="_blank" title="腾讯微博">腾讯微博</a>
-		<a href="https://v.qq.com" class="i_video" target="_blank" title="腾讯视频">腾讯视频</a>
-		<a href="https://www.qq.com" class="i_qqwebsite" target="_blank" title="腾讯网">腾讯网</a>
-		<a href="https://y.qq.com" class="i_music" target="_blank" title="QQ音乐">QQ音乐</a>
-		<a href="https://wallet.tenpay.com/web/" class="i_wallet" target="_blank" title="QQ钱包">QQ钱包</a>
-		<a href="https://www.pengyou.com" class="i_pengyou" target="_blank" title="朋友网">朋友网</a>
-		<a href="https://www.weiyun.com" class="i_weiyun" target="_blank" title="微云">微云</a>
-	</div>
-	
-<!--	好友列表-->
-	
-<!--	<iframe src="show_friends.html" allowtransparency="true" id="show_friends" class="show_friends_set"></iframe>-->
-		<script language="javascript">
-        function show1() {
-            document.getElementById("friend").style.visibility = "visible";
-            document.getElementById("cluster").style.visibility = "hidden";
-            document.getElementById("history").style.visibility = "hidden";
-            // document.getElementById("cluster").innerHTML="";
-            // document.getElementById("history").innerHTML="";
-            // document.getElementById("friend").innerHTML=""+
-            // " <img src=\"\" /><p><strong>zzx</strong><br><span>mirdfg fgre</span> </p> <div class=\"status available\"></div>";
-        }
-        function show2() {
-            document.getElementById("friend").style.visibility = "hidden";
-            document.getElementById("cluster").style.visibility = "visible";
-            document.getElementById("history").style.visibility = "hidden";
-            // document.getElementById("friend").innerHTML="";
-        }
-        function show3() {
-            document.getElementById("friend").style.visibility = "hidden";
-            document.getElementById("cluster").style.visibility = "hidden";
-            document.getElementById("history").style.visibility = "visible";
-            // document.getElementById("friend").innerHTML="";
-        }
-        window.onload = function () {
-            var list = document.getElementById('list');
-            var ah2 = list.getElementsByTagName('h2');
-            var uls = list.getElementsByTagName('ul');
-            // h2要和下面的ul进行匹配，所以我们要用索引值，给h2身上添加索引值
-            for (var i = 0; i < ah2.length; i++) {
-                ah2[i].index = i;//给h2添加索引值，点击谁就给谁添加索引值
-                ah2[i].onclick = function () {
-                    if (this.className == '') {//判断所点击的h2标签是否有类，
-                        //this.index指h2身上的索引数，this指h2，h2的索引值为this.index
-                        uls[this.index].style.display = 'block';
-                        this.className = 'active';//给当前点击的h2添加类，更改箭头方向
-                    } else {
-                        uls[this.index].style.display = 'none';
-                        this.className = '';
-                    }
-                }
-            }
-        }
-    </script>
-	<link rel="stylesheet" type="text/css" href="/css/friends.css">
-	<div id="show_friends" class="show_friends_set">
-
-
-		
-	<div class="chatbox">
-
-        <div class="friendslist">
-            <div class="topmenu">
-                <button onClick="show1()">好友</button>
-                <button onClick="show2()">群</button>
-                <button onClick="show3()">历史</button>
-            </div>
-
-            <hr class="line">
-            </hr>
-            <div class="friends abl" id="friend">
-                <ul id="list">
-                    <li class="lis">
-
-                        <h2>我的好友</h2>
-                        <ul>
-                            <th:block th:each="friend : ${userfriendList}">
-                            <div class="friend">
-                                <img src="" />
-                                <p>
-                                    <strong><a  th:href="@{'javascript:openchat('+${friend.getUser_id()}+')'}"  th:text="${friend.getUser_id()}">Title ...</a></strong><br>
-                                    <span>好友</span>
-                                </p>
-                                <div class="status available"></div>
-                            </div>
-                            </th:block>
-                        </ul>
-                        <h2>同学</h2>
-                        <ul>
-                            <div class="friend">
-                                <img src="" />
-                                <p>
-                                    <strong>zzx</strong><br>
-                                    <span>mirssre</span>
-                                </p>
-                                <div class="status available"></div>
-                            </div>
-
-                        </ul>
-                        <h2>未分组</h2>
-                        <ul>
-                            <div class="friend">
-                                <img src="" />
-                                <p>
-                                    <strong>zzx</strong><br>
-                                    <span>miraaaagre</span>
-                                </p>
-                                <div class="status available"></div>
-                            </div>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-            <th:block th:each="crowds : ${crowdsList}">
-            <div class="clusters abl" id="cluster">
-                <div class="cluster">
-                    <img src="" />
-                    <p>
-                        <strong><a  th:href="@{'javascript:openchat('+${crowds.getCrowd_id()}+')'}"  th:text="${crowds.getCrowd_id()}">Title ...</a></strong><br>
-                        <span>群</span>
-                    </p>
-                    <div class="status inactive"></div>
-                </div>
-            </div>
-            </th:block>
-            <div class="historys abl" id="history">
-                <div class="history">
-                    <img src="" />
-                    <p>
-                        <strong>历史纪录</strong><br>
-                        <span>历史</span>
-                    </p>
-                    <div class="status inactive"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-	
-	
-	</div><!--	好友列表-->
-	
-	
-	
-	
-	
-	
-	
-	
-
-	<iframe src="/load_1" allowtransparency="true" scrolling="no" id="show_ana" class="show_others_set"></iframe>
-	
-	<!--	聊天界面，信息资料显示-->
-	<div id="show_others" class="show_others_set">
-	
-		
-		<link rel="stylesheet" type="text/css" href="/css/others.css">
-<!--	<script src="../js/others.js"></script>-->
-	
-<script>
-    function mytime(){
-        var a = new Date();
-        var b = a.toLocaleTimeString();
-        var c = a.toLocaleDateString();
-        document.getElementById("time1").innerHTML = c+"&nbsp"+b;
-        }
-    setInterval(function() {mytime()},1000);
-</script>
-<!--		<div id="oth_mess" style="visibility: hidden;">-->
-<div id="container">   
-        <div class="header11">   
-            <span id="sendid" style="text-align:right;"></span>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   
-             <span id="time1" style="color: blueviolet;text-align:left;"></span>
-	<input type="button" value="另一个人" style="background:#FFFF00;" id="anopeople">
-        </div>
-<div style="position:absolute;left:200px;" > 
-<input type="button" value="查询消息" style="background:#FFFF00;" onclick="javascript:mymessage.innerHTML='这里是输入文字的。'">
-</div>   
-	
-        <ul class="content" id="mess">
-
-			
-        </ul>   
-		
-        <div id="foot" class="footer">
-            <div id="user_face_icon">   
-                <img src="/image/1.jpg" alt="" class="img01">
-            </div>   
-            <input id="text" type="text" placeholder="说点什么吧..." >   
-            <span id="btn">发送</span>   
-        </div>   
-    </div> 
-<div style="position:absolute;top:42px;left:406px;" class="oldnews" id="mymessage">
-
-</div>  
-		
-<!--		</div>-->
-	</div>
-	
-		
-<script>
-    var fromuser_id;
-    var id = [[${user_id}]];
-    var websocket = null;
+    //window.onbeforeunload = function(){
+      //  websocket.remove(send_id);
+    //}
     var crowd_id;
         window.onload = function(){ 
 	var anopeople=document.getElementById('anopeople');
@@ -460,12 +541,12 @@
             var iNow = -1;   // <!--用来累加改变左右浮动-->    
             var icon = document.getElementById('user_face_icon').getElementsByTagName('img');    
             var btn = document.getElementById('btn');    
-            var text = document.getElementById('text');    
-            
-  
+            var text = document.getElementById('text');
 
-              
-               
+
+
+
+
 	btn.onclick = function(){
         if (send_id < 1000) {//单聊
             var message = document.getElementById('text').value;
@@ -515,146 +596,6 @@
 
                 }  
             }
-
-            //判断当前浏览器是否支持WebSocket
-            if('WebSocket' in window){
-                websocket = new WebSocket("ws://localhost:8080/WebSocket/"+id);
-            }
-            else{
-                alert('Not support websocket')
-            }
-
-            //连接发生错误的回调方法
-            websocket.onerror = function(){
-                setMessageInnerHTML("error");
-            };
-
-            //连接成功建立的回调方法
-            websocket.onopen = function(event){
-                setMessageInnerHTML("open");
-            }
-
-            //接收到消息的回调方法
-            websocket.onmessage = function(event) {
-
-                var message = event.data;
-                var Message = message.split("|");
-                if (Message.length == 4 && Message[0] < 100000) {//处理聊天消息
-                    var tag = Message[2];
-                    switch (tag) {
-                        case '100001':
-                            var realmessage = Message[1];
-                            var fromuserid = Message[0];
-                            var Finmessage = "<li><img  src='+arrIcon[1]+' class='imgleft img01'><span class='spanleft'>"+realmessage+"</span></li>"
-                            setMessageInnerHTML(Finmessage,fromuserid);
-                            break;
-
-                    }
-                }
-                else if (Message.length == 3 && Message[0] < 100000) {//处理操作消息
-                    var tag = Message[1];
-                    switch (tag) {
-                        case '100003':
-                            var fromuserid = Message[0];
-                            var senduserid = Message[2];
-                            var Finmessage = "<div>" + "用户" + fromuserid + ":  请求加您为好友！" + "</div>" + " <a href='javascript:agree()'>同意</a><a href='javascript:reject()'>拒绝</a><br/>";
-                            fromuser_id = fromuserid;
-                            setAddMessageInnerHTML(Finmessage)
-                            break;
-                        case '100004':
-                            var fromuserid = Message[0];
-                            var senduserid = Message[2];
-                            var Finmessage = "<div>" + "用户" + fromuserid + ": 和您已加为好友！" + "</div>" + "<button onclick='location.reload()'>确认</button>";
-                            fromuser_id = fromuserid;
-                            setAddMessageInnerHTML(Finmessage)
-                            break;
-                        case '100008':
-                            var fromuserid = Message[0];
-                            var senduserid = Message[2];
-                            var Finmessage = "<div>" + "用户" + fromuserid + ": 拒绝加您为好友！" + "</div>" + "<button onclick='location.reload()'>确认</button>";
-                            fromuser_id = fromuserid;
-                            setAddMessageInnerHTML(Finmessage);
-                            break;
-                    }
-                }
-                else if (Message.length == 8 && Message[0] < 100000) {//查询到的好友
-                    var tag = Message[1];
-                    if (tag == '100010') {
-                        var findfriendid = Message[2];
-                        var findfriendnickname = Message[3];
-                        var findfriendage = Message[4];
-                        var findfriendsex = Message[5];
-                        var findfriendregistime = Message[6];
-                        var findfriendcomments = Message[7];
-                        var Finmessage = "<div>" + "用户:" + findfriendid + "基本信息：" + "<br>" +
-                            "昵称: " + findfriendnickname + "<br>" +
-                            "年龄: " + findfriendage + "<br>" +
-                            "性别: " + findfriendsex + "<br>" +
-                            "注册时间: " + findfriendregistime + "<br>" +
-                            "印象和评价: " + findfriendcomments + "<br>" + "</div>";
-                        setAddMessageInnerHTML(Finmessage);
-                    }
-                }
-                else if (Message[0] > 100000) {//查询到的好友
-                    var tag = Message[0];
-                    if (tag == '1000012') {
-                        var crowdid = Message[2];
-                        var crowdowner = Message[3];
-                        var Finmessage = "<div>" + "群:" + crowdid + "基本信息：" + "<br>" +
-                            "群主: " + findfriendnickname + "<br>" +
-                            "群成员: " + "<br>";
-                        for (var i = 4; i < Message.length; i++) {
-                            Finmessage = Finmessage + "用户名：" + Message[i] + "<br>";
-                        }
-                        setCrowdMessageInnerHTML(Finmessage);
-                    }
-                    else if (tag == '100002') {
-                        var realmessage = Message[2];
-                        var fromuserid = Message[1];
-                        var Finmessage = "<div>" + "用户" + fromuserid + ":  " + realmessage + "</div>";
-                        setCrowdMessageInnerHTML(Finmessage);
-                    }
-                    else if (tag == '100016') {
-                        var crowdid = Message[2];
-                        var crowdowner = Message[3];
-                        var Finmessage = "<div>" + "群:" + crowdid + "基本信息：" + "<br>" +
-                            "群主: " + findfriendnickname + "<br>" +
-                            "群成员: " + "<br>";
-                        for (var i = 4; i < Message.length; i++) {
-                            Finmessage = Finmessage + "用户名：" + Message[i] + "<br>";
-                        }
-                        setAddMessageInnerHTML(Finmessage);
-                    }
-                    else if(tag=='100006'){
-                        var fromuserid = Message[1];
-                        var crowdid=Message[2];
-                        var Finmessage = "<div>" + "用户" + fromuserid + ":  请求加群" +crowdid+ "</div>" + " <a href='javascript:agreecrowd()'>同意</a><a href='javascript:rejectcrowd()'>拒绝</a><br/>";
-                        fromuser_id=fromuserid;
-                        crowd_id=crowdid
-                        setAddMessageInnerHTML(Finmessage)
-                    }
-                    else if(tag=='100007'){
-                        var crowdid=Message[2];
-                        Finmessage = "<div>" + "您已加入群" + crowdid  + "</div>" + "<button onclick='location.reload()'>确认</button>";
-                        setAddMessageInnerHTML(Finmessage);
-                    }
-                    else if(tag=='100014'){
-                        var crowdid=Message[2];
-                        Finmessage = "<div>" + "您已被拒绝加入群" + crowdid  + "</div>" + "<button onclick='location.reload()'>确认</button>";
-                        setAddMessageInnerHTML(Finmessage)
-                    }
-                    //fromuser_id = message.split("|")[1];
-                    //setAddMessageInnerHTML(message.split("|")[0]+message.split("|")[1]+message.split("|")[2]);
-                }
-            }
-            //连接关闭的回调方法
-            websocket.onclose = function(){
-                setMessageInnerHTML("close");
-            }
-            //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
-            window.onbeforeunload = function(){
-                websocket.close();
-            }
     </script>
 	
 	
@@ -667,12 +608,9 @@
 	
 <!--	信息提示框显示-->
 <!--	<iframe src="show_info.html" allowtransparency="true" id="show_info" class="show_info_set"></iframe>-->
-	<div id="show_info" class="show_info_set"></div>
-	
-	
-	<button onClick="show_info_get()">显示消息</button>
-	
-	
+	<div id="show_info" class="show_info_set">
+
+    </div>
 <!--	右侧公告设置-->
 	<div class="gonggao">
 	
@@ -723,17 +661,13 @@
 			return a;
 		}
 		
-	function show_info_get(){
-		document.getElementById("show_info").style.visibility="visible";
-		
+	//function show_info_get(){
+		//document.getElementById("show_info").style.visibility="visible";
 		//设值
-		document.getElementById("show_info").innerHTML="121";
-		
-		
 		//五秒后消失
-		setTimeout( function(){document.getElementById("show_info").style.visibility="hidden";}, 5 * 1000 );
+		//setTimeout( function(){document.getElementById("show_info").style.visibility="hidden";}, 5 * 1000 );
 		
-	}
+	//}
 	
 	 function show_others() {
     document.getElementById("show_others").style.visibility="hidden";
