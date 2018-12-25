@@ -76,12 +76,11 @@
 		
 <!--	菜单功能-->
 	<div class="menu_c">
-	<button onClick="" class="btn-bt">设置</button>
 		<button onClick="openaddfriend()" class="btn-bt">添加好友</button>
 		<button onClick="openaddcrowd()" class="btn-bt">添加群</button>
 		<button onClick="" class="btn-bt">查看资料</button>
+        <button type="submit" onClick="" class="btn-bt">设置</button>
 		<button onClick="" class="btn-bt">注销</button>
-		
 	</div>
 <div id="addmessage" style="visibility: hidden">
     添加好友id:<input id="addtext" type="text"><br>
@@ -124,6 +123,7 @@
 	
 <!--	<iframe src="show_friends.html" allowtransparency="true" id="show_friends" class="show_friends_set"></iframe>-->
 <script language="javascript">
+    var sendid;//传输到聊天框里的id
     function show1() {
         document.getElementById("friend").style.visibility = "visible";
         document.getElementById("cluster").style.visibility = "hidden";
@@ -319,17 +319,21 @@
         document.getElementById("time1").innerHTML = c+"&nbsp"+b;
         }
     setInterval(function() {mytime()},1000);
+    function downloadchat(fromuserid) {
+        window.open("/DownloadServlet?fromid="+id+"&&sendid="+fromuserid);
+    }
 </script>
 <!--		<div id="oth_mess" style="visibility: hidden;">-->
-<div id="container" >
+<div id="container"  >
         <div class="header11">   
-            <span id="sendid" style="text-align:right;"></span>
+            <span id="sendid" style="text-align:right "></span>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   
              <span id="time1" style="color: blueviolet;text-align:left;"></span>
-	<input type="button" value="另一个人" style="background:#FFFF00;" id="anopeople">
         </div>
-<div style="position:absolute;left:200px;" > 
-<input type="button" value="查询消息" style="background:#FFFF00;" onclick="javascript:mymessage.innerHTML='这里是输入文字的。'">
+<div style="position:absolute;left:200px;" >
+
+<button  value="下载聊天记录" style="background:lawngreen;" onclick="downloadchat(sendid)">下载聊天记录</button>
+
 </div>   
 	
         <ul class="content" id="mess">
@@ -345,6 +349,22 @@
         </div>   
     </div> 
 <div style="position:absolute;top:42px;left:406px;" class="oldnews" id="mymessage">
+
+    <ul>
+
+        <li><img src="../image/head_test.png" id="1" class="qun_info_img"><div id="20" class="qun_info_id">1asfd3</div></li>
+        <li><img src="../image/head_test.png" id="2" class="qun_info_img"><div id="19" class="qun_info_id">1asfd3</div></li>
+        <li><img src="../image/head_test.png" id="3" class="qun_info_img"><div id="18" class="qun_info_id">1asfd3</div></li>
+        <li><img src="../image/head_test.png" id="4" class="qun_info_img"><div id="17" class="qun_info_id">1asfd3</div></li>
+        <li><img src="../image/head_test.png" id="5" class="qun_info_img"><div id="16" class="qun_info_id">1asfd3</div></li>
+        <li><img src="../image/head_test.png" id="6" class="qun_info_img"><div id="15" class="qun_info_id">1asfd3</div></li>
+        <li><img src="../image/head_test.png" id="7" class="qun_info_img"><div id="14" class="qun_info_id">1asfd3</div></li>
+        <li><img src="../image/head_test.png" id="8" class="qun_info_img"><div id="13" class="qun_info_id">1asfd3</div></li>
+        <li><img src="../image/head_test.png" id="9" class="qun_info_img"><div id="12" class="qun_info_id">1asfd3</div></li>
+        <li><img src="../image/head_test.png" id="10" class="qun_info_img"><div id="11" class="qun_info_id">1asfd3</div></li>
+
+    </ul>
+
 
 </div>  
 		
@@ -486,13 +506,27 @@
             else if(tag=='100019'){
                 if(Message[5]=='1'){
                     var realmessage = Message[2];
-                    var fromuserid = Message[1];
+                    var fromuserid = Message[4];
+                    if(Message[4]!=id) {
+                         fromuserid = Message[4];
+                    }
+                    else{
+                        fromuserid=Message[1];
+                    }
+
+
                     var Finmessage = "<li><img src='+arrIcon[1]+' class='imgright img01'><span class='spanright'>"+realmessage+"</span></li>";
                     setMessageDocumentInnerHTML(Finmessage,fromuserid);
                 }
                 else if(Message[5]=='2'){
                     var realmessage = Message[2];
-                    var fromuserid = Message[1];
+                    var fromuserid = Message[4];
+                    if(Message[4]!=id) {
+                         fromuserid = Message[4];
+                    }
+                    else{
+                         fromuserid=Message[1];
+                    }
                     var Finmessage = "<li><img  src='+arrIcon[1]+' class='imgleft img01'><span class='spanleft'>"+realmessage+"</span></li>";
                     setMessageDocumentInnerHTML(Finmessage,fromuserid);
                 }
@@ -503,14 +537,32 @@
         else if(Message.length==5&&Message[0]<100000){//离线消息发送
             var realmessage = Message[1];
             var fromuserid = Message[0];
-            var Finmessage = "<li>用户:"+fromuserid+"说：<span class='spanleft'>"+realmessage+"</span></li>"
+            fromuser_id=fromuserid;
+            var Finmessage = "<a href='#' onclick='setinlinemessageonline(fromuser_id)'><li>用户:"+fromuserid+"说：<span class='spanleft'>"+realmessage+"</span></li><a>"
             setinlineMessageInnerHTML(Finmessage);
         }
+    }
+    function setinlinemessageonline(fromuserid) {
+        var fromAndto=fromuserid+"|"+id;
+        $.ajax({
+            url:"/MessagesController/setInlineMessageOnline",
+            data:{'fromAndto':fromAndto},
+            type : 'post',
+            traditional : true,
+            async : false,
+            success:function(){
+                location.reload();//
+            },
+            error : function(){
+                alert(fromuserid+'error');
+            }
+        });
     }
     //将信息显示在页面上
     function setMessageDocumentInnerHTML(innerHTML,fromuserid) {
         document.getElementById('mess').innerHTML+=innerHTML;
         document.getElementById('sendid').innerHTML=fromuserid;
+        sendid=fromuserid;
         mess.scrollTop=mess.scrollHeight;
     }
     function setMessageInnerHTML(innerHTML,fromuserid) {
@@ -531,6 +583,7 @@
     function  setCrowdMessageInnerHTML(innerHTML) {
         document.getElementById('mess').innerHTML += innerHTML ;
     }
+
     //关闭连接
     function closeWebSocket(){
         websocket.close();
