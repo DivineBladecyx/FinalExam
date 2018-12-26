@@ -20,6 +20,7 @@
             <!--position: relative;-->
             <!--box-shadow: 20px 20px 55px #777;-->
 */
+	border-radius: 5px;
 }
 #oth_mess {
 	width: 580px;
@@ -33,7 +34,7 @@
 }
 .header11 {
 	width: 580px;
-	background: rgba(140, 181, 255, 0.73);
+	background: rgba(132, 255, 113, 0.44);
 	height: 40px;
 	color: #fff;
 	line-height: 34px;
