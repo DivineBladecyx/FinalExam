@@ -152,10 +152,10 @@ body {
 .menu_c{
 	position: absolute;
 	top: 60px;
-	left: 1000px;
+	left: 900px;
 }
 .btn-bt{
-	width: 100px;
+	width: 120px;
 	height: 40px;
 	background-color: #99CC99;
 	border: 0;
