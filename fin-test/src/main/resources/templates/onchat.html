@@ -76,10 +76,11 @@
 		
 <!--	菜单功能-->
 	<div class="menu_c">
-		<button onClick="openaddfriend()" class="btn-bt">添加好友</button>
-		<button onClick="openaddcrowd()" class="btn-bt">添加群</button>
+		<button onClick="openaddfriend()" class="btn-bt">添加好友和群</button>
+
 		<button onClick="" class="btn-bt">查看资料</button>
         <button type="submit" onClick="" class="btn-bt">设置</button>
+        <button onClick="" class="btn-bt">关于我们</button>
 		<button onClick="" class="btn-bt">注销</button>
 	</div>
 
@@ -96,14 +97,18 @@
 	
 <!--	头像以及昵称-->
 	<div class="head_portait">
-	<a href="" title="显示资料"><img src="/image/head_test.png" class="head_photo" alt="头像"></a>
+	<a href="#" onclick=""  title="显示资料" ><img src="/image/head_test.png" class="head_photo" alt="头像"></a>
 	<div  th:text="'用户： ' + ${user_id} " class="head_name"></div>
 	</div>
 
-
+<script>
+    function openuser_infor() {
+        window.open("/user_infor");
+    }
+</script>
 
 <!--	添加好友，添加群-->
-<div id="addmessage" class="infor_addfriends" style="visibility: visible">
+<div id="addmessage" class="infor_addfriends" style="visibility: hidden;">
     <input id="addtext" type="text" placeholder="请输入id"  class="add_inp"><button type="button" onClick="findfriend()" class="add_btn">查询</button>
     <a href="#">
         <div id="show_infor_addfriends" class="show_infor_addfriends">
@@ -206,8 +211,9 @@
                 <div  th:id="'list_ul'+${userhash.key}" style="display:none">
                     <div  th:each="user : ${userhash.value}">
                     <div  class="friend sav">
+
+                        <img src="image/head_test.png" class="imgaa1" onMouseOver="mouse_show('1','2','sdgdfg得分sfg1234我')" onMouseOut="mouse_gone()" onclick="show_infor_ga()"/>
                         <a  th:href="@{'javascript:openchat('+${user.getUser_id()}+')'}">
-                        <img src="image/head_test.png" class="imgaa1" onMouseOver="mouse_show('1','2','sdgdfg得分sfg1234我')" onMouseOut="mouse_gone()"/>
                         <div class="pp1">
                             <strong th:text="${user.getUser_nickname()}"></strong><br>
                             <span th:text="${user.getUser_id()}"></span>
@@ -225,67 +231,17 @@
                   <div id="clusters_ul1"style="display:none">
                       <div  th:each="crowds : ${crowdsList}" class="friend sav">
                           <img src="image/head_test.png" class="imgaa1"/>
+                          <a  th:href="@{'javascript:openchat('+${crowds.getCrowd_id()}+')'}" >
                           <div class="pp1">
                               <strong>多人聊天</strong><br>
-                              <span><a  th:href="@{'javascript:opencrowdchat('+${crowds.getCrowd_id()}+')'}"  th:text="${crowds.getCrowd_id()}">Title ...</a></span>
-                          </div>
-                      </div>
-                  </div>
-                  <button class="list_button" onClick="group_a(2)">群2</button>
-                  <div id="clusters_ul2"style="display:none">
-                      <div class="friend sav">
-
-                          <img src="image/head_test.png" class="imgaa1"/>
-                          <div class="pp1">
-                              <strong><a>昵称</a></strong><br>
-                              <span>这是id</span>
-                          </div>
-                      </div>
-
-
-
-                      <div class="friend sav">
-                          <img src="image/head_test.png" class="imgaa1"/>
-                          <div class="pp1">
-                              <strong><a>昵称</a></strong><br>
-                              <span>这是id</span>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-              <div class="historys abl" id="history">
-                  <div class="history" id="historya">
-                      <div class="friend sav">
-                          <a>
-                          <img src="image/head_test.png" class="imgaa1"/>
-                          <div class="pp1">
-                              <strong>昵称</strong><br>
-                              <span>这是id</span>
+                              <span th:text="${crowds.getCrowd_id()}"></span>
                           </div>
                           </a>
                       </div>
                   </div>
-
-                  <div class="friend sav">
-                      <a>
-                          <img src="/image/head_test.png" class="imgaa1"/>
-                          <div class="pp1">
-                              <strong>这是id</strong><br>
-                              <span>请求添加为好友</span>
-                          </div>
-                      </a>
-                      <div class="infor_new">
-
-                          <button type="button" class="infor_new_btn" onClick="">同意</button>
-                          <button type="button" class="infor_new_btn" onClick="">取消</button>
-                      </div>
-
-
-                  </div>
-
-
-
-
+              </div>
+              <div class="historys abl" id="history">
+                 <!--历史消息-->
 
               </div>
 
@@ -294,7 +250,7 @@
                 年龄：<b id="show_div_age"></b><br>
                 生日：<b id="show_div_borth"></b><br>
                 好友印象：<br><b id="show_div_yinxiang"></b><br>
-                <br><a href="#" target="_blank">查看详情</a>
+                <br><a href="javascript:show_infor_ga()" target="_blank">查看详情</a>
             </div><!--	鼠标悬停框-->
         </div>
     </div>
@@ -350,8 +306,7 @@
 </script>
 <!--		<div id="oth_mess" style="visibility: hidden;">-->
 <div id="container"  >
-        <div class="header11">   
-            <span id="sendid" style="text-align:right "></span>
+        <div class="header11">
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   
              <span id="time1" style="color: blueviolet;text-align:left;"></span>
         </div>
@@ -373,25 +328,12 @@
             <span id="btn">发送</span>   
         </div>   
     </div> 
-<div style="position:absolute;top:42px;left:406px;" class="oldnews" id="mymessage">
-
-    <ul>
-
-        <li><img src="../image/head_test.png" id="1" class="qun_info_img"><div id="20" class="qun_info_id">1asfd3</div></li>
-        <li><img src="../image/head_test.png" id="2" class="qun_info_img"><div id="19" class="qun_info_id">1asfd3</div></li>
-        <li><img src="../image/head_test.png" id="3" class="qun_info_img"><div id="18" class="qun_info_id">1asfd3</div></li>
-        <li><img src="../image/head_test.png" id="4" class="qun_info_img"><div id="17" class="qun_info_id">1asfd3</div></li>
-        <li><img src="../image/head_test.png" id="5" class="qun_info_img"><div id="16" class="qun_info_id">1asfd3</div></li>
-        <li><img src="../image/head_test.png" id="6" class="qun_info_img"><div id="15" class="qun_info_id">1asfd3</div></li>
-        <li><img src="../image/head_test.png" id="7" class="qun_info_img"><div id="14" class="qun_info_id">1asfd3</div></li>
-        <li><img src="../image/head_test.png" id="8" class="qun_info_img"><div id="13" class="qun_info_id">1asfd3</div></li>
-        <li><img src="../image/head_test.png" id="9" class="qun_info_img"><div id="12" class="qun_info_id">1asfd3</div></li>
-        <li><img src="../image/head_test.png" id="10" class="qun_info_img"><div id="11" class="qun_info_id">1asfd3</div></li>
-
-    </ul>
+<div style="position:absolute;top:42px;left:406px;" class="oldnews" id="crowdmember">
 
 
-</div>  
+
+
+</div>
 		
 <!--		</div>-->
 	</div>
@@ -431,7 +373,7 @@
                 case '100001':
                     var realmessage = Message[1];
                     var fromuserid = Message[0];
-                    var Finmessage = "<li><img  src='+arrIcon[1]+' class='imgleft img01'><span class='spanleft'>"+realmessage+"</span></li>"
+                    var Finmessage = "<li><img  src='+arrIcon[1]+' class='imgleft img01'><span class='spanleft'>"+realmessage+"</span></li>";
                     setMessageInnerHTML(Finmessage,fromuserid);
                     sethistoryMessageInnerHTML(fromuserid,realmessage.substring(0,6));
                     break;
@@ -489,20 +431,18 @@
             if (tag == '1000012') {
                 var crowdid = Message[2];
                 var crowdowner = Message[3];
-               var Finmessage = "<div>" + "群:" + crowdid + "基本信息：" + "<br>" +
-                    "群主: " + findfriendnickname + "<br>" +
-                    "群成员: " + "<br>";
+               var Finmessage =""+ '<ul>';
                 for (var i = 4; i < Message.length; i++) {
-                    Finmessage = Finmessage + "用户名：" + Message[i] + "<br>";
+                    Finmessage = Finmessage + '<li><img src="/image/head_test.png" id="1" class="qun_info_img"><div id="20" class="qun_info_id">'+Message[i]+'</div></li>';
                 }
-
-                setCrowdMessageInnerHTML(Finmessage);
+               Finmessage=Finmessage+'<ul>';
+                setcrowdMemberInnerHTML(Finmessage,crowdid);
             }
             else if (tag == '100002') {
                 var realmessage = Message[2];
                 var fromuserid = Message[1];
-                var Finmessage = "<div>" + "用户" + fromuserid + ":  " + realmessage + "</div>";
-                setCrowdMessageInnerHTML(Finmessage);
+                var Finmessage = "<li><img  src='+arrIcon[1]+' class='imgleft img01'>"+fromuserid+":<span class='spanleft'>"+realmessage+"</span></li>";
+                setMessageInnerHTML(Finmessage,fromuserid);
             }
             else if (tag == '100016') {
                 var crowdid = Message[2];
@@ -598,7 +538,10 @@
         sendid=fromuserid;
         mess.scrollTop=mess.scrollHeight;
     }
-
+    function setcrowdMemberInnerHTML(Finmessage,crowdid){
+        document.getElementById('crowdmember').innerHTML="";
+        document.getElementById('crowdmember').innerHTML+=Finmessage;
+    }
     function setMessageInnerHTML(innerHTML,fromuserid) {
         document.getElementById('mess').innerHTML +=innerHTML;
         document.getElementById('sendid').innerHTML=fromuserid;
@@ -745,9 +688,14 @@
 		<label class="ggnr-font">
 		<marquee direction="up" behavior="scroll" scrollamount="2" loop="-1" 
 				 width="200px" height="300px">
-			这是一个聊天界面<br>
-			也没有什么特别的<br>
-			就是有点帅！<br>
+                 <b>制作人</b><br>
+                     <p style="font-family: 楷体;text-align: center">曹宇翔</p>
+                     <p style="font-family: 楷体;text-align: center"> 陈军晔</p>
+                     <p style="font-family: 楷体;text-align: center">李银秋</p>
+                     <p style="font-family: 楷体;text-align: center"> 郑梓熙</p>
+                     <p style="font-family: 楷体;text-align: center">李晨</p>
+                     <p style="font-family: 楷体;text-align: center">（也没有什么特别的</p>
+                     <p style="font-family: 楷体;text-align: center">就是有点帅！）</p>
 			<a href="https://www.baidu.com" target="_blank">点击百度</a>
 		</marquee>
 		</label>
@@ -763,15 +711,110 @@
 	
 	南昌大学计算机科学与技术162班@2018
 	</footer>
-	
 
-	
-	
-	
-	
-	
-	
-	<script>
+
+
+
+
+<!--	资料卡片-->
+<link rel="stylesheet" type="text/css" href="../css/infor.css">
+
+<div id="show_infor_gt" class="show_others_set" style="visibility: hidden;">
+
+
+    <div id="user_id" class="user_id">id</div>
+
+    <img src="../image/head_test.png" class="img-thumbnail user_image" alt="头像">
+
+
+    <div class="form-horizontal form01" role="form" id="">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">昵称</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control input01" id="user_name" value="ss" readonly="true">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">性别</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control input01" id="user_sex" value="ss" readonly="true">
+            </div>
+
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">年龄</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control input01" id="user_age" value="ss" readonly="true">
+            </div>
+        </div>
+        <div class="loc01">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">生日</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control input01" id="user_borth" value="ss" readonly="true">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">E-mail</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control input01" id="user_email" value="ss" readonly="true">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">印象</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control input01" id="user_yinxiang" value="ss" readonly="true">
+                </div>
+            </div>
+        </div>
+        <div class="btn-lo">
+            <input type="button" onClick="bianji()" value="编辑资料" class="btn-bt_1">
+            <br><br>
+            <input type="submit" value="提交" class="btn-bt_1" id="change" style="visibility: hidden;">
+            <!--			<br><br><input type="reset" value="重置" class="btn-bt_1">-->
+        </div>
+        <div class="img-lo">
+            <button type="button" id="user_img" class="btn-bt_1" style="visibility: hidden;">更改头像</button>
+        </div>
+
+    </div>
+    <div class="bj">
+        <button onClick="chongzhi()" class="btn-bt_1" id="cz" style="visibility: hidden;">重置</button>
+    </div>
+</div>
+<script language="javascript">
+    function bianji(){
+        document.getElementById("change").style.visibility="visible";
+        document.getElementById("cz").style.visibility="visible";
+        document.getElementById("user_img").style.visibility="visible";
+        document.getElementById("user_name").readOnly=false;
+        document.getElementById("user_sex").readOnly=false;
+        document.getElementById("user_age").readOnly=false;
+        document.getElementById("user_borth").readOnly=false;
+        document.getElementById("user_email").readOnly=false;
+        document.getElementById("user_yinxiang").readOnly=false;
+    }
+    function chongzhi(){
+        document.getElementById("user_img").value="";
+        document.getElementById("user_name").value="";
+        document.getElementById("user_sex").value="";
+        document.getElementById("user_age").value="";
+        document.getElementById("user_borth").value="";
+        document.getElementById("user_email").value="";
+        document.getElementById("user_yinxiang").value="";
+
+    }
+</script>
+<!--	资料卡片-->
+
+
+
+
+
+
+
+
+<script>
 
 //		$(document).ready(function (){
 //			
@@ -795,6 +838,7 @@
 	
 	 function show_others() {
     document.getElementById("show_others").style.visibility="hidden";
+    document.getElementById("show_infor_gt").style.visibility="hidden";
     document.getElementById("show_ana").style.visibility="visible";
     setTimeout( function(){
         document.getElementById("show_ana").style.visibility="hidden";
@@ -809,8 +853,25 @@
 		function shutdown(){
 			document.getElementById("shutdown").style.visibility="hidden";
 			document.getElementById("show_others").style.visibility="hidden";
-		}
-		
+            document.getElementById("show_infor_gt").style.visibility="hidden";
+            document.getElementById("change").style.visibility="hidden";
+            document.getElementById("cz").style.visibility="hidden";
+            document.getElementById("user_img").style.visibility="hidden";
+        }
+function show_infor_ga() {
+    document.getElementById("show_others").style.visibility="hidden";
+    document.getElementById("show_infor_gt").style.visibility="hidden";
+    document.getElementById("show_ana").style.visibility="visible";
+    setTimeout( function(){
+        document.getElementById("show_ana").style.visibility="hidden";
+        document.getElementById("show_infor_gt").style.visibility="visible";
+        document.getElementById("shutdown").style.visibility="visible";
+//
+//		ss=get_oth_mess();
+//                document.getElementById("show_others").innerHTML = ss;
+
+    }, 1.2 * 1000 );
+}
 		
 	</script>
 	

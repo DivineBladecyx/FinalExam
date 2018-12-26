@@ -55,5 +55,12 @@ public class UserController {
         }
     }
 
+    @RequestMapping("/UserInfor")
+    public String UserInfor(User user, Model model) {
+        User user2=userService.findById(user.getUser_id());
+        model.addAttribute("user",user2);
+        return "/user_infor";
+    }
+
 
 }

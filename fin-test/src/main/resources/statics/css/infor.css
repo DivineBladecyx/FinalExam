@@ -1,31 +1,33 @@
 
+/*
 body{
-	background: #3C9687;
+	background: #61B7A2;
 }
+*/
 
 
 
 .user_image{
-	
+
 	position: absolute;
-	top: 80px;
+	top: 60px;
 	left: 60px;
-	
+
 	width: 130px;
 	height: 130px;
 }
 .user_id{
 	position: absolute;
-	top: 110px;
+	top: 80px;
 	left: 230px;
-	
+
 	font-weight: 200;
 	font-size: 18px;
 }
 .form01{
 	position: absolute;
 	top: 250px;
-	left: 60px;
+	left: 30px;
 }
 .input01{
 	width: 200px;
@@ -41,28 +43,28 @@ body{
 	top: -170px;
 	left: 380px;
 }
-.btn-bt{
-	
+.btn-bt_1{
+
 	width: 80px;
 	height: 25px;
 	border: 0;
-	background-color: #548CC6;
+	background-color: #7090B0;
 	border-radius: 5px;
 }
-.btn-bt:hover{
+.btn-bt_1:hover{
 	background-color: #2AD9B8;
 }
 .bj{
 	position: absolute;
 	top: 165px;
-	left: 440px;
+	left: 410px;
 }
 .img-lo{
 	position: absolute;
 	top: -100px;
-	left: 170px;
-	
+	left: 190px;
+
 }
 .file-bt{
-	
+
 }

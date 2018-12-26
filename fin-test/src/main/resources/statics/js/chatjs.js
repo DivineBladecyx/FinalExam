@@ -4,11 +4,31 @@ function openchat(send_user_id) {
     // document.getElementById("message").style.display="block";
     document.getElementById('mess').innerHTML="";
         send_id = send_user_id;
-        var Finmessage=100019+"|"+id+"|"+send_user_id;
-        websocket.send(Finmessage);
-    document.getElementById("show_others").style.visibility="hidden";
-    document.getElementById("show_ana").style.visibility="visible";
+        if(send_id<1000) {
+            var Finmessage = 100019 + "|" + id + "|" + send_user_id;
+
+
+            websocket.send(Finmessage);
+            document.getElementById("show_others").style.visibility = "hidden";
+            document.getElementById("show_ana").style.visibility = "visible";
+            document.getElementById("show_infor_gt").style.visibility="hidden";
+            document.getElementById("change").style.visibility="hidden";
+            document.getElementById("cz").style.visibility="hidden";
+            document.getElementById("user_img").style.visibility="hidden";
+        }
+        else{
+            var Finmessage = 100019 + "|" + id + "|" + send_user_id;
+            websocket.send(Finmessage);
+            findcmid(send_id);
+            document.getElementById("show_others").style.visibility = "hidden";
+            document.getElementById("show_ana").style.visibility = "visible";
+            document.getElementById("show_infor_gt").style.visibility="hidden";
+            document.getElementById("change").style.visibility="hidden";
+            document.getElementById("cz").style.visibility="hidden";
+            document.getElementById("user_img").style.visibility="hidden";
+        }
     setTimeout( function(){
+
         document.getElementById("show_ana").style.visibility="hidden";
         document.getElementById("show_others").style.visibility="visible";
         document.getElementById("shutdown").style.visibility="visible";
@@ -24,6 +44,7 @@ function openchat(send_user_id) {
 }
 
 function openaddfriend() {
+
     document.getElementById('addmessage').style.visibility="visible";
 }
 function openaddcrowd() {
@@ -31,8 +52,7 @@ function openaddcrowd() {
 }
 function opencrowdchat(send_crowd_id) {
     //document.getElementById("crowdmessage").style.display="block";
-    send_id = send_crowd_id;
-    findcmid(send_id);
+
 }
 
 
@@ -56,7 +76,7 @@ function send(){//向好友发送信息
         websocket.send(Finmessage);
     }
     else {//群聊
-        var message = document.getElementById('crowdtext').value;
+        var message = document.getElementById('text').value;
             var Finmessage = "100002" + "|" +id+"|"+message+"|"+send_id;
         websocket.send(Finmessage);
     }

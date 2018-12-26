@@ -38,6 +38,15 @@ public class HtmlController {
     }
     @GetMapping("/user_infor")
     public String user_infor() {
-        return "/user_infro.html";
+        return "/user_infor.html";
     }
+    @GetMapping("/denglv")
+    public String denglv() {
+        return "/denglv.html";
+    }
+    @GetMapping("/zhuce")
+    public String zhuce() {
+        return "/zhuce.html";
+    }
+
 }

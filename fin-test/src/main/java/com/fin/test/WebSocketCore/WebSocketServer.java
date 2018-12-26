@@ -282,13 +282,26 @@ public class WebSocketServer  {
                 }
                 break;
                 case "100002": {//群聊
+                    messageService = applicationContext.getBean(MessageService.class);
                     crowdsService = applicationContext.getBean(CrowdsService.class);
                     String crowdid = Message[3];
                     List<Crowds> crowdsList = crowdsService.findAll();
+                    Date date = new Date(System.currentTimeMillis());
+                    Messages message2=new Messages();
+                    message2.setMessage_fromuser_id(id);
+                    message2.setMessage_touser_id(crowdid);
+                    message2.setMessage_time(date);
+                    message2.setMessage_infor(message);
+                    message2.setMessage_type("1");
+                    messageService.saveMessages(message2);
                     for (int i = 0; i < crowdsList.size(); i++) {
                         if (crowdid.equals(crowdsList.get(i).getCrowd_id())) {
                             try {
-                                sendtoCrowd(message,crowdsList.get(i).getCrowd_member());
+                                if(!crowdsList.get(i).getCrowd_member().equals(id)) {
+
+                                    sendtoUser(message, crowdsList.get(i).getCrowd_member());
+
+                                }
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -368,19 +381,6 @@ public class WebSocketServer  {
 
         if (webSocketSet.get(sendUserId) != null) {
                     webSocketSet.get(sendUserId).sendMessage(message);//添加好友的消息
-        }
-        else {
-            //如果用户不在线则返回不在线信息给自己
-            sendtoUser("当前用户不在线",id);
-        }
-    }
-    public void sendtoCrowd(String message,String sendUserId) throws IOException {//聊天信息
-       // messageService=applicationContext.getBean(MessageService.class);
-        if (webSocketSet.get(sendUserId) != null) {
-               /* Date date = new Date(System.currentTimeMillis());
-                messageService.saveMessages(amessage);*/
-                webSocketSet.get(sendUserId).sendMessage(message);
-
         }
         else {
             //如果用户不在线则返回不在线信息给自己

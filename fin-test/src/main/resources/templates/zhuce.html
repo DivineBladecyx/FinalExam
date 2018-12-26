@@ -1,0 +1,78 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>欢迎你，请先登陆！</title>
+    <script type="text/javascript" src="/js/deng.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/js/jquery-1.8.3.min.js" type="text/javascript"></script>
+    <link type="text/css" rel="stylesheet" href="/css/validator.css">
+    <script src="/js/formValidator-4.0.1.js" type="text/javascript" ></script>
+    <script src="/js/formValidatorRegex.js" type="text/javascript" ></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $.formValidator.initConfig({submitButtonID:"Submit1",debug:true,onError:function(){alert("具体错误，请看网页上的提示")}});
+
+            $("#name").formValidator({onShow:"请输入用户名",onFocus:"只能是字母和数字",onCorrect:"用户合法"}).regexValidator({regExp:"username",dataType:"enum",onError:"用户名格式不正确"});
+            $("#password1").formValidator({onShow:"请输入密码",onFocus:"1~10个长度",onCorrect:"密码合法"}).inputValidator({min:1,empty:{leftEmpty:false,rightEmpty:false,emptyError:"密码两边不能有空符号"},onError:"密码不能为空,请确认"});
+            $("#password2").formValidator({onShow:"输再次输入密码",onFocus:"1~10个长度",onCorrect:"密码一致"}).inputValidator({min:1,empty:{leftEmpty:false,rightEmpty:false,emptyError:"重复密码两边不能有空符号"},onError:"重复密码不能为空,请确认"}).compareValidator({desID:"password1",operateor:"=",onError:"2次密码不一致,请确认"});
+            $("#uid").formValidator({onShow:"请输入昵称",onFocus:"只能是字母和数字",onCorrect:"昵称合法"}).regexValidator({regExp:"username",dataType:"enum",onError:"昵称格式不正确"});
+            $(":radio[name='xb_one']").formValidator({tipID:"sexTip",onShow:"请选择你的性别",onFocus:"没有第三种性别了，你选一个吧",onCorrect:"输入正确",defaultValue:["1"]}).inputValidator({min:1,max:1,onError:"性别忘记选了,请确认"});//.defaultPassed();
+            $("#nl").formValidator({autoModify:true,onShow:"请输入的年龄（1-99岁之间）",onFocus:"只能输入1-99之间的数字哦",onCorrect:"恭喜你,你输对了"}).inputValidator({min:1,max:99,type:"value",onErrorMin:"你输入的值必须大于等于1",onError:"年龄必须在1-99之间，请确认"});
+        })
+    </script>
+</head>
+<body>
+<form action="/UserController/register" method="post">
+<div align="center">
+    <div id="container" style="width: 400px" >
+        <div id="header" style="background-color: aquamarine">
+            <h2 align="center">注册</h2>
+        </div>
+        <div id="content">
+            <table border="0px" style="font-size:12px" width="630px">
+                <tr>
+                    <td align="right">用户名:</td>
+                    <td><input type="text" id="name" name="name" style="width:150px" placeholder="用户名字符为字母和数字"/></td>
+                    <td><div id="nameTip" style="width:250px"></div></td>
+                </tr>
+                <tr>
+                    <td align="right">密码:</td>
+                    <td><input type="password" id="password1" name="password1" style="width:150px" placeholder="请输入密码"/></td>
+                    <td><div id="password1Tip" style="width:250px"></div></td>
+                </tr>
+                <tr>
+                    <td align="right">重复密码:</td>
+                    <td><input type="password" id="password2" name="password2" style="width:150px" placeholder="请重新输入密码"/></td>
+                    <td><div id="password2Tip" style="width:250px"></div></td>
+                </tr>
+                <tr>
+                    <td align="right">昵称:</td>
+                    <td><input type="text" id="uid" name="uid" style="width:150px" placeholder="昵称只能是英文+数字"/></td>
+                    <td><div id="uidTip" style="width:250px"></div></td>
+                </tr>
+                <tr>
+                    <td align="right">你的性别:</td>
+                    <td><input type="radio" id="sex" value="0" name="xb_one" placeholder="男或者女"/>
+                        男&nbsp;&nbsp;&nbsp;&nbsp; <input type="radio" id="sex1" value="1" name="xb_one" />
+                        女</td>
+                    <td><div id="sexTip" style="width:250px"></div></td>
+                </tr>
+                <tr>
+                    <td align="right">你的年龄:</td>
+                    <td><input type="text" id="nl" name="nl" style="width:150px" placeholder="0~99岁"/></td>
+                    <td><div id="nlTip" style="width:250px"></div></td>
+                </tr>
+
+                <tr align="center"><td colspan="3" ><input id="Submit1" type="submit" value="注册"/></td></tr>
+
+            </table>
+            <div style="background-color: aquamarine">
+                <i>版权信息@</i>
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+</body>
+</html>
