@@ -83,8 +83,14 @@ function findcmid(crowdid) {
 }
 function findfriend() {
     var friendid=document.getElementById('addtext').value;
-    var Finmessage=id+"|"+"100009"+"|"+friendid
-    websocket.send(Finmessage);
+    if(friendid<1000) {
+        var Finmessage = id + "|" + "100009" + "|" + friendid
+        websocket.send(Finmessage);
+    }
+    else
+    {
+        findcrowd(friendid)
+    }
 }
 function agree() {
 
@@ -108,7 +114,7 @@ function agree() {
         }
     });
 }
-function reject() {
+function rejected() {
     var adddefeat=fromuser_id+"|"+"100008"+"|"+id;
     websocket.send(adddefeat);
     location.reload();

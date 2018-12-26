@@ -14,6 +14,7 @@ public class Friends {
     private String f_user_id;
     private String f_friend_id;
     private String f_group_id;
+    private String f_group_name;
 
     public String getF_id() {
         return f_id;
@@ -45,5 +46,13 @@ public class Friends {
 
     public void setF_group_id(String f_group_id) {
         this.f_group_id = f_group_id;
+    }
+
+    public String getF_group_name() {
+        return f_group_name;
+    }
+
+    public void setF_group_name(String f_group_name) {
+        this.f_group_name = f_group_name;
     }
 }

@@ -41,6 +41,113 @@ body {
 
 }
 
+
+.infor_addfriends{
+	position: absolute;
+	top: 140px;
+	left: 500px;
+	background: #B4DBB4;
+	width: 300px;
+	height: 110px;
+	border-radius: 8px;
+}
+.add_inp{
+	width: 230px;
+	height: 30px;
+	border: 1px #21678E;
+	margin: 10px;
+	border-radius: 18px;
+}
+.add_btn{
+	width: 40px;
+	height: 30px;
+	border: 0;
+	border-radius: 3px;
+}
+.show_infor_addfriends{
+
+}
+.addfriends_img{
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	margin: 5px;
+}
+.addfriends_name{
+	position: absolute;
+	top: 60px;
+	left: 70px;
+}
+.addfriends_age{
+	position: absolute;
+	top: 78px;
+	left: 75px;
+	font-size: 2px;
+}
+.tj-l{
+	position: absolute;
+	top: 65px;
+	left: 190px;
+}
+.qx-l{
+	position: absolute;
+	top: 65px;
+	left: 250px;
+}
+.infor_addfriends{
+	position: absolute;
+	top: 140px;
+	left: 500px;
+	background: #B4DBB4;
+	width: 300px;
+	height: 110px;
+	border-radius: 8px;
+}
+.add_inp{
+	width: 230px;
+	height: 30px;
+	border: 1px #21678E;
+	margin: 10px;
+	border-radius: 18px;
+}
+.add_btn{
+	width: 40px;
+	height: 30px;
+	border: 0;
+	border-radius: 3px;
+}
+.show_infor_addfriends{
+
+}
+.addfriends_img{
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	margin: 5px;
+}
+.addfriends_name{
+	position: absolute;
+	top: 60px;
+	left: 70px;
+}
+.addfriends_age{
+	position: absolute;
+	top: 78px;
+	left: 75px;
+	font-size: 2px;
+}
+.tj-l{
+	position: absolute;
+	top: 65px;
+	left: 190px;
+}
+.qx-l{
+	position: absolute;
+	top: 65px;
+	left: 250px;
+}
+
+
 .menu_c{
 	position: absolute;
 	top: 60px;

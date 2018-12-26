@@ -17,4 +17,5 @@ public class FriendsService {
     public void saveFriends(Friends friends) {
         friendsRepository.save(friends);
     }
+
 }

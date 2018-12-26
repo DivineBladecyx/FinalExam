@@ -28,7 +28,7 @@
 .oldnews {
 	width: 180px;
 	height: 400px;
-	background-image: url(../html/5.png);
+	background-image: url(/image/5.png);
 	background-size: cover;
 }
 .header11 {

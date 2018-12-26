@@ -42,7 +42,6 @@ public class MessagesController {
             if(messagesList.get(i).getMessage_fromuser_id().equals(fromuserid)&&messagesList.get(i).getMessage_touser_id().equals(senduserid)){
                 messagesList.get(i).setMessage_type("1");
                 messageService.saveMessages(messagesList.get(i));
-                break;
             }
         }
         return "/showfriends";

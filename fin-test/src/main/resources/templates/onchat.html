@@ -82,11 +82,7 @@
         <button type="submit" onClick="" class="btn-bt">设置</button>
 		<button onClick="" class="btn-bt">注销</button>
 	</div>
-<div id="addmessage" style="visibility: hidden">
-    添加好友id:<input id="addtext" type="text"><br>
-    <button onclick="findfriend()">查询</button><br>
-    <button onclick="addsend()"  >发送请求</button><br>
-</div>
+
 <div id="addcrowdmessage"  style="visibility: hidden">
     添加群id:<input id="addcrowdtext" type="text"><br>
     <button onclick="findcrowd(document.getElementById('addcrowdtext').value)">查询群资料</button><br>
@@ -103,7 +99,31 @@
 	<a href="" title="显示资料"><img src="/image/head_test.png" class="head_photo" alt="头像"></a>
 	<div  th:text="'用户： ' + ${user_id} " class="head_name"></div>
 	</div>
-	
+
+
+
+<!--	添加好友，添加群-->
+<div id="addmessage" class="infor_addfriends" style="visibility: visible">
+    <input id="addtext" type="text" placeholder="请输入id"  class="add_inp"><button type="button" onClick="findfriend()" class="add_btn">查询</button>
+    <a href="#">
+        <div id="show_infor_addfriends" class="show_infor_addfriends">
+            <img src="/image/head_test.png" alt="头像" class="addfriends_img">
+            <div  id="addfriends_name" class="addfriends_name"></div>
+            <div  id="addfriends_age" class="addfriends_age"></div>
+        </div>
+    </a>
+    <button type="button" onClick="addsend()" class="add_btn tj-l">添加</button>
+    <button type="button" onClick="get_info()" class="add_btn qx-l">取消</button>
+</div>
+
+
+
+
+
+
+
+
+
 
 	
 <!--	扩展功能-->
@@ -177,94 +197,99 @@
                 <button class="top_button" onClick="show3()">历史</button>
             </div>
             <div class="fenge"></div>
-        <div class="friendslist">
-            <div class="friends abl" id="friend">
+        <div  class="friendslist">
+            <div  class="friends abl"  id="friend">
+<div th:each="userhash: *{usermap}">
 
+                <button th:text="${userhash.key}" class="list_button" id="list_button" th:onClick="@{'group(\''+${userhash.key}+'\')'}">我的好友</button>
 
-                <button class="list_button"id="list_button" onClick="group(1)">我的好友</button>
-
-                <div id="list_ul1" style="display:none">
-                    <div th:each="friend : ${userfriendList}" class="friend sav" onMouseOver="mouse_show('1','2','sdgdfg得分sfg1234我')" onMouseOut="mouse_gone()">
-                        <img src="image/head_test.png" class="imgaa1"/>
+                <div  th:id="'list_ul'+${userhash.key}" style="display:none">
+                    <div  th:each="user : ${userhash.value}">
+                    <div  class="friend sav">
+                        <a  th:href="@{'javascript:openchat('+${user.getUser_id()}+')'}">
+                        <img src="image/head_test.png" class="imgaa1" onMouseOver="mouse_show('1','2','sdgdfg得分sfg1234我')" onMouseOut="mouse_gone()"/>
                         <div class="pp1">
-                            <strong th:text="${friend.getUser_nickname()}"></strong><br>
-                            <span><a  th:href="@{'javascript:openchat('+${friend.getUser_id()}+')'}"  th:text="${friend.getUser_id()}">Title ...</a></span>
+                            <strong th:text="${user.getUser_nickname()}"></strong><br>
+                            <span th:text="${user.getUser_id()}"></span>
                         </div>
+                        </a>
+                     </div>
                     </div>
-                </div>
+                  </div>
 
+</div>
+              </div>
+              <div class="clusters abl" id="cluster">
 
-                <button class="list_button" onClick="group(2)">同学</button>
-                <div id="list_ul2"style="display:none">
-                    <div class="friend sav">
-                        <img src="image/head_test.png" class="imgaa1"/>
-                        <div class="pp1">
-                            <strong><a>昵称</a></strong><br>
-                            <span>这是id</span>
-                        </div>
-                    </div>
+                  <button class="list_button" onClick="group_a(1)">群</button>
+                  <div id="clusters_ul1"style="display:none">
+                      <div  th:each="crowds : ${crowdsList}" class="friend sav">
+                          <img src="image/head_test.png" class="imgaa1"/>
+                          <div class="pp1">
+                              <strong>多人聊天</strong><br>
+                              <span><a  th:href="@{'javascript:opencrowdchat('+${crowds.getCrowd_id()}+')'}"  th:text="${crowds.getCrowd_id()}">Title ...</a></span>
+                          </div>
+                      </div>
+                  </div>
+                  <button class="list_button" onClick="group_a(2)">群2</button>
+                  <div id="clusters_ul2"style="display:none">
+                      <div class="friend sav">
 
-                </div>
-
-                <button class="list_button" onClick="group(3)">未分组</button>
-                <div id="list_ul3"style="display:none">
-                    <div class="friend sav">
-                        <img src="image/head_test.png" class="imgaa1"/>
-                        <div class="pp1">
-                            <strong><a>昵称</a></strong><br>
-                            <span>这是id</span>
-                        </div>
-                    </div>
-                </div>
-
-
-            </div>
-            <div class="clusters abl" id="cluster">
-
-                <button class="list_button" onClick="group_a(1)">群</button>
-                <div id="clusters_ul1"style="display:none">
-                    <div  th:each="crowds : ${crowdsList}" class="friend sav">
-                        <img src="image/head_test.png" class="imgaa1"/>
-                        <div class="pp1">
-                            <strong>多人聊天</strong><br>
-                            <span><a  th:href="@{'javascript:opencrowdchat('+${crowds.getCrowd_id()}+')'}"  th:text="${crowds.getCrowd_id()}">Title ...</a></span>
-                        </div>
-                    </div>
-                </div>
-                <button class="list_button" onClick="group_a(2)">群2</button>
-                <div id="clusters_ul2"style="display:none">
-                    <div class="friend sav">
-                        <img src="image/head_test.png" class="imgaa1"/>
-                        <div class="pp1">
-                            <strong><a>昵称</a></strong><br>
-                            <span>这是id</span>
-                        </div>
-                    </div>
+                          <img src="image/head_test.png" class="imgaa1"/>
+                          <div class="pp1">
+                              <strong><a>昵称</a></strong><br>
+                              <span>这是id</span>
+                          </div>
+                      </div>
 
 
 
-                    <div class="friend sav">
-                        <img src="image/head_test.png" class="imgaa1"/>
-                        <div class="pp1">
-                            <strong><a>昵称</a></strong><br>
-                            <span>这是id</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="historys abl" id="history">
-                <div class="history" id="historya">
-                    <div class="friend sav">
-                        <img src="image/head_test.png" class="imgaa1"/>
-                        <div class="pp1">
-                            <strong><a>昵称</a></strong><br>
-                            <span>这是id</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                      <div class="friend sav">
+                          <img src="image/head_test.png" class="imgaa1"/>
+                          <div class="pp1">
+                              <strong><a>昵称</a></strong><br>
+                              <span>这是id</span>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="historys abl" id="history">
+                  <div class="history" id="historya">
+                      <div class="friend sav">
+                          <a>
+                          <img src="image/head_test.png" class="imgaa1"/>
+                          <div class="pp1">
+                              <strong>昵称</strong><br>
+                              <span>这是id</span>
+                          </div>
+                          </a>
+                      </div>
+                  </div>
 
-            <!--	鼠标悬停框-->
+                  <div class="friend sav">
+                      <a>
+                          <img src="/image/head_test.png" class="imgaa1"/>
+                          <div class="pp1">
+                              <strong>这是id</strong><br>
+                              <span>请求添加为好友</span>
+                          </div>
+                      </a>
+                      <div class="infor_new">
+
+                          <button type="button" class="infor_new_btn" onClick="">同意</button>
+                          <button type="button" class="infor_new_btn" onClick="">取消</button>
+                      </div>
+
+
+                  </div>
+
+
+
+
+
+              </div>
+
+              <!--	鼠标悬停框-->
             <div id="show_div" style="display: none">
                 年龄：<b id="show_div_age"></b><br>
                 生日：<b id="show_div_borth"></b><br>
@@ -408,6 +433,7 @@
                     var fromuserid = Message[0];
                     var Finmessage = "<li><img  src='+arrIcon[1]+' class='imgleft img01'><span class='spanleft'>"+realmessage+"</span></li>"
                     setMessageInnerHTML(Finmessage,fromuserid);
+                    sethistoryMessageInnerHTML(fromuserid,realmessage.substring(0,6));
                     break;
             }
         }
@@ -417,23 +443,23 @@
                 case '100003':
                     var fromuserid = Message[0];
                     var senduserid = Message[2];
-                    var Finmessage = "<div>" + "用户" + fromuserid + ":  请求加您为好友！" + "</div>" + " <a href='javascript:agree()'>同意</a><a href='javascript:reject()'>拒绝</a><br/>";
+                    var Finmessage =   "用户" + fromuserid + ":  请求加您为好友！" ;
                     fromuser_id = fromuserid;
-                    setAddMessageInnerHTML(Finmessage)
+                    setAddMessageInnerHTML(fromuserid,Finmessage);
                     break;
                 case '100004':
                     var fromuserid = Message[0];
                     var senduserid = Message[2];
-                    var Finmessage = "<div>" + "用户" + fromuserid + ": 和您已加为好友！" + "</div>" + "<button onclick='location.reload()'>确认</button>";
+                    var Finmessage =  "用户" + fromuserid + ": 和您已加为好友！" ;
                     fromuser_id = fromuserid;
-                    setAddMessageInnerHTML(Finmessage)
+                    sethistoryMessageInnerHTML(fromuserid,Finmessage);
                     break;
                 case '100008':
                     var fromuserid = Message[0];
                     var senduserid = Message[2];
-                    var Finmessage = "<div>" + "用户" + fromuserid + ": 拒绝加您为好友！" + "</div>" + "<button onclick='location.reload()'>确认</button>";
+                    var Finmessage =  "用户" + fromuserid + ": 拒绝加您为好友！";
                     fromuser_id = fromuserid;
-                    setAddMessageInnerHTML(Finmessage);
+                    sethistoryMessageInnerHTML(fromuserid,Finmessage);
                     break;
             }
         }
@@ -446,13 +472,16 @@
                 var findfriendsex = Message[5];
                 var findfriendregistime = Message[6];
                 var findfriendcomments = Message[7];
-                var Finmessage = "<div>" + "用户:" + findfriendid + "基本信息：" + "<br>" +
+
+               /* var Finmessage = "<div>" + "用户:" + findfriendid + "基本信息：" + "<br>" +
                     "昵称: " + findfriendnickname + "<br>" +
                     "年龄: " + findfriendage + "<br>" +
                     "性别: " + findfriendsex + "<br>" +
                     "注册时间: " + findfriendregistime + "<br>" +
-                    "印象和评价: " + findfriendcomments + "<br>" + "</div>";
-                setAddMessageInnerHTML(Finmessage);
+                    "印象和评价: " + findfriendcomments + "<br>" + "</div>";*/
+               findfriendnickname="昵称："+findfriendnickname;
+               findfriendage="年龄:"+findfriendage;
+              setshow_infor_addfriendsMessageInnerHTML(findfriendnickname,findfriendage);
             }
         }
         else if (Message[0] > 100000) {//查询到的好友
@@ -460,12 +489,13 @@
             if (tag == '1000012') {
                 var crowdid = Message[2];
                 var crowdowner = Message[3];
-                var Finmessage = "<div>" + "群:" + crowdid + "基本信息：" + "<br>" +
+               var Finmessage = "<div>" + "群:" + crowdid + "基本信息：" + "<br>" +
                     "群主: " + findfriendnickname + "<br>" +
                     "群成员: " + "<br>";
                 for (var i = 4; i < Message.length; i++) {
                     Finmessage = Finmessage + "用户名：" + Message[i] + "<br>";
                 }
+
                 setCrowdMessageInnerHTML(Finmessage);
             }
             else if (tag == '100002') {
@@ -477,31 +507,33 @@
             else if (tag == '100016') {
                 var crowdid = Message[2];
                 var crowdowner = Message[3];
-                var Finmessage = "<div>" + "群:" + crowdid + "基本信息：" + "<br>" +
+                /*var Finmessage = "<div>" + "群:" + crowdid + "基本信息：" + "<br>" +
                     "群主: " + findfriendnickname + "<br>" +
                     "群成员: " + "<br>";
                 for (var i = 4; i < Message.length; i++) {
                     Finmessage = Finmessage + "用户名：" + Message[i] + "<br>";
-                }
-                setAddMessageInnerHTML(Finmessage);
+                }*/
+                crowdid="群id:"+crowdid;
+                crowdowner="群主id"+crowdowner;
+                setshow_infor_addfriendsMessageInnerHTML(crowdid,crowdowner);
             }
             else if(tag=='100006'){
                 var fromuserid = Message[1];
                 var crowdid=Message[2];
-                var Finmessage = "<div>" + "用户" + fromuserid + ":  请求加群" +crowdid+ "</div>" + " <a href='javascript:agreecrowd()'>同意</a><a href='javascript:rejectcrowd()'>拒绝</a><br/>";
+                var Finmessage =  "用户" + fromuserid + ":  请求加群" +crowdid ;
                 fromuser_id=fromuserid;
                 crowd_id=crowdid
-                setAddMessageInnerHTML(Finmessage)
+                setAddMessageInnerHTML(fromuserid,Finmessage)
             }
             else if(tag=='100007'){
                 var crowdid=Message[2];
-                Finmessage = "<div>" + "您已加入群" + crowdid  + "</div>" + "<button onclick='location.reload()'>确认</button>";
-                setAddMessageInnerHTML(Finmessage);
+                Finmessage =  "您已加入群" + crowdid ;
+                setAddMessageInnerHTML(crowdid,Finmessage);
             }
             else if(tag=='100014'){
                 var crowdid=Message[2];
-                Finmessage = "<div>" + "您已被拒绝加入群" + crowdid  + "</div>" + "<button onclick='location.reload()'>确认</button>";
-                setAddMessageInnerHTML(Finmessage)
+                Finmessage = "您已被拒绝加入群" + crowdid ;
+                setAddMessageInnerHTML(crowdid,Finmessage)
             }
             else if(tag=='100019'){
                 if(Message[5]=='1'){
@@ -538,8 +570,9 @@
             var realmessage = Message[1];
             var fromuserid = Message[0];
             fromuser_id=fromuserid;
-            var Finmessage = "<a href='#' onclick='setinlinemessageonline(fromuser_id)'><li>用户:"+fromuserid+"说：<span class='spanleft'>"+realmessage+"</span></li><a>"
+            var Finmessage = "<a href='#' onclick='setinlinemessageonline(fromuser_id)'><li>在您离线时::用户:"+fromuserid+"说：<span class='spanleft'>"+realmessage+"</span></li><a>"
             setinlineMessageInnerHTML(Finmessage);
+            sethistoryMessageInnerHTML(fromuserid,realmessage);
         }
     }
     function setinlinemessageonline(fromuserid) {
@@ -565,6 +598,7 @@
         sendid=fromuserid;
         mess.scrollTop=mess.scrollHeight;
     }
+
     function setMessageInnerHTML(innerHTML,fromuserid) {
         document.getElementById('mess').innerHTML +=innerHTML;
         document.getElementById('sendid').innerHTML=fromuserid;
@@ -574,11 +608,38 @@
         document.getElementById('show_info').style.visibility="visible";
         document.getElementById('show_info').innerHTML +=innerHTML;
     }
-    function sethistoryMessageInnerHTML(innerHTML) {
-        document.getElementById('show_infor').innerHTML +=innerHTML;
+    function setshow_infor_addfriendsMessageInnerHTML(findfriendnickname,findfriendage) {
+        document.getElementById('addfriends_name').innerHTML=findfriendnickname;
+        document.getElementById('addfriends_age').innerHTML=findfriendage;
     }
-    function  setAddMessageInnerHTML(innerHTML) {
-        document.getElementById('addmessage').innerHTML += innerHTML ;
+    function sethistoryMessageInnerHTML(fromuserid,realmessage) {
+       var oldmessage= document.getElementById('history').innerHTML ;
+
+       var mess=""+
+    '<div class="history" id="historya"><div class="friend sav">'+
+            '<a href="javascript:openchat(\''+ fromuserid+'\' )"><img src="image/head_test.png" class="imgaa1"/>'+
+            '<div class="pp1">'+
+            '<strong>'+fromuserid+'</strong><br>'+
+            '<span>'+realmessage.substring(0,12)+'</span>'+
+            '</div></a></div></div>';
+
+        // document.getElementById('history').innerHTML=innerHTML+oldmessage;
+
+        document.getElementById('history').innerHTML=mess+oldmessage;
+    }
+    function  setAddMessageInnerHTML(fromuserid,realmessage) {
+        var oldmessage= document.getElementById('history').innerHTML ;
+
+        var mess=""+ '<div class="friend sav"> <a> <img src="/image/head_test.png" class="imgaa1"/> <div class="pp1">'+
+            '<strong>'+fromuserid+'</strong><br><span>'+realmessage+'</span></div></a>'+
+            '<div class="infor_new">'+
+            '<button type="button" class="infor_new_btn" onClick="agree()">同意</button>'+
+            '<button type="button" class="infor_new_btn" onClick="rejected()">拒绝</button>'
+           + '</div></div>';
+
+        // document.getElementById('history').innerHTML=innerHTML+oldmessage;
+
+        document.getElementById('history').innerHTML=mess+oldmessage;
     }
     function  setCrowdMessageInnerHTML(innerHTML) {
         document.getElementById('mess').innerHTML += innerHTML ;
