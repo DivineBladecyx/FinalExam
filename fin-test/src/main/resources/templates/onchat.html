@@ -9,6 +9,384 @@
 
 	
 <body>
+<script th:inline="javascript">
+    var fromuser_id;
+    var id = [[${user_id}]];
+    var websocket = null;
+    //判断当前浏览器是否支持WebSocket
+    if('WebSocket' in window){
+        websocket = new WebSocket("ws://localhost:8080/WebSocket/"+id);
+    }
+    else{
+        alert('Not support websocket')
+    }
+
+    //连接发生错误的回调方法
+    websocket.onerror = function(){
+        setMessageInnerHTML("error");
+    };
+
+    //连接成功建立的回调方法
+    websocket.onopen = function(event){
+        var Findinlinemessage=id+"|"+"100017";
+        websocket.send(Findinlinemessage);
+    }
+
+    //接收到消息的回调方法
+    websocket.onmessage = function(event) {
+
+        var message = event.data;
+        var Message = message.split("|");
+        if (Message.length == 4 && Message[0] < 100000) {//处理聊天消息
+            var tag = Message[2];
+            switch (tag) {
+                case '100001':
+                    var realmessage = Message[1];
+                    var fromuserid = Message[0];
+                    var Finmessage = "<li><img  src='+arrIcon[1]+' class='imgleft img01'><span class='spanleft'>"+realmessage+"</span></li>";
+                    setMessageInnerHTML(Finmessage,fromuserid);
+                    sethistoryMessageInnerHTML(fromuserid,realmessage.substring(0,6));
+                    break;
+            }
+        }
+        else if (Message.length == 3 && Message[0] < 100000) {//处理操作消息
+            var tag = Message[1];
+            switch (tag) {
+                case '100003':
+                    var fromuserid = Message[0];
+                    var senduserid = Message[2];
+                    var Finmessage =   "用户" + fromuserid + ":  请求加您为好友！" ;
+                    fromuser_id = fromuserid;
+                    setAddMessageInnerHTML(fromuserid,Finmessage);
+                    break;
+                case '100004':
+                    var fromuserid = Message[0];
+                    var senduserid = Message[2];
+                    var Finmessage =  "用户" + senduserid + ": 和您已加为好友！"+"请刷新一下网页" ;
+                    fromuser_id = fromuserid;
+                    sethistoryMessageInnerHTML(senduserid,Finmessage);
+                    break;
+                case '100008':
+                    var fromuserid = Message[0];
+                    var senduserid = Message[2];
+                    var Finmessage =  "用户" + senduserid + ": 拒绝加您为好友！";
+                    fromuser_id = fromuserid;
+                    sethistoryMessageInnerHTML(senduserid,Finmessage);
+                    break;
+            }
+        }
+        else if (Message.length == 8 && Message[0] < 100000) {//查询到的好友
+            var tag = Message[1];
+            if (tag == '100010') {
+                var findfriendid = Message[2];
+                var findfriendnickname = Message[3];
+                var findfriendage = Message[4];
+                var findfriendsex = Message[5];
+                var findfriendregistime = Message[6];
+                var findfriendcomments = Message[7];
+
+                /* var Finmessage = "<div>" + "用户:" + findfriendid + "基本信息：" + "<br>" +
+                     "昵称: " + findfriendnickname + "<br>" +
+                     "年龄: " + findfriendage + "<br>" +
+                     "性别: " + findfriendsex + "<br>" +
+                     "注册时间: " + findfriendregistime + "<br>" +
+                     "印象和评价: " + findfriendcomments + "<br>" + "</div>";*/
+                findfriendnickname="昵称："+findfriendnickname;
+                findfriendage="年龄:"+findfriendage;
+                setshow_infor_addfriendsMessageInnerHTML(findfriendnickname,findfriendage);
+            }
+            else if(tag=='100020'){
+                var finduserid = Message[2];
+                var findusernickname = Message[3];
+                var finduserage = Message[4];
+                var findusersex = Message[5];
+                var finduserregistime = Message[6];
+                var findusercomments = Message[7];
+                document.getElementById('user_id').value=fromuserid;
+                document.getElementById('user_name').value=findusernickname;
+                document.getElementById('user_age').value=finduserage;
+                document.getElementById('user_sex').value=findusersex;
+                document.getElementById('user_birth').value=finduserregistime;
+                document.getElementById('user_comments').value=findusercomments;
+                document.getElementById('user_yinxiang').value=fromuserid;
+            }
+            else if(tag=='10021'){
+
+                var finduserid = Message[2];
+                var findusernickname = Message[3];
+                var finduserage = Message[4];
+                var findusersex = Message[5];
+                var finduserregistime = Message[6];
+                var findusercomments = Message[7];
+                document.getElementById('user_idt').value=finduserid;
+                document.getElementById('user_namet').value=findusernickname;
+                document.getElementById('user_aget').value=finduserage;
+                document.getElementById('user_sext').value=findusersex;
+                document.getElementById('user_birtht').value=finduserregistime;
+                document.getElementById('user_commentst').value=findusercomments;
+                document.getElementById('user_yinxiangt').value=fromuserid;
+            }
+        }
+        else if (Message[0] > 100000) {//查询到的好友
+            var tag = Message[0];
+            if (tag == '1000012') {
+                var crowdid = Message[2];
+                var crowdowner = Message[3];
+                var Finmessage =""+ '<ul>';
+                for (var i = 4; i < Message.length; i++) {
+                    Finmessage = Finmessage + '<li><img src="/image/head_test.png" id="1" class="qun_info_img"><div id="20" class="qun_info_id">'+Message[i]+'</div></li>';
+                }
+                Finmessage=Finmessage+'<ul>';
+                setcrowdMemberInnerHTML(Finmessage,crowdid);
+            }
+            else if (tag == '100002') {
+                var realmessage = Message[2];
+                var fromuserid = Message[1];
+                var crowdid=Message[3];
+                var Finmessage = "<li><img  src='+arrIcon[1]+' class='imgleft img01'><span class='spanleft'>"+"用户"+fromuserid+"说:"+realmessage+"</span></li>";
+                setMessageInnerHTML(Finmessage,fromuserid);
+                sethistoryMessageInnerHTML(crowdid,realmessage);
+            }
+            else if (tag == '100016') {
+                var crowdid = Message[2];
+                var crowdowner = Message[3];
+                /*var Finmessage = "<div>" + "群:" + crowdid + "基本信息：" + "<br>" +
+                    "群主: " + findfriendnickname + "<br>" +
+                    "群成员: " + "<br>";
+                for (var i = 4; i < Message.length; i++) {
+                    Finmessage = Finmessage + "用户名：" + Message[i] + "<br>";
+                }*/
+                crowdid="群id:"+crowdid;
+                crowdowner="群主id"+crowdowner;
+                setshow_infor_addfriendsMessageInnerHTML(crowdid,crowdowner);
+            }
+            else if(tag=='100006'){
+                var fromuserid = Message[1];
+                var crowdid=Message[2];
+                var Finmessage =  "用户" + fromuserid + ":  请求加群" +crowdid ;
+                fromuser_id=fromuserid;
+                crowd_id=crowdid
+                setAddMessageInnerHTML(crowdid,Finmessage);
+            }
+            else if(tag=='100007'){
+                var crowdid=Message[2];
+                Finmessage =  "您已加入群" + crowdid+"请刷新一下网页" ;
+                sethistoryMessageInnerHTML(crowdid,Finmessage);
+            }
+            else if(tag=='100014'){
+                var crowdid=Message[2];
+                Finmessage = "您已被拒绝加入群" + crowdid ;
+                sethistoryMessageInnerHTML(crowdid,Finmessage)
+            }
+            else if(tag=='100019'){
+                if(Message[5]=='1'){
+                    var realmessage = Message[2];
+                    var fromuserid = Message[4];
+                    if(Message[4]!=id) {
+                        fromuserid = Message[4];
+                    }
+                    else{
+                        fromuserid=Message[1];
+                    }
+
+
+                    var Finmessage = "<li><img src='+arrIcon[1]+' class='imgright img01'><span class='spanright'>"+realmessage+"</span></li>";
+                    setMessageDocumentInnerHTML(Finmessage,fromuserid);
+                }
+                else if(Message[5]=='2'){
+                    var realmessage = Message[2];
+                    var fromuserid = Message[4];
+                    if(Message[4]!=id) {
+                        fromuserid = Message[4];
+                    }
+                    else{
+                        fromuserid=Message[1];
+                    }
+                    var Finmessage = "<li><img  src='+arrIcon[1]+' class='imgleft img01'><span class='spanleft'>"+realmessage+"</span></li>";
+                    setMessageDocumentInnerHTML(Finmessage,fromuserid);
+                }
+                else if(Message[5]=='0'){
+                    var realmessage = Message[3];
+                    var fromuserid = Message[2];
+                    var Finmessage = "<li><img  src='+arrIcon[1]+' class='imgleft img01'><span class='spanleft'>"+"用户"+fromuserid+":"+realmessage+"</span></li>";
+                    setMessageDocumentInnerHTML(Finmessage,fromuserid);
+                }
+            }
+            //fromuser_id = message.split("|")[1];
+            //setAddMessageInnerHTML(message.split("|")[0]+message.split("|")[1]+message.split("|")[2]);
+        }//群消息群操作
+        else if(Message.length==5&&Message[0]<100000){//离线消息发送
+            var realmessage = Message[1];
+            var fromuserid = Message[0];
+            fromuser_id=fromuserid;
+            var Finmessage = "<a href='#' onclick='setinlinemessageonline(fromuser_id)'><li>在您离线时::用户:"+fromuserid+"说：<span class='spanleft'>"+realmessage+"</span></li><a>"
+            setinlineMessageInnerHTML(Finmessage);
+            sethistoryMessageInnerHTML(fromuserid,realmessage);
+        }
+    }
+    function setinlinemessageonline(fromuserid) {
+        var fromAndto=fromuserid+"|"+id;
+        $.ajax({
+            url:"/MessagesController/setInlineMessageOnline",
+            data:{'fromAndto':fromAndto},
+            type : 'post',
+            traditional : true,
+            async : false,
+            success:function(){
+                location.reload();//
+            },
+            error : function(){
+                alert(fromuserid+'error');
+            }
+        });
+    }
+    //将信息显示在页面上
+    function setMessageDocumentInnerHTML(innerHTML,fromuserid) {
+        document.getElementById('mess').innerHTML+=innerHTML;
+        sendid=fromuserid;
+        mess.scrollTop=mess.scrollHeight;
+    }
+    function setcrowdMemberInnerHTML(Finmessage,crowdid){
+        document.getElementById('crowdmember').innerHTML="";
+        document.getElementById('crowdmember').innerHTML+=Finmessage;
+    }
+    function setMessageInnerHTML(innerHTML,fromuserid) {
+        document.getElementById('mess').innerHTML +=innerHTML;
+        mess.scrollTop=mess.scrollHeight;
+    }
+    function setinlineMessageInnerHTML(innerHTML) {
+        document.getElementById('show_info').style.visibility="visible";
+        document.getElementById('show_info').innerHTML +=innerHTML;
+    }
+    function setshow_infor_addfriendsMessageInnerHTML(findfriendnickname,findfriendage) {
+        document.getElementById('addfriends_name').innerHTML=findfriendnickname;
+        document.getElementById('addfriends_age').innerHTML=findfriendage;
+    }
+    function sethistoryMessageInnerHTML(fromuserid,realmessage) {
+        var oldmessage= document.getElementById('history').innerHTML ;
+
+        var mess=""+
+            '<div class="history" id="historya"><div class="friend sav">'+
+            '<a href="javascript:openchat(\''+ fromuserid+'\' )"><img src="image/head_test.png" class="imgaa1"/>'+
+            '<div class="pp1">'+
+            '<strong>'+fromuserid+'</strong><br>'+
+            '<span>'+realmessage.substring(0,12)+'</span>'+
+            '</div></a></div></div>';
+
+        // document.getElementById('history').innerHTML=innerHTML+oldmessage;
+
+        document.getElementById('history').innerHTML=mess+oldmessage;
+    }
+    function  setAddMessageInnerHTML(fromuserid,realmessage) {
+        if(fromuserid<1000) {
+            var oldmessage = document.getElementById('history').innerHTML;
+
+            var mess = "" + '<div class="friend sav"> <a> <img src="/image/head_test.png" class="imgaa1"/> <div class="pp1">' +
+                '<strong>' + fromuserid + '</strong><br><span>' + realmessage + '</span></div></a>' +
+                '<div class="infor_new">' +
+                '<button type="button" class="infor_new_btn" onClick="agree()">同意</button>' +
+                '<button type="button" class="infor_new_btn" onClick="rejected()">拒绝</button>'
+                + '</div></div>';
+
+            // document.getElementById('history').innerHTML=innerHTML+oldmessage;
+
+            document.getElementById('history').innerHTML = mess + oldmessage;
+        }
+        else{
+            var oldmessage = document.getElementById('history').innerHTML;
+
+            var mess = "" + '<div class="friend sav"> <a> <img src="/image/head_test.png" class="imgaa1"/> <div class="pp1">' +
+                '<strong>' + fromuserid + '</strong><br><span>' + realmessage + '</span></div></a>' +
+                '<div class="infor_new">' +
+                '<button type="button" class="infor_new_btn" onClick="agreecrowd()">同意</button>' +
+                '<button type="button" class="infor_new_btn" onClick="rejectcrowd()">拒绝</button>'
+                + '</div></div>';
+
+            // document.getElementById('history').innerHTML=innerHTML+oldmessage;
+
+            document.getElementById('history').innerHTML = mess + oldmessage;
+        }
+    }
+    function  setCrowdMessageInnerHTML(innerHTML) {
+        document.getElementById('mess').innerHTML += innerHTML ;
+    }
+
+    //关闭连接
+    function closeWebSocket(){
+        websocket.close();
+    }
+    //连接关闭的回调方法
+    websocket.onclose = function(){
+        setMessageInnerHTML("close");
+    }
+    //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+    //window.onbeforeunload = function(){
+    //  websocket.remove(send_id);
+    //}
+    var crowd_id;
+    window.onload = function(){
+        var anopeople=document.getElementById('anopeople');
+        var arrIcon = ['/image/1.jpg','/image/2.jpg'];
+        var num = 0;   //  <!--控制头像改变-->
+        var iNow = -1;   // <!--用来累加改变左右浮动-->
+        var icon = document.getElementById('user_face_icon').getElementsByTagName('img');
+        var btn = document.getElementById('btn');
+        var text = document.getElementById('text');
+
+
+
+
+
+        btn.onclick = function(){
+            if (send_id < 1000) {//单聊
+                var message = document.getElementById('text').value;
+                var Finmessage = id+"|"+message + "|" +"100001"+"|"+ send_id;
+                if(text.value ==''){
+                    alert('不能发送空消息');
+                }else {
+                    var ll=text.value.length/15;
+                    var aab="";
+                    for(var i=0;i<ll; i++)
+                    {
+                        aa=text.value.substring(i*15,(i+1)*15)+"<br>";
+                        aab+=aa;
+
+                    }
+                    mess.innerHTML += '<li><img src="'+arrIcon[num]+'"class="imgright img01"><span class="spanright">'+message+'</span></li>';
+
+                    text.value = '';
+                    mess.scrollTop=mess.scrollHeight;
+                    websocket.send(Finmessage);
+                }
+            }
+            else {//群聊
+                var message = document.getElementById('text').value;
+                var Finmessage = "100002" + "|" +id+"|"+message+"|"+send_id;
+                if(text.value ==''){
+                    alert('不能发送空消息');
+                }else {
+                    var ll=text.value.length/20;
+                    var aab="";
+                    for(var i=0;i<ll; i++)
+                    {
+                        aa=text.value.substring(i*20,(i+1)*20)+"<br>";
+                        aab+=aa;
+
+                    }
+                    mess.innerHTML += '<li><img src="'+arrIcon[num]+'"class="imgright img01"><span class="spanright">'+message+'</span></li>';
+
+                    text.value = '';
+                    mess.scrollTop=mess.scrollHeight;
+                    websocket.send(Finmessage);
+                }
+            }
+
+//     	<!-- 内容过多时,将滚动条放置到最底端 -->
+
+
+        }
+    }
+</script>
 <script th:inline="javascript" th:src="@{/js/chatjs.js}"></script>
 
 	<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
@@ -92,7 +470,7 @@
 	
 <!--	头像以及昵称-->
 	<div class="head_portait">
-	<a href="javascript:show_infor_ga()"   title="显示资料" ><img src="/image/head_test.png" class="head_photo" alt="头像"></a>
+	<a href="javascript:show_infor_gat()"   title="显示资料" ><img src="/image/head_test.png" class="head_photo" alt="头像"></a>
 	<div  th:text="'用户： ' + ${user_id} " class="head_name"></div>
 	</div>
 
@@ -338,353 +716,7 @@
 	</div>
 	
 		
-<script th:inline="javascript">
-    var fromuser_id;
-    var id = [[${user_id}]];
-    var websocket = null;
-    //判断当前浏览器是否支持WebSocket
-    if('WebSocket' in window){
-        websocket = new WebSocket("ws://localhost:8080/WebSocket/"+id);
-    }
-    else{
-        alert('Not support websocket')
-    }
 
-    //连接发生错误的回调方法
-    websocket.onerror = function(){
-        setMessageInnerHTML("error");
-    };
-
-    //连接成功建立的回调方法
-    websocket.onopen = function(event){
-        var Findinlinemessage=id+"|"+"100017";
-        websocket.send(Findinlinemessage);
-    }
-
-    //接收到消息的回调方法
-    websocket.onmessage = function(event) {
-
-        var message = event.data;
-        var Message = message.split("|");
-        if (Message.length == 4 && Message[0] < 100000) {//处理聊天消息
-            var tag = Message[2];
-            switch (tag) {
-                case '100001':
-                    var realmessage = Message[1];
-                    var fromuserid = Message[0];
-                    var Finmessage = "<li><img  src='+arrIcon[1]+' class='imgleft img01'><span class='spanleft'>"+realmessage+"</span></li>";
-                    setMessageInnerHTML(Finmessage,fromuserid);
-                    sethistoryMessageInnerHTML(fromuserid,realmessage.substring(0,6));
-                    break;
-            }
-        }
-        else if (Message.length == 3 && Message[0] < 100000) {//处理操作消息
-            var tag = Message[1];
-            switch (tag) {
-                case '100003':
-                    var fromuserid = Message[0];
-                    var senduserid = Message[2];
-                    var Finmessage =   "用户" + fromuserid + ":  请求加您为好友！" ;
-                    fromuser_id = fromuserid;
-                    setAddMessageInnerHTML(fromuserid,Finmessage);
-                    break;
-                case '100004':
-                    var fromuserid = Message[0];
-                    var senduserid = Message[2];
-                    var Finmessage =  "用户" + senduserid + ": 和您已加为好友！"+"请刷新一下网页" ;
-                    fromuser_id = fromuserid;
-                    sethistoryMessageInnerHTML(senduserid,Finmessage);
-                    break;
-                case '100008':
-                    var fromuserid = Message[0];
-                    var senduserid = Message[2];
-                    var Finmessage =  "用户" + senduserid + ": 拒绝加您为好友！";
-                    fromuser_id = fromuserid;
-                    sethistoryMessageInnerHTML(senduserid,Finmessage);
-                    break;
-            }
-        }
-        else if (Message.length == 8 && Message[0] < 100000) {//查询到的好友
-            var tag = Message[1];
-            if (tag == '100010') {
-                var findfriendid = Message[2];
-                var findfriendnickname = Message[3];
-                var findfriendage = Message[4];
-                var findfriendsex = Message[5];
-                var findfriendregistime = Message[6];
-                var findfriendcomments = Message[7];
-
-               /* var Finmessage = "<div>" + "用户:" + findfriendid + "基本信息：" + "<br>" +
-                    "昵称: " + findfriendnickname + "<br>" +
-                    "年龄: " + findfriendage + "<br>" +
-                    "性别: " + findfriendsex + "<br>" +
-                    "注册时间: " + findfriendregistime + "<br>" +
-                    "印象和评价: " + findfriendcomments + "<br>" + "</div>";*/
-               findfriendnickname="昵称："+findfriendnickname;
-               findfriendage="年龄:"+findfriendage;
-              setshow_infor_addfriendsMessageInnerHTML(findfriendnickname,findfriendage);
-            }
-        }
-        else if (Message[0] > 100000) {//查询到的好友
-            var tag = Message[0];
-            if (tag == '1000012') {
-                var crowdid = Message[2];
-                var crowdowner = Message[3];
-               var Finmessage =""+ '<ul>';
-                for (var i = 4; i < Message.length; i++) {
-                    Finmessage = Finmessage + '<li><img src="/image/head_test.png" id="1" class="qun_info_img"><div id="20" class="qun_info_id">'+Message[i]+'</div></li>';
-                }
-               Finmessage=Finmessage+'<ul>';
-                setcrowdMemberInnerHTML(Finmessage,crowdid);
-            }
-            else if (tag == '100002') {
-                var realmessage = Message[2];
-                var fromuserid = Message[1];
-                var crowdid=Message[3];
-                var Finmessage = "<li><img  src='+arrIcon[1]+' class='imgleft img01'><span class='spanleft'>"+"用户"+fromuserid+"说:"+realmessage+"</span></li>";
-                setMessageInnerHTML(Finmessage,fromuserid);
-                sethistoryMessageInnerHTML(crowdid,realmessage);
-            }
-            else if (tag == '100016') {
-                var crowdid = Message[2];
-                var crowdowner = Message[3];
-                /*var Finmessage = "<div>" + "群:" + crowdid + "基本信息：" + "<br>" +
-                    "群主: " + findfriendnickname + "<br>" +
-                    "群成员: " + "<br>";
-                for (var i = 4; i < Message.length; i++) {
-                    Finmessage = Finmessage + "用户名：" + Message[i] + "<br>";
-                }*/
-                crowdid="群id:"+crowdid;
-                crowdowner="群主id"+crowdowner;
-                setshow_infor_addfriendsMessageInnerHTML(crowdid,crowdowner);
-            }
-            else if(tag=='100006'){
-                var fromuserid = Message[1];
-                var crowdid=Message[2];
-                var Finmessage =  "用户" + fromuserid + ":  请求加群" +crowdid ;
-                fromuser_id=fromuserid;
-                crowd_id=crowdid
-                setAddMessageInnerHTML(crowdid,Finmessage);
-            }
-            else if(tag=='100007'){
-                var crowdid=Message[2];
-                Finmessage =  "您已加入群" + crowdid+"请刷新一下网页" ;
-                sethistoryMessageInnerHTML(crowdid,Finmessage);
-            }
-            else if(tag=='100014'){
-                var crowdid=Message[2];
-                Finmessage = "您已被拒绝加入群" + crowdid ;
-                sethistoryMessageInnerHTML(crowdid,Finmessage)
-            }
-            else if(tag=='100019'){
-                if(Message[5]=='1'){
-                    var realmessage = Message[2];
-                    var fromuserid = Message[4];
-                    if(Message[4]!=id) {
-                         fromuserid = Message[4];
-                    }
-                    else{
-                        fromuserid=Message[1];
-                    }
-
-
-                    var Finmessage = "<li><img src='+arrIcon[1]+' class='imgright img01'><span class='spanright'>"+realmessage+"</span></li>";
-                    setMessageDocumentInnerHTML(Finmessage,fromuserid);
-                }
-                else if(Message[5]=='2'){
-                    var realmessage = Message[2];
-                    var fromuserid = Message[4];
-                    if(Message[4]!=id) {
-                         fromuserid = Message[4];
-                    }
-                    else{
-                         fromuserid=Message[1];
-                    }
-                    var Finmessage = "<li><img  src='+arrIcon[1]+' class='imgleft img01'><span class='spanleft'>"+realmessage+"</span></li>";
-                    setMessageDocumentInnerHTML(Finmessage,fromuserid);
-                }
-                else if(Message[5]=='0'){
-                    var realmessage = Message[3];
-                    var fromuserid = Message[2];
-                    var Finmessage = "<li><img  src='+arrIcon[1]+' class='imgleft img01'><span class='spanleft'>"+"用户"+fromuserid+":"+realmessage+"</span></li>";
-                    setMessageDocumentInnerHTML(Finmessage,fromuserid);
-                }
-            }
-            //fromuser_id = message.split("|")[1];
-            //setAddMessageInnerHTML(message.split("|")[0]+message.split("|")[1]+message.split("|")[2]);
-        }//群消息群操作
-        else if(Message.length==5&&Message[0]<100000){//离线消息发送
-            var realmessage = Message[1];
-            var fromuserid = Message[0];
-            fromuser_id=fromuserid;
-            var Finmessage = "<a href='#' onclick='setinlinemessageonline(fromuser_id)'><li>在您离线时::用户:"+fromuserid+"说：<span class='spanleft'>"+realmessage+"</span></li><a>"
-            setinlineMessageInnerHTML(Finmessage);
-            sethistoryMessageInnerHTML(fromuserid,realmessage);
-        }
-    }
-    function setinlinemessageonline(fromuserid) {
-        var fromAndto=fromuserid+"|"+id;
-        $.ajax({
-            url:"/MessagesController/setInlineMessageOnline",
-            data:{'fromAndto':fromAndto},
-            type : 'post',
-            traditional : true,
-            async : false,
-            success:function(){
-                location.reload();//
-            },
-            error : function(){
-                alert(fromuserid+'error');
-            }
-        });
-    }
-    //将信息显示在页面上
-    function setMessageDocumentInnerHTML(innerHTML,fromuserid) {
-        document.getElementById('mess').innerHTML+=innerHTML;
-        sendid=fromuserid;
-        mess.scrollTop=mess.scrollHeight;
-    }
-    function setcrowdMemberInnerHTML(Finmessage,crowdid){
-        document.getElementById('crowdmember').innerHTML="";
-        document.getElementById('crowdmember').innerHTML+=Finmessage;
-    }
-    function setMessageInnerHTML(innerHTML,fromuserid) {
-        document.getElementById('mess').innerHTML +=innerHTML;
-        mess.scrollTop=mess.scrollHeight;
-    }
-    function setinlineMessageInnerHTML(innerHTML) {
-        document.getElementById('show_info').style.visibility="visible";
-        document.getElementById('show_info').innerHTML +=innerHTML;
-    }
-    function setshow_infor_addfriendsMessageInnerHTML(findfriendnickname,findfriendage) {
-        document.getElementById('addfriends_name').innerHTML=findfriendnickname;
-        document.getElementById('addfriends_age').innerHTML=findfriendage;
-    }
-    function sethistoryMessageInnerHTML(fromuserid,realmessage) {
-       var oldmessage= document.getElementById('history').innerHTML ;
-
-       var mess=""+
-    '<div class="history" id="historya"><div class="friend sav">'+
-            '<a href="javascript:openchat(\''+ fromuserid+'\' )"><img src="image/head_test.png" class="imgaa1"/>'+
-            '<div class="pp1">'+
-            '<strong>'+fromuserid+'</strong><br>'+
-            '<span>'+realmessage.substring(0,12)+'</span>'+
-            '</div></a></div></div>';
-
-        // document.getElementById('history').innerHTML=innerHTML+oldmessage;
-
-        document.getElementById('history').innerHTML=mess+oldmessage;
-    }
-    function  setAddMessageInnerHTML(fromuserid,realmessage) {
-        if(fromuserid<1000) {
-            var oldmessage = document.getElementById('history').innerHTML;
-
-            var mess = "" + '<div class="friend sav"> <a> <img src="/image/head_test.png" class="imgaa1"/> <div class="pp1">' +
-                '<strong>' + fromuserid + '</strong><br><span>' + realmessage + '</span></div></a>' +
-                '<div class="infor_new">' +
-                '<button type="button" class="infor_new_btn" onClick="agree()">同意</button>' +
-                '<button type="button" class="infor_new_btn" onClick="rejected()">拒绝</button>'
-                + '</div></div>';
-
-            // document.getElementById('history').innerHTML=innerHTML+oldmessage;
-
-            document.getElementById('history').innerHTML = mess + oldmessage;
-        }
-        else{
-            var oldmessage = document.getElementById('history').innerHTML;
-
-            var mess = "" + '<div class="friend sav"> <a> <img src="/image/head_test.png" class="imgaa1"/> <div class="pp1">' +
-                '<strong>' + fromuserid + '</strong><br><span>' + realmessage + '</span></div></a>' +
-                '<div class="infor_new">' +
-                '<button type="button" class="infor_new_btn" onClick="agreecrowd()">同意</button>' +
-                '<button type="button" class="infor_new_btn" onClick="rejectcrowd()">拒绝</button>'
-                + '</div></div>';
-
-            // document.getElementById('history').innerHTML=innerHTML+oldmessage;
-
-            document.getElementById('history').innerHTML = mess + oldmessage;
-        }
-    }
-    function  setCrowdMessageInnerHTML(innerHTML) {
-        document.getElementById('mess').innerHTML += innerHTML ;
-    }
-
-    //关闭连接
-    function closeWebSocket(){
-        websocket.close();
-    }
-    //连接关闭的回调方法
-    websocket.onclose = function(){
-        setMessageInnerHTML("close");
-    }
-    //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
-    //window.onbeforeunload = function(){
-      //  websocket.remove(send_id);
-    //}
-    var crowd_id;
-        window.onload = function(){ 
-	var anopeople=document.getElementById('anopeople');
-            var arrIcon = ['/image/1.jpg','/image/2.jpg'];
-            var num = 0;   //  <!--控制头像改变-->    
-            var iNow = -1;   // <!--用来累加改变左右浮动-->    
-            var icon = document.getElementById('user_face_icon').getElementsByTagName('img');    
-            var btn = document.getElementById('btn');    
-            var text = document.getElementById('text');
-
-
-
-
-
-	btn.onclick = function(){
-        if (send_id < 1000) {//单聊
-            var message = document.getElementById('text').value;
-            var Finmessage = id+"|"+message + "|" +"100001"+"|"+ send_id;
-            if(text.value ==''){
-                alert('不能发送空消息');
-            }else {
-                var ll=text.value.length/15;
-                var aab="";
-                for(var i=0;i<ll; i++)
-                {
-                    aa=text.value.substring(i*15,(i+1)*15)+"<br>";
-                    aab+=aa;
-
-                }
-                mess.innerHTML += '<li><img src="'+arrIcon[num]+'"class="imgright img01"><span class="spanright">'+message+'</span></li>';
-
-                text.value = '';
-                mess.scrollTop=mess.scrollHeight;
-                websocket.send(Finmessage);
-        }
-        }
-        else {//群聊
-            var message = document.getElementById('text').value;
-            var Finmessage = "100002" + "|" +id+"|"+message+"|"+send_id;
-            if(text.value ==''){
-                alert('不能发送空消息');
-            }else {
-                var ll=text.value.length/20;
-                var aab="";
-                for(var i=0;i<ll; i++)
-                {
-                    aa=text.value.substring(i*20,(i+1)*20)+"<br>";
-                    aab+=aa;
-
-                }
-                mess.innerHTML += '<li><img src="'+arrIcon[num]+'"class="imgright img01"><span class="spanright">'+message+'</span></li>';
-
-                text.value = '';
-                mess.scrollTop=mess.scrollHeight;
-                websocket.send(Finmessage);
-            }
-        }
-
-//     	<!-- 内容过多时,将滚动条放置到最底端 -->
-   
-
-                }  
-            }
-    </script>
 	
 	
 <!--	<iframe src="file:///C:/Users/zheng/Desktop/4.html" allowtransparency="true" scrolling="no" id="show_others" class="show_others_set"></iframe>-->
@@ -968,6 +1000,8 @@
             document.getElementById("user_imgt").style.visibility="hidden";
         }
 function show_infor_ga() {
+		    var userid=id+"|"+id;
+		    websocket.send(userid);
     document.getElementById("show_others").style.visibility="hidden";
     document.getElementById("show_infor_gt").style.visibility="hidden";
     document.getElementById("show_infor_gtt").style.visibility="hidden";

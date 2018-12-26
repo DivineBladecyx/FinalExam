@@ -116,7 +116,7 @@ public class WebSocketServer  {
                     }
                 }
                 break;
-                case "100002": {//2.群聊
+                case "": {//2.群聊
 
                 }
                 break;
@@ -125,6 +125,27 @@ public class WebSocketServer  {
 
                 }
                 break;
+            }
+            userService = applicationContext.getBean(UserService.class);
+            if(Integer.valueOf(tag)<100000&&Message[0].equals(Message[1])){//返回自己对自己的消息查询
+                User user=userService.findById(Message[1]);
+                String Finmessage=Message[0] + "|" + "100020" + "|" + user.getUser_id() + "|" + user.getUser_nickname() + "|" + user.getUser_age() +
+                        "|" + user.getUser_sex() + "|" + user.getUser_registime() + "|" + user.getUser_comments();
+                try {
+                    webSocketSet.get(Message[0]).sendMessage(Finmessage);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            else if(Integer.valueOf(tag)<100000&&(!Message[0].equals(Message[1]))){
+                User user=userService.findById(Message[1]);
+                String Finmessage=Message[0] + "|" + "100021" + "|" + user.getUser_id() + "|" + user.getUser_nickname() + "|" + user.getUser_age() +
+                        "|" + user.getUser_sex() + "|" + user.getUser_registime() + "|" + user.getUser_comments();
+                try {
+                    webSocketSet.get(Message[0]).sendMessage(Finmessage);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
         else if (Message.length == 3 && Integer.valueOf(Message[0]) < 100000) {//操作信息
