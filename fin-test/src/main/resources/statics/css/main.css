@@ -49,14 +49,15 @@ body {
 	background: #B4DBB4;
 	width: 300px;
 	height: 110px;
-	border-radius: 8px;
+	border-radius: 4px;
 }
 .add_inp{
 	width: 230px;
 	height: 30px;
 	border: 1px #21678E;
 	margin: 10px;
-	border-radius: 18px;
+	border-radius: 3px;
+
 }
 .add_btn{
 	width: 40px;
@@ -205,7 +206,7 @@ body {
 	top: -75px;
 	left: 100px;
 	font-size: 20px;
-	font-weight: 450;
+	font-weight: 500;
 	color: #128362
 }
 
@@ -287,15 +288,15 @@ body {
 	border: 3px;
 }
 
-.show_info_set::-webkit-scrollbar-button{/*滚动条两端的按钮，可以用display:none让其不显示，也可以添加背景图片，颜色改变显示效果*/
+.show_info_set::-webkit-scrollbar-button{
 	display: none;
 }
 
-.show_info_set::-webkit-scrollbar-thumb{/*滚动条里面可以拖动的那部分*/
+.show_info_set::-webkit-scrollbar-thumb{
 	background:#9F9B93;
 	border-radius:4px;
 }
-.show_info_set::-webkit-scrollbar-corner {/*边角*/
+.show_info_set::-webkit-scrollbar-corner {
 	background:#D9D9D9;
 	border: 3px;
 }

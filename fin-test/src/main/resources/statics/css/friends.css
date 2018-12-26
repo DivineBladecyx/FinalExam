@@ -32,7 +32,7 @@
 .top_button {
     border: 0px #ffffff;
     width: 75px;
-    background: #4C707B;
+    background: rgba(122, 255, 170, 0.66);
     height: 30px;
     border-radius: 5px;
 }
@@ -43,13 +43,13 @@
     display: block;
     width: auto;
     height: 20px;
-    background-color: #575A36;
+    background-color: rgba(68, 90, 31, 0.51);
     border-radius: 5px;
 }
 .list_button {
     width: 235px;
     color: #000000;
-    background-color: #617D61;
+    background-color: rgba(63, 125, 68, 0.55);
     border:0px #ffffff;
     border-radius: 12px;
 }
@@ -200,4 +200,13 @@ ul {
     border-width: thick;
     border-radius: 5px;
 
+}
+
+#show_div a{
+    color: rgba(255,226,42,0.72);
+
+}
+
+#show_div a:hover{
+    color: rgba(255, 179, 37, 0.87);
 }
