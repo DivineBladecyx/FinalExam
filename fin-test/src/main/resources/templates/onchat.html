@@ -78,17 +78,12 @@
 	<div class="menu_c">
 		<button onClick="openaddfriend()" class="btn-bt">添加好友和群</button>
 
-		<button onClick="" class="btn-bt">查看资料</button>
+		<button onclick="show_infor_ga()" class="btn-bt">查看资料</button>
         <button type="submit" onClick="" class="btn-bt">设置</button>
         <button onClick="" class="btn-bt">关于我们</button>
 		<button onClick="" class="btn-bt">注销</button>
 	</div>
 
-<div id="addcrowdmessage"  style="visibility: hidden">
-    添加群id:<input id="addcrowdtext" type="text"><br>
-    <button onclick="findcrowd(document.getElementById('addcrowdtext').value)">查询群资料</button><br>
-    <button onclick="addcrowdsend()"  >发送请求</button><br>
-</div>
 	
 	<!-- 中部分割线-->
 	 <div class="span1">
@@ -97,7 +92,7 @@
 	
 <!--	头像以及昵称-->
 	<div class="head_portait">
-	<a href="#" onclick=""  title="显示资料" ><img src="/image/head_test.png" class="head_photo" alt="头像"></a>
+	<a href="javascript:show_infor_ga()"   title="显示资料" ><img src="/image/head_test.png" class="head_photo" alt="头像"></a>
 	<div  th:text="'用户： ' + ${user_id} " class="head_name"></div>
 	</div>
 
@@ -118,10 +113,14 @@
         </div>
     </a>
     <button type="button" onClick="addsend()" class="add_btn tj-l">添加</button>
-    <button type="button" onClick="get_info()" class="add_btn qx-l">取消</button>
+    <button type="button" onClick="add_hd_in()" class="add_btn qx-l">取消</button>
 </div>
 
-
+<script>
+    function add_hd_in() {
+        document.getElementById("addmessage").style.visibility="hidden";
+    }
+</script>
 
 
 
@@ -212,7 +211,7 @@
                     <div  th:each="user : ${userhash.value}">
                     <div  class="friend sav">
 
-                        <img src="image/head_test.png" class="imgaa1" onMouseOver="mouse_show('1','2','sdgdfg得分sfg1234我')" onMouseOut="mouse_gone()" onclick="show_infor_ga()"/>
+                        <img src="image/head_test.png" class="imgaa1" onMouseOver="mouse_show('1','2','sdgdfg得分sfg1234我')" onMouseOut="mouse_gone()" onclick="show_infor_gat()"/>
                         <a  th:href="@{'javascript:openchat('+${user.getUser_id()}+')'}">
                         <div class="pp1">
                             <strong th:text="${user.getUser_nickname()}"></strong><br>
@@ -324,7 +323,7 @@
             <div id="user_face_icon">   
                 <img src="/image/1.jpg" alt="" class="img01">
             </div>   
-            <input id="text" type="text" placeholder="说点什么吧..." >   
+            <input id="text" type="text" placeholder="说点什么吧..." >
             <span id="btn">发送</span>   
         </div>   
     </div> 
@@ -392,16 +391,16 @@
                 case '100004':
                     var fromuserid = Message[0];
                     var senduserid = Message[2];
-                    var Finmessage =  "用户" + fromuserid + ": 和您已加为好友！" ;
+                    var Finmessage =  "用户" + senduserid + ": 和您已加为好友！"+"请刷新一下网页" ;
                     fromuser_id = fromuserid;
-                    sethistoryMessageInnerHTML(fromuserid,Finmessage);
+                    sethistoryMessageInnerHTML(senduserid,Finmessage);
                     break;
                 case '100008':
                     var fromuserid = Message[0];
                     var senduserid = Message[2];
-                    var Finmessage =  "用户" + fromuserid + ": 拒绝加您为好友！";
+                    var Finmessage =  "用户" + senduserid + ": 拒绝加您为好友！";
                     fromuser_id = fromuserid;
-                    sethistoryMessageInnerHTML(fromuserid,Finmessage);
+                    sethistoryMessageInnerHTML(senduserid,Finmessage);
                     break;
             }
         }
@@ -441,8 +440,10 @@
             else if (tag == '100002') {
                 var realmessage = Message[2];
                 var fromuserid = Message[1];
-                var Finmessage = "<li><img  src='+arrIcon[1]+' class='imgleft img01'>"+fromuserid+":<span class='spanleft'>"+realmessage+"</span></li>";
+                var crowdid=Message[3];
+                var Finmessage = "<li><img  src='+arrIcon[1]+' class='imgleft img01'><span class='spanleft'>"+"用户"+fromuserid+"说:"+realmessage+"</span></li>";
                 setMessageInnerHTML(Finmessage,fromuserid);
+                sethistoryMessageInnerHTML(crowdid,realmessage);
             }
             else if (tag == '100016') {
                 var crowdid = Message[2];
@@ -463,17 +464,17 @@
                 var Finmessage =  "用户" + fromuserid + ":  请求加群" +crowdid ;
                 fromuser_id=fromuserid;
                 crowd_id=crowdid
-                setAddMessageInnerHTML(fromuserid,Finmessage)
+                setAddMessageInnerHTML(crowdid,Finmessage);
             }
             else if(tag=='100007'){
                 var crowdid=Message[2];
-                Finmessage =  "您已加入群" + crowdid ;
-                setAddMessageInnerHTML(crowdid,Finmessage);
+                Finmessage =  "您已加入群" + crowdid+"请刷新一下网页" ;
+                sethistoryMessageInnerHTML(crowdid,Finmessage);
             }
             else if(tag=='100014'){
                 var crowdid=Message[2];
                 Finmessage = "您已被拒绝加入群" + crowdid ;
-                setAddMessageInnerHTML(crowdid,Finmessage)
+                sethistoryMessageInnerHTML(crowdid,Finmessage)
             }
             else if(tag=='100019'){
                 if(Message[5]=='1'){
@@ -500,6 +501,12 @@
                          fromuserid=Message[1];
                     }
                     var Finmessage = "<li><img  src='+arrIcon[1]+' class='imgleft img01'><span class='spanleft'>"+realmessage+"</span></li>";
+                    setMessageDocumentInnerHTML(Finmessage,fromuserid);
+                }
+                else if(Message[5]=='0'){
+                    var realmessage = Message[3];
+                    var fromuserid = Message[2];
+                    var Finmessage = "<li><img  src='+arrIcon[1]+' class='imgleft img01'><span class='spanleft'>"+"用户"+fromuserid+":"+realmessage+"</span></li>";
                     setMessageDocumentInnerHTML(Finmessage,fromuserid);
                 }
             }
@@ -534,7 +541,6 @@
     //将信息显示在页面上
     function setMessageDocumentInnerHTML(innerHTML,fromuserid) {
         document.getElementById('mess').innerHTML+=innerHTML;
-        document.getElementById('sendid').innerHTML=fromuserid;
         sendid=fromuserid;
         mess.scrollTop=mess.scrollHeight;
     }
@@ -544,7 +550,6 @@
     }
     function setMessageInnerHTML(innerHTML,fromuserid) {
         document.getElementById('mess').innerHTML +=innerHTML;
-        document.getElementById('sendid').innerHTML=fromuserid;
         mess.scrollTop=mess.scrollHeight;
     }
     function setinlineMessageInnerHTML(innerHTML) {
@@ -571,18 +576,34 @@
         document.getElementById('history').innerHTML=mess+oldmessage;
     }
     function  setAddMessageInnerHTML(fromuserid,realmessage) {
-        var oldmessage= document.getElementById('history').innerHTML ;
+        if(fromuserid<1000) {
+            var oldmessage = document.getElementById('history').innerHTML;
 
-        var mess=""+ '<div class="friend sav"> <a> <img src="/image/head_test.png" class="imgaa1"/> <div class="pp1">'+
-            '<strong>'+fromuserid+'</strong><br><span>'+realmessage+'</span></div></a>'+
-            '<div class="infor_new">'+
-            '<button type="button" class="infor_new_btn" onClick="agree()">同意</button>'+
-            '<button type="button" class="infor_new_btn" onClick="rejected()">拒绝</button>'
-           + '</div></div>';
+            var mess = "" + '<div class="friend sav"> <a> <img src="/image/head_test.png" class="imgaa1"/> <div class="pp1">' +
+                '<strong>' + fromuserid + '</strong><br><span>' + realmessage + '</span></div></a>' +
+                '<div class="infor_new">' +
+                '<button type="button" class="infor_new_btn" onClick="agree()">同意</button>' +
+                '<button type="button" class="infor_new_btn" onClick="rejected()">拒绝</button>'
+                + '</div></div>';
 
-        // document.getElementById('history').innerHTML=innerHTML+oldmessage;
+            // document.getElementById('history').innerHTML=innerHTML+oldmessage;
 
-        document.getElementById('history').innerHTML=mess+oldmessage;
+            document.getElementById('history').innerHTML = mess + oldmessage;
+        }
+        else{
+            var oldmessage = document.getElementById('history').innerHTML;
+
+            var mess = "" + '<div class="friend sav"> <a> <img src="/image/head_test.png" class="imgaa1"/> <div class="pp1">' +
+                '<strong>' + fromuserid + '</strong><br><span>' + realmessage + '</span></div></a>' +
+                '<div class="infor_new">' +
+                '<button type="button" class="infor_new_btn" onClick="agreecrowd()">同意</button>' +
+                '<button type="button" class="infor_new_btn" onClick="rejectcrowd()">拒绝</button>'
+                + '</div></div>';
+
+            // document.getElementById('history').innerHTML=innerHTML+oldmessage;
+
+            document.getElementById('history').innerHTML = mess + oldmessage;
+        }
     }
     function  setCrowdMessageInnerHTML(innerHTML) {
         document.getElementById('mess').innerHTML += innerHTML ;
@@ -724,7 +745,7 @@
 
     <div id="user_id" class="user_id">id</div>
 
-    <img src="../image/head_test.png" class="img-thumbnail user_image" alt="头像">
+    <img src="../image/head_test.png" class="img-thumbnail user_image" id="user_header"alt="头像">
 
 
     <div class="form-horizontal form01" role="form" id="">
@@ -807,8 +828,88 @@
 </script>
 <!--	资料卡片-->
 
+<!-- 好友卡片-->
+
+<link rel="stylesheet" type="text/css" href="../css/infor.css">
+
+<div id="show_infor_gtt" class="show_others_set" style="visibility: hidden;">
 
 
+    <div id="user_idt" class="user_id">id</div>
+
+    <img src="../image/head_test.png" class="img-thumbnail user_image" id="user_headert" alt="头像">
+
+
+    <div class="form-horizontal form01" role="form" id="">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">昵称</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control input01" id="user_namet" value="ss" readonly="true">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">性别</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control input01" id="user_sext" value="ss" readonly="true">
+            </div>
+
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">年龄</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control input01" id="user_aget" value="ss" readonly="true">
+            </div>
+        </div>
+        <div class="loc01">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">生日</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control input01" id="user_bortht" value="ss" readonly="true">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">E-mail</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control input01" id="user_emailt" value="ss" readonly="true">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">印象</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control input01" id="user_yinxiangt" value="ss" readonly="true">
+                </div>
+            </div>
+        </div>
+        <div class="btn-lo">
+            <input type="button" onClick="bianjit()" value="编辑资料" class="btn-bt_1">
+            <br><br>
+            <input type="submit" value="提交" class="btn-bt_1" id="changet" style="visibility: hidden;">
+            <!--			<br><br><input type="reset" value="重置" class="btn-bt_1">-->
+        </div>
+        <div class="img-lo">
+            <button type="button" id="user_imgt" class="btn-bt_1" style="visibility: hidden;">更改头像</button>
+        </div>
+
+    </div>
+    <div class="bj">
+        <button onClick="chongzhit()" class="btn-bt_1" id="czt" style="visibility: hidden;">重置</button>
+    </div>
+</div>
+<script language="javascript">
+    function bianjit(){
+        document.getElementById("changet").style.visibility="visible";
+        document.getElementById("czt").style.visibility="visible";
+
+
+        document.getElementById("user_yinxiangt").readOnly=false;
+    }
+    function chongzhit(){
+
+        document.getElementById("user_yinxiangt").value="";
+
+    }
+</script>
+<!-- 好友卡片-->
 
 
 
@@ -839,7 +940,9 @@
 	 function show_others() {
     document.getElementById("show_others").style.visibility="hidden";
     document.getElementById("show_infor_gt").style.visibility="hidden";
-    document.getElementById("show_ana").style.visibility="visible";
+         document.getElementById("show_infor_gtt").style.visibility = "hidden";
+
+         document.getElementById("show_ana").style.visibility="visible";
     setTimeout( function(){
         document.getElementById("show_ana").style.visibility="hidden";
         document.getElementById("show_others").style.visibility="visible";
@@ -854,13 +957,34 @@
 			document.getElementById("shutdown").style.visibility="hidden";
 			document.getElementById("show_others").style.visibility="hidden";
             document.getElementById("show_infor_gt").style.visibility="hidden";
+            document.getElementById("show_infor_gtt").style.visibility = "hidden";
+
             document.getElementById("change").style.visibility="hidden";
             document.getElementById("cz").style.visibility="hidden";
             document.getElementById("user_img").style.visibility="hidden";
+
+            document.getElementById("changet").style.visibility="hidden";
+            document.getElementById("czt").style.visibility="hidden";
+            document.getElementById("user_imgt").style.visibility="hidden";
         }
 function show_infor_ga() {
     document.getElementById("show_others").style.visibility="hidden";
     document.getElementById("show_infor_gt").style.visibility="hidden";
+    document.getElementById("show_infor_gtt").style.visibility="hidden";
+    document.getElementById("changet").style.visibility="hidden";
+    document.getElementById("czt").style.visibility="hidden";
+    document.getElementById("user_imgt").style.visibility="hidden";
+    document.getElementById("change").style.visibility="hidden";
+    document.getElementById("cz").style.visibility="hidden";
+    document.getElementById("user_img").style.visibility="hidden";
+
+    document.getElementById("user_name").readOnly=true;
+    document.getElementById("user_sex").readOnly=true;
+    document.getElementById("user_age").readOnly=true;
+    document.getElementById("user_borth").readOnly=true;
+    document.getElementById("user_email").readOnly=true;
+    document.getElementById("user_yinxiang").readOnly=true;
+
     document.getElementById("show_ana").style.visibility="visible";
     setTimeout( function(){
         document.getElementById("show_ana").style.visibility="hidden";
@@ -872,7 +996,30 @@ function show_infor_ga() {
 
     }, 1.2 * 1000 );
 }
-		
+function show_infor_gat() {
+    document.getElementById("show_others").style.visibility = "hidden";
+    document.getElementById("show_infor_gt").style.visibility = "hidden";
+    document.getElementById("show_infor_gtt").style.visibility = "hidden";
+    document.getElementById("change").style.visibility="hidden";
+    document.getElementById("cz").style.visibility="hidden";
+    document.getElementById("user_img").style.visibility="hidden";
+    document.getElementById("changet").style.visibility="hidden";
+    document.getElementById("czt").style.visibility="hidden";
+    document.getElementById("user_imgt").style.visibility="hidden";
+
+    document.getElementById("user_yinxiangt").readOnly=true;
+
+    document.getElementById("show_ana").style.visibility = "visible";
+    setTimeout(function () {
+        document.getElementById("show_ana").style.visibility = "hidden";
+        document.getElementById("show_infor_gtt").style.visibility = "visible";
+        document.getElementById("shutdown").style.visibility = "visible";
+//
+//		ss=get_oth_mess();
+//                document.getElementById("show_others").innerHTML = ss;
+
+    }, 1.2 * 1000);
+}
 	</script>
 	
 	

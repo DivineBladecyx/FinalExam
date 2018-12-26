@@ -12,6 +12,16 @@ function openchat(send_user_id) {
             document.getElementById("show_others").style.visibility = "hidden";
             document.getElementById("show_ana").style.visibility = "visible";
             document.getElementById("show_infor_gt").style.visibility="hidden";
+            document.getElementById("show_infor_gtt").style.visibility = "hidden";
+
+            document.getElementById("change").style.visibility="hidden";
+            document.getElementById("cz").style.visibility="hidden";
+            document.getElementById("user_img").style.visibility="hidden";
+
+            document.getElementById("changet").style.visibility="hidden";
+            document.getElementById("czt").style.visibility="hidden";
+            document.getElementById("user_imgt").style.visibility="hidden";
+
             document.getElementById("change").style.visibility="hidden";
             document.getElementById("cz").style.visibility="hidden";
             document.getElementById("user_img").style.visibility="hidden";
@@ -23,9 +33,15 @@ function openchat(send_user_id) {
             document.getElementById("show_others").style.visibility = "hidden";
             document.getElementById("show_ana").style.visibility = "visible";
             document.getElementById("show_infor_gt").style.visibility="hidden";
+            document.getElementById("show_infor_gtt").style.visibility = "hidden";
+
             document.getElementById("change").style.visibility="hidden";
             document.getElementById("cz").style.visibility="hidden";
             document.getElementById("user_img").style.visibility="hidden";
+
+            document.getElementById("changet").style.visibility="hidden";
+            document.getElementById("czt").style.visibility="hidden";
+            document.getElementById("user_imgt").style.visibility="hidden";
         }
     setTimeout( function(){
 
@@ -88,8 +104,14 @@ function findcrowd(crowdid) {
 function addsend(){//发送添加好友的信息
 
     var sendid = document.getElementById('addtext').value;
-    var Finmessage=id+"|"+"100003"+"|"+sendid;
-    websocket.send(Finmessage);
+    if(sendid<1000) {
+        var Finmessage = id + "|" + "100003" + "|" + sendid;
+        websocket.send(Finmessage);
+    }
+    else{
+        var Finmessage ="100006"+ "|" + id + "|" + sendid;
+        websocket.send(Finmessage);
+    }
 }
 function addcrowdsend(){//发送添加群的信息
 
@@ -143,11 +165,13 @@ function agreecrowd() {
     var sendid = fromuser_id;
     var Finmessage="100007"+"|"+sendid+"|"+crowd_id;
     websocket.send(Finmessage);
+    location.reload();
 }
 function rejectcrowd() {
     var sendid = fromuser_id;
     var Finmessage="100014"+"|"+sendid+"|"+crowd_id;
     websocket.send(Finmessage);
+    location.reload();
 }
 
 

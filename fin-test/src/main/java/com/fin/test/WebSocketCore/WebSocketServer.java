@@ -334,32 +334,47 @@ public class WebSocketServer  {
                     }
                 }
                 break;
-                case "100019":{
-                    String fromuserid=Message[1];
-                    String senduserid=Message[2];
-                    messageService = applicationContext.getBean(MessageService.class);
-                    List<Messages>messagesList=messageService.findALL();
-                    for(int i=0;i<messagesList.size();i++){
-                        if(messagesList.get(i).getMessage_fromuser_id().equals(fromuserid)&&messagesList.get(i).getMessage_touser_id().equals(senduserid)){
-                            String Finmessage="100019"+"|"+messagesList.get(i).getMessage_infor()+"|"+"1";
-                            try {
+                case "100019": {
+                    String fromuserid = Message[1];
+                    String senduserid = Message[2];
+                    if (Integer.valueOf(senduserid) < 1000) {
+                        messageService = applicationContext.getBean(MessageService.class);
+                        List<Messages> messagesList = messageService.findALL();
+                        for (int i = 0; i < messagesList.size(); i++) {
+                            if (messagesList.get(i).getMessage_fromuser_id().equals(fromuserid) && messagesList.get(i).getMessage_touser_id().equals(senduserid)) {
+                                String Finmessage = "100019" + "|" + messagesList.get(i).getMessage_infor() + "|" + "1";
+                                try {
 
-                                sendOperateMessage(Finmessage, fromuserid);
-                            } catch (IOException e) {
-                                e.printStackTrace();
+                                    sendOperateMessage(Finmessage, fromuserid);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            } else if (messagesList.get(i).getMessage_fromuser_id().equals(senduserid) && messagesList.get(i).getMessage_touser_id().equals(fromuserid)) {
+                                String Finmessage = "100019" + "|" + messagesList.get(i).getMessage_infor() + "|" + "2";
+                                try {
+
+                                    sendOperateMessage(Finmessage, fromuserid);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
-                        else if(messagesList.get(i).getMessage_fromuser_id().equals(senduserid)&&messagesList.get(i).getMessage_touser_id().equals(fromuserid)){
-                            String Finmessage="100019"+"|"+messagesList.get(i).getMessage_infor()+"|"+"2";
-                            try {
 
-                                sendOperateMessage(Finmessage, fromuserid);
-                            } catch (IOException e) {
-                                e.printStackTrace();
+                    }
+                    else{
+                        messageService = applicationContext.getBean(MessageService.class);
+                        List<Messages> messagesList = messageService.findALL();
+                        for(int i=0;i<messagesList.size();i++){
+                            if(messagesList.get(i).getMessage_touser_id().equals(senduserid)){
+                                String Finmessage="100019"+"|"+messagesList.get(i).getMessage_infor()+"|"+"0";
+                                try {
+                                    sendOperateMessage(Finmessage, fromuserid);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
                     }
-
                 }
                 break;
             }
@@ -381,10 +396,6 @@ public class WebSocketServer  {
 
         if (webSocketSet.get(sendUserId) != null) {
                     webSocketSet.get(sendUserId).sendMessage(message);//添加好友的消息
-        }
-        else {
-            //如果用户不在线则返回不在线信息给自己
-            sendtoUser("当前用户不在线",id);
         }
     }
     public void sendtoUser(String message,String sendUserId) throws IOException {//聊天信息
