@@ -102,15 +102,15 @@
                 var findusersex = Message[5];
                 var finduserregistime = Message[6];
                 var findusercomments = Message[7];
-                document.getElementById('user_id').value=fromuserid;
+                document.getElementById('user_id').innerHTML=finduserid;
                 document.getElementById('user_name').value=findusernickname;
                 document.getElementById('user_age').value=finduserage;
                 document.getElementById('user_sex').value=findusersex;
-                document.getElementById('user_birth').value=finduserregistime;
+                document.getElementById('user_registime').value=finduserregistime;
                 document.getElementById('user_comments').value=findusercomments;
                 document.getElementById('user_yinxiang').value=fromuserid;
             }
-            else if(tag=='10021'){
+            else if(tag=='100021'){
 
                 var finduserid = Message[2];
                 var findusernickname = Message[3];
@@ -118,11 +118,11 @@
                 var findusersex = Message[5];
                 var finduserregistime = Message[6];
                 var findusercomments = Message[7];
-                document.getElementById('user_idt').value=finduserid;
+                document.getElementById('user_idt').innerHTML=finduserid;
                 document.getElementById('user_namet').value=findusernickname;
                 document.getElementById('user_aget').value=finduserage;
                 document.getElementById('user_sext').value=findusersex;
-                document.getElementById('user_birtht').value=finduserregistime;
+                document.getElementById('user_registimet').value=finduserregistime;
                 document.getElementById('user_commentst').value=findusercomments;
                 document.getElementById('user_yinxiangt').value=fromuserid;
             }
@@ -146,6 +146,16 @@
                 var Finmessage = "<li><img  src='+arrIcon[1]+' class='imgleft img01'><span class='spanleft'>"+"用户"+fromuserid+"说:"+realmessage+"</span></li>";
                 setMessageInnerHTML(Finmessage,fromuserid);
                 sethistoryMessageInnerHTML(crowdid,realmessage);
+            }
+            else if(tag=='100022'){
+                var realmessage=Message[1];
+                var Finmessage = "<li><span class='spanleft'>"+realmessage+"</span></li>";
+                sethistoryMessageInnerHTML("tip:",realmessage);
+            }
+            else if(tag=='100023'){
+                var realmessage=Message[1];
+                var Finmessage = "<li><span class='spanleft'>"+realmessage+"</span></li>";
+                sethistoryMessageInnerHTML("tip:",realmessage);
             }
             else if (tag == '100016') {
                 var crowdid = Message[2];
@@ -263,19 +273,36 @@
         document.getElementById('addfriends_age').innerHTML=findfriendage;
     }
     function sethistoryMessageInnerHTML(fromuserid,realmessage) {
-        var oldmessage= document.getElementById('history').innerHTML ;
+        if(fromuserid!='tip:') {
+            var oldmessage = document.getElementById('history').innerHTML;
 
-        var mess=""+
-            '<div class="history" id="historya"><div class="friend sav">'+
-            '<a href="javascript:openchat(\''+ fromuserid+'\' )"><img src="image/head_test.png" class="imgaa1"/>'+
-            '<div class="pp1">'+
-            '<strong>'+fromuserid+'</strong><br>'+
-            '<span>'+realmessage.substring(0,12)+'</span>'+
-            '</div></a></div></div>';
+            var mess = "" +
+                '<div class="history" id="historya"><div class="friend sav">' +
+                '<a href="javascript:openchat(\'' + fromuserid + '\' )"><img src="image/head_test.png" class="imgaa1"/>' +
+                '<div class="pp1">' +
+                '<strong>' + fromuserid + '</strong><br>' +
+                '<span>' + realmessage.substring(0, 12) + '</span>' +
+                '</div></a></div></div>';
 
-        // document.getElementById('history').innerHTML=innerHTML+oldmessage;
+            // document.getElementById('history').innerHTML=innerHTML+oldmessage;
 
-        document.getElementById('history').innerHTML=mess+oldmessage;
+            document.getElementById('history').innerHTML = mess + oldmessage;
+        }
+        else{
+            var oldmessage = document.getElementById('history').innerHTML;
+
+            var mess = "" +
+                '<div class="history" id="historya"><div class="friend sav">' +
+                '<a href="#"><img src="image/head_test.png" class="imgaa1"/>' +
+                '<div class="pp1">' +
+                '<strong>' + fromuserid + '</strong><br>' +
+                '<span>' + realmessage.substring(0, 12) + '</span>' +
+                '</div></a></div></div>';
+
+            // document.getElementById('history').innerHTML=innerHTML+oldmessage;
+
+            document.getElementById('history').innerHTML = mess + oldmessage;
+        }
     }
     function  setAddMessageInnerHTML(fromuserid,realmessage) {
         if(fromuserid<1000) {
@@ -470,7 +497,7 @@
 	
 <!--	头像以及昵称-->
 	<div class="head_portait">
-	<a href="javascript:show_infor_gat()"   title="显示资料" ><img src="/image/head_test.png" class="head_photo" alt="头像"></a>
+	<a href="javascript:show_infor_ga()"   title="显示资料" ><img src="/image/head_test.png" class="head_photo" alt="头像"></a>
 	<div  th:text="'用户： ' + ${user_id} " class="head_name"></div>
 	</div>
 
@@ -589,7 +616,9 @@
                     <div  th:each="user : ${userhash.value}">
                     <div  class="friend sav">
 
-                        <img src="image/head_test.png" class="imgaa1" onMouseOver="mouse_show('1','2','sdgdfg得分sfg1234我')" onMouseOut="mouse_gone()" onclick="show_infor_gat()"/>
+                        <img src="image/head_test.png" class="imgaa1"
+                             th:onMouseOver="@{'mouse_show(\''+${user.getUser_nickname()}+'\',\''+${user.getUser_sex()}+'\',\'印象\')'}"
+                             onMouseOut="mouse_gone()" th:onclick="@{'show_infor_gat(\''+${user.getUser_id()}+'\')'}"/>
                         <a  th:href="@{'javascript:openchat('+${user.getUser_id()}+')'}">
                         <div class="pp1">
                             <strong th:text="${user.getUser_nickname()}"></strong><br>
@@ -775,7 +804,7 @@
 <div id="show_infor_gt" class="show_others_set" style="visibility: hidden;">
 
 
-    <div id="user_id" class="user_id">id</div>
+    <div id="user_id" class="user_id"></div>
 
     <img src="../image/head_test.png" class="img-thumbnail user_image" id="user_header"alt="头像">
 
@@ -802,15 +831,15 @@
         </div>
         <div class="loc01">
             <div class="form-group">
-                <label class="col-sm-2 control-label">生日</label>
+                <label class="col-sm-2 control-label">注册时间</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control input01" id="user_borth" value="ss" readonly="true">
+                    <input type="text" class="form-control input01" id="user_registime" value="ss" readonly="true">
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">E-mail</label>
+                <label class="col-sm-2 control-label">备注</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control input01" id="user_email" value="ss" readonly="true">
+                    <input type="text" class="form-control input01" id="user_comments" value="ss" readonly="true">
                 </div>
             </div>
             <div class="form-group">
@@ -823,7 +852,7 @@
         <div class="btn-lo">
             <input type="button" onClick="bianji()" value="编辑资料" class="btn-bt_1">
             <br><br>
-            <input type="submit" value="提交" class="btn-bt_1" id="change" style="visibility: hidden;">
+            <input type="button" onclick="tijiao()" value="提交" class="btn-bt_1" id="change" style="visibility: hidden;">
             <!--			<br><br><input type="reset" value="重置" class="btn-bt_1">-->
         </div>
         <div class="img-lo">
@@ -843,8 +872,8 @@
         document.getElementById("user_name").readOnly=false;
         document.getElementById("user_sex").readOnly=false;
         document.getElementById("user_age").readOnly=false;
-        document.getElementById("user_borth").readOnly=false;
-        document.getElementById("user_email").readOnly=false;
+        document.getElementById("user_registime").readOnly=false;
+        document.getElementById("user_comments").readOnly=false;
         document.getElementById("user_yinxiang").readOnly=false;
     }
     function chongzhi(){
@@ -852,8 +881,8 @@
         document.getElementById("user_name").value="";
         document.getElementById("user_sex").value="";
         document.getElementById("user_age").value="";
-        document.getElementById("user_borth").value="";
-        document.getElementById("user_email").value="";
+        document.getElementById("user_registime").value="";
+        document.getElementById("user_comments").value="";
         document.getElementById("user_yinxiang").value="";
 
     }
@@ -867,7 +896,7 @@
 <div id="show_infor_gtt" class="show_others_set" style="visibility: hidden;">
 
 
-    <div id="user_idt" class="user_id">id</div>
+    <div id="user_idt" class="user_id"></div>
 
     <img src="../image/head_test.png" class="img-thumbnail user_image" id="user_headert" alt="头像">
 
@@ -894,15 +923,15 @@
         </div>
         <div class="loc01">
             <div class="form-group">
-                <label class="col-sm-2 control-label">生日</label>
+                <label class="col-sm-2 control-label">注册时间</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control input01" id="user_bortht" value="ss" readonly="true">
+                    <input type="text" class="form-control input01" id="user_registimet" value="ss" readonly="true">
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">E-mail</label>
+                <label class="col-sm-2 control-label">备注</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control input01" id="user_emailt" value="ss" readonly="true">
+                    <input type="text" class="form-control input01" id="user_commentst" value="ss" readonly="true">
                 </div>
             </div>
             <div class="form-group">
@@ -928,12 +957,40 @@
     </div>
 </div>
 <script language="javascript">
+    function tijiao() {
+        var user_id=document.getElementById("user_id").innerHTML;
+        var user_name=document.getElementById("user_name").value;
+        var user_sex=document.getElementById("user_sex").value;
+        var user_age=document.getElementById("user_age").value;
+        var user_comments=document.getElementById("user_comments").value;
+        var user_yinxiang=document.getElementById("user_id").value;
+        $.ajax({
+            url:"/UserController/EditInformation",
+            data:{'user_id':user_id,
+                'user_name':user_name,
+                'user_sex':user_sex,
+                'user_age':user_age,
+                'user_comments':user_comments
+            },
+            type : 'post',
+            traditional : true,
+            async : false,
+            success:function(){
+                location.reload();//
+            },
+            error : function(){
+                alert('error');
+            }
+        });
+    }
     function bianjit(){
         document.getElementById("changet").style.visibility="visible";
         document.getElementById("czt").style.visibility="visible";
 
 
         document.getElementById("user_yinxiangt").readOnly=false;
+
+
     }
     function chongzhit(){
 
@@ -1015,8 +1072,8 @@ function show_infor_ga() {
     document.getElementById("user_name").readOnly=true;
     document.getElementById("user_sex").readOnly=true;
     document.getElementById("user_age").readOnly=true;
-    document.getElementById("user_borth").readOnly=true;
-    document.getElementById("user_email").readOnly=true;
+    document.getElementById("user_registime").readOnly=true;
+    document.getElementById("user_comments").readOnly=true;
     document.getElementById("user_yinxiang").readOnly=true;
 
     document.getElementById("show_ana").style.visibility="visible";
@@ -1030,7 +1087,9 @@ function show_infor_ga() {
 
     }, 1.2 * 1000 );
 }
-function show_infor_gat() {
+function show_infor_gat(userid) {
+    var message=id+"|"+userid;
+    websocket.send(message);
     document.getElementById("show_others").style.visibility = "hidden";
     document.getElementById("show_infor_gt").style.visibility = "hidden";
     document.getElementById("show_infor_gtt").style.visibility = "hidden";

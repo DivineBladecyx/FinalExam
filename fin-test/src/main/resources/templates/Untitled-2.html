@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+</head>
+
+<body>
+	
+		<script type="text/javascript">
+ 
+ function checkuse(){
+  
+   var check= false;
+   var username = document.getElementById("user_id").value;
+   if (username.length > 10 || username.length < 1) {
+//    alert("用户名输入不合法，请重新输入！");
+   
+    document.getElementById("user_id").focus();
+    check = false; 
+   } else { 
+    document.getElementById("checktext1").innerHTML = "* 用户名由1-10位字符组成 √";
+    check = true; 
+   } 
+   return check; 
+  } 
+
+ function checkpwd() { 
+  var check= false;; 
+  var reg = /[^A-Za-z0-9_]+/;
+  var regs = /^[a-zA-Z0-9_\u4e00-\u9fa5] + $ /;
+  var password = document.getElementById("user_password").value;
+  if (password.length < 1 || password.length > 10 || regs.test(password)) {
+   alert("密码输入不合法，请重新输入！");
+   document.getElementById("user_password").focus();
+   check = false; 
+  } else { 
+   document.getElementById("checktext2").innerHTML = "* 密码由1-10位字符组成，可以包含字母、数字和标点符号 √";
+   check = true; 
+  } 
+  return check; 
+ } 
+	
+	 
+ function check() { 
+  var check = checkuse() && checkpwd();
+	 if(check==true){
+		 alert("登录成功！");
+		 
+	 }
+	 else {
+		 alert("错误！");
+	 }
+  return check; 
+ } 
+ </script>
+<form action="/UserController/login" method="post" onsubmit="return check()" >
+<fieldset>
+<legend>
+ 登录
+</legend>
+<table align="left" style="background-image: url('img/4.jpg');" >
+ <tr>
+  <td>用户名:</td>
+  <td><input type="text" name="user_id" id="user_id" onchange="checkuse()"/></td>
+  <td id="checktext1">* 用户名由1-10位字符组成</td>
+ </tr>
+ 
+
+ <tr>
+  <td>密码:</td>
+  <td><input type="password" name="user_password" id="user_password" onchange="checkpwd()" /></td>
+  <td id="checktext2">* 密码由1-10位字符组成，可以包含字母、数字和标点符号</td>
+ </tr>
+	<tr>
+  <td colspan="2" align="center">
+   <input type="submit" name="submit" value="提交"/>
+   <input type="reset" name="reset" value="重置" />
+  </td>
+ </tr>
+</table>
+</fieldset>
+</form>
+</body>
+</html>

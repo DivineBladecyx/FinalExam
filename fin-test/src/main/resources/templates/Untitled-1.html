@@ -1,0 +1,189 @@
+<!doctype html>
+<html>
+<head>
+
+<title>用户注册</title>
+<!-- 此处引用外部css样式 -->
+
+ 
+ 
+</head>
+<body >
+	<script type="text/javascript">
+ //及时验证用户名
+ function checkuse(){
+   //在每个函数中定义check变量是为了在表单提交后，能够逐个验证每个函数是否通过，很好很好。（以下同理）
+   var check= false;; 
+   var username = document.getElementById("userid").value; 
+   if (username.length > 10 || username.length < 1) {
+//    alert("用户名输入不合法，请重新输入！");
+    //此处甚妙，既然你在此处输入错误，那么按理说当然要在此处继续输入了。（在此处继续获取焦点！）
+    document.getElementById("userid").focus();
+    check = false; 
+   } else { 
+    document.getElementById("checktext1").innerHTML = "* 用户名由1-10位字符组成 √";
+    check = true; 
+   } 
+   return check; 
+  } 
+ //利用正则表达式判断密码符合否
+ function checkpwd() { 
+  var check= false;; 
+  var reg = /[^A-Za-z0-9_]+/;
+  var regs = /^[a-zA-Z0-9_\u4e00-\u9fa5] + $ /;
+  var password = document.getElementById("password").value; 
+  if (password.length < 1 || password.length > 10 || regs.test(password)) {
+   alert("密码输入不合法，请重新输入！");
+   document.getElementById("password").focus();
+   check = false; 
+  } else { 
+   document.getElementById("checktext2").innerHTML = "* 密码由1-10位字符组成，可以包含字母、数字和标点符号 √";
+   check = true; 
+  } 
+  return check; 
+ } 
+ //验证密码是否不一致！
+ function checkpwdc() { 
+  var check= false;; 
+  var password = document.getElementById("password").value; 
+  var pwdc = document.getElementById("pwdc").value; 
+  if (password != pwdc) { 
+   alert("两次输入密码不一致，请重新输入！");
+   document.getElementById("pwdc").focus();
+   check = false; 
+  } else { 
+   document.getElementById("checktext3").innerHTML = "* 请再次输入你的密码 √"; 
+   check = true; 
+  } 
+  return check; 
+ }
+
+ 
+ //提交时验证用户性别
+ function checkGender(){
+  var check= false;; 
+  var gender = "";
+  //获取所有名称为sex的标签
+  var sex = document.getElementsByName("user_sex");
+  //遍历这些名称为sex的标签
+
+    gender = sex[i].value;  
+
+  if(gender == "")
+   {
+//    alert("请选择性别！");s
+    check = false;
+   }else{
+    document.getElementById("checktext4").innerHTML = "* 请选择你的性别 √"; 
+    check = true; 
+   } 
+  return check;
+ }
+ function checkName(){
+	 var check= false; 
+  	var reg = /[^A-Za-z0-9_]+/;
+  	var regs = /^[a-zA-Z0-9_\u4e00-\u9fa5] + $ /;
+  	var password = document.getElementById("username").value; 
+  	if (password.length < 1 || password.length > 10 || regs.test(password)) {
+//   alert("昵称输入不合法！");
+   document.getElementById("username").focus();
+  
+  } else { 
+   document.getElementById("checktext5").innerHTML = "* 昵称最多十位字符，且不能有中文 √"; 
+   check = true; 
+  } 
+  return check; 
+ }
+
+ function checkAge() {
+     var check= false;
+     var age = document.getElementById("userage").value;
+     if(age=="") {
+         check = false;
+         document.getElementById("userage").focus();
+     }
+     else {
+         check=true;
+         document.getElementById("checktext6").innerHTML = "* 年龄正确 √";
+     }
+     return check;
+ }
+ 
+ //提交表单时所有都验证一遍(若任何一个验证不通过，则返回为false，阻止表单提交)
+ function check() { 
+  var check = checkuse() && checkpwd() && checkpwdc()  && checkGender() && checkName()&&checkName();
+	 if(check==true){
+		 alert("注册成功！");
+		 
+	 }
+	 else {
+		 alert("错误！");
+	 }
+  return check; 
+ } 
+ </script>
+<!-- <form action ="跳转页面" method ="get"|"post" name ="表单名称" target ="打开方式" enctype="multipart/form-data" > -->
+<!-- onsubmit()函数在返回值为true时提交表单。 -->
+ 
+<form action="/UserController/register" method="post" onsubmit="return check()" >
+<fieldset>
+<legend>
+ 注册
+</legend>
+<table align="left" style="background-image: url('img/4.jpg');" >
+ <tr>
+  <td>用户名:</td>
+  <td><input type="text" name="user_id" id="userid" onchange="checkuse()"/></td>
+  <td id="checktext1">* 用户名由1-10位字符组成</td>
+ </tr>
+ 
+ <!-- onblur 事件处理程序:当元素或窗口失去焦点时触发该事件 -->
+ <!-- onchange事件处理程序:当表单元素获取焦点，并且内容发生改变时，触发该事件 -->
+ <!-- 以下同理 -->
+ <tr>
+  <td>密码:</td>
+  <td><input type="password" name="user_password" id="password" onchange="checkpwd()" /></td>
+  <td id="checktext2">* 密码由1-10位字符组成，可以包含字母、数字和标点符号</td>
+ </tr>
+ 
+ <tr>
+  <td>确认密码：</td>
+  <td><input type="password" name="pwdc" id="pwdc" onchange="checkpwdc()" /></td>
+  <td id="checktext3">* 请再次输入你的密码</td>
+ </tr>
+
+ 
+ <tr>
+  <td>性别：</td>
+  <td>
+   <input type="radio" value="0" name="user_sex" onchange="checkGender()"/>男
+   <input type="radio" value="1" name="user_sex" onchange="checkGender()"/>女
+  </td>
+  <td id="checktext4">* 请选择你的性别</td>
+ </tr>
+ 
+ <tr>
+  <td>昵称：</td>
+  <td><input type="text" name="user_nickname" id="username" onchange="checkName()"/></td>
+  <td id="checktext5">* 请输入昵称，最多十位字符</td>
+ </tr>
+
+ <tr>
+  <td>年龄：</td>
+  <td><input type="text" name="user_age" id="userage" onchange="checkAge()"/></td>
+  <td id="checktext6">* 请输入年龄</td>
+ </tr>
+
+ 
+ 
+ <tr>
+  <td colspan="2" align="center">
+   <input type="submit" name="submit" value="提交"/>
+   <input type="reset" name="reset" value="重置" />
+  </td>
+ </tr>
+</table>
+</fieldset>
+</form>
+</body>
+</html>

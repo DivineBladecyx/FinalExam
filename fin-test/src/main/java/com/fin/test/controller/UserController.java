@@ -47,7 +47,7 @@ public class UserController {
         if(isExist==false) {
             userService.registerUser(user);
             System.out.println("用户" + user.getUser_id() + "已注册");
-            return "Login";
+            return "Untitled-2";
         }
         else{
             System.out.println("用户" + user.getUser_id() + "已存在");
@@ -61,6 +61,25 @@ public class UserController {
         model.addAttribute("user",user2);
         return "/user_infor";
     }
+    @RequestMapping(value = "EditInformation" ,method = RequestMethod.POST)
+    @ResponseBody
+    public String EditInformation(@RequestParam(value = "user_id",defaultValue = "")String user_id,@RequestParam(value = "user_name",defaultValue = "")String user_name,
+                                  @RequestParam(value = "user_sex",defaultValue = "")String user_sex,@RequestParam(value = "user_age",defaultValue = "")String user_age,
+                                  @RequestParam(value = "user_comments",defaultValue = "")String user_comments) {
+       List<User>userList=userService.findALL();
+       for(int i=0;i< userList.size();i++){
+           if(userList.get(i).getUser_id().equals(user_id)){
+               userList.get(i).setUser_id(user_id);
+               userList.get(i).setUser_age(Integer.valueOf(user_age));
+               userList.get(i).setUser_nickname(user_name);
+               userList.get(i).setUser_comments(user_comments);
+               userList.get(i).setUser_sex(Integer.valueOf(user_sex));
 
+           userService.registerUser(userList.get(i));
+           break;
+           }
+       }
+        return "/showfriends";
+    }
 
 }

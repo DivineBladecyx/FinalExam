@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>在线聊天</title>
+</head>
+<style>
+body{background-image:url(image/背景图7.jpg)}
+div{
+    margin:0 auto;
+	margin-top:50px;
+	width:400px;
+	height:500px;
+	background-color:white;
+	border-color:white;
+	border-width:1px;
+	border-radius:20px;
+	border-style:solid;
+	background: rgba(255, 255, 255,0.7);}
+
+.bt1{border-radius:10px;width:310px;height:50px;margin-top:10px;background-color:#CC9933;color:white;font-size:28px;font-family:楷体}
+.bt2{border-radius:10px;width:310px;height:50px;margin-top:10px;background-color:#CC9933;color:white;font-size:28px;font-family:楷体}
+</style>
+<body>
+<div>
+<p style="font-size:45px;margin-top:50px;text-align:center;font-family:楷体">在线聊天</p>
+<hr color="#CC9933" size="3" width="310px"align="center">
+<form align="center">
+<table align="center">
+   <tr><td><strong>用户名：</strong></td>
+   <td><input type="text" name="username" style="border-radius:5px;width:240px;height:40px;"value="请输入用户名" size="28" maxlength="20"
+                                        onfocus="if (this.value=='请输入用户名')  this.value='';" /></td></tr>
+   <tr><td><strong>密&nbsp;&nbsp;&nbsp;码：</strong></td>
+   <td><input type="password" name="password" style="border-radius:5px;width:240px;height:40px;"value="请输入密码" size="28" maxlength="20"
+                                        onfocus="if (this.value=='请输入密码')  this.value='';" /></td></tr>
+   <tr><td><strong>验证码：</strong></td><td><input type="text" size="" name="inputcode" style="border-radius:5px;width:106px;height:40px;"value="验证码" onfocus="if (this.value=='验证码')  this.value='';" />
+<img src="" alt="验证码显示失败"></td></tr>
+</table>
+<input type="submit" class="bt1" value="登录"/><br>
+<input type="submit" class="bt2" value="立即注册"/>
+</form>
+</div>
+</body>
+</html>

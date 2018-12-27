@@ -1,0 +1,110 @@
+<html>
+<head>
+<title>注册</title>
+</head>
+<style>
+body{background-image:url(image/背景图8.png)}
+div{
+    margin-left:170px;
+	margin-top:20px;
+	width:530px;
+	height:630px;
+	background-color:white;
+	border-color:white;
+	border-width:1px;
+	border-style:solid;
+	border-radius:20px;
+	background: rgba(255, 255, 255,0.7);}
+td{font-size:24px}
+.bt1{border-radius:10px;width:150px;height:40px;margin-top:10px;background-color:#CC9933;color:white;font-size:24px;font-family:楷体}
+.bt2{border-radius:10px;width:150px;height:40px;margin-top:10px;background-color:#CC9933;color:white;font-size:24px;font-family:楷体}
+</style>
+<body>
+
+<div>
+<p style="font-size:36px;margin-top:10px;text-align:center;font-family:宋体">欢迎注册</p>
+<hr color="#CC9933" size="3" width="95%"align="center">
+<form method="POST" action="/UserController/login" name="registered" >
+<table width="0" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td>&nbsp;&nbsp;用&nbsp;&nbsp;户&nbsp;&nbsp;名</td>
+<td><input type="text" name="username"style="border-radius:5px;width:330px;height:35px;"/></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码 </td>
+<td><input type="password" name="password"style="border-radius:5px;width:330px;height:35px;"/></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;确认密码</td>
+<td><input type="password" name="confirmpass"style="border-radius:5px;width:330px;height:35px;"/></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;电子邮箱</td>
+<td><input type="text" name="Email"style="border-radius:5px;width:330px;height:35px;"/></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别</td>
+<td><input type="radio" name="gender" value="1" checked/>男<input type="radio" name="gender" value="0"/>女</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;学&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;历</td>
+<td>
+<select name="education"> 
+<option value="-1" selected>---请选择---</option>
+<option value="0">小学</option>
+<option value="1">初中</option>
+<option value="2">高中</option>
+<option value="3">大学</option>
+<option value="4">研究生</option>
+<option value="5">博士</option>
+<option value="7">未入学</option>
+</select>
+</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;爱&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;好</td>
+<td>
+<input type="checkbox" name="favorite" value="read"/>读书
+<input type="checkbox" name="favorite" value="music"/>音乐
+<input type="checkbox" name="favorite" value="internet"/>上网
+<input type="checkbox" name="favorite" value="shopping"/>购物
+<input type="checkbox" name="favorite" value="movie"/>电影
+</td>
+</tr>
+<tr>
+<td>
+&nbsp;&nbsp;上传头像
+</td>
+<td>
+<input type="file" name ="pixture"/>
+</td>
+</tr>
+ 
+<tr>
+<td>&nbsp;&nbsp;简&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;介
+</td>
+<td>
+<textarea rows="10" cols="50"style="border-radius:10px;">
+这是一段简介
+</textarea>
+</td>
+</tr>
+ 
+<tr>
+<td>
+&nbsp;&nbsp;打勾选项
+</td>
+<td><input type="checkbox" name="hope to obey" checked/></td>
+</tr>
+<tr>
+<td colspan="2"align="center"><input type="submit" class="bt1" value="注册"/>
+<input type="button"name="button" value="取消" class="bt2" onclick="location.href='login.html'"/> 
+</td>
+</tr>
+ 
+
+</table>
+</form>
+</div>
+</body>
+</html>

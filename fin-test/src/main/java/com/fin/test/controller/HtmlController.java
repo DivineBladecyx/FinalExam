@@ -42,11 +42,11 @@ public class HtmlController {
     }
     @GetMapping("/denglv")
     public String denglv() {
-        return "/denglv.html";
+        return "/Untitled-2.html";
     }
     @GetMapping("/zhuce")
     public String zhuce() {
-        return "/zhuce.html";
+        return "/Untitled-1.html";
     }
 
 }
