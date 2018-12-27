@@ -25,7 +25,7 @@ public class UserController {
                 return "redirect:/FriendsController/showfriends?user_id="+user.getUser_id();
             } else {
                 System.out.println("用户" + user.getUser_id() + "用户名或密码错误");
-                return "Login";
+                return "Untitled-2";
             }
         }
         else{
@@ -51,7 +51,7 @@ public class UserController {
         }
         else{
             System.out.println("用户" + user.getUser_id() + "已存在");
-            return "Start";
+            return "Untitled-1";
         }
     }
 

@@ -2,7 +2,48 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>无标题文档</title>
+<title>用户登录</title>
+ <style>
+
+  body{
+   background: url("/image/背景图7.jpg");
+   background-size: cover;
+
+  }
+
+  fieldset{
+   position: absolute;
+   top: 200px;
+   left: 650px;
+   width: 650px;
+
+
+   font-size: 25px;
+   font-family: "楷体";
+   border-radius: 3px;
+  }
+
+  .btn{
+
+   /*display: block;*/
+   /*width: 40px;*/
+   /*height: 25px;*/
+   background-color: rgba(208, 255, 118, 0.57);
+
+   border: 0;
+  }
+  .btn:hover{
+   background-color: rgba(156, 255, 133, 0.57);
+  }
+  input{
+   width: 200px;
+   height: 25px;
+   border: 0px;
+
+   border-radius: 3px;
+  }
+
+ </style>
 </head>
 
 <body>
@@ -13,13 +54,13 @@
   
    var check= false;
    var username = document.getElementById("user_id").value;
-   if (username.length > 10 || username.length < 1) {
+   if (username.length > 3 || username.length < 1) {
 //    alert("用户名输入不合法，请重新输入！");
    
     document.getElementById("user_id").focus();
     check = false; 
    } else { 
-    document.getElementById("checktext1").innerHTML = "* 用户名由1-10位字符组成 √";
+    document.getElementById("checktext1").innerHTML = "* 用户名由1-3位字符组成 √";
     check = true; 
    } 
    return check; 
@@ -45,11 +86,11 @@
  function check() { 
   var check = checkuse() && checkpwd();
 	 if(check==true){
-		 alert("登录成功！");
+		 alert("输入正确，正在链接...！");
 		 
 	 }
 	 else {
-		 alert("错误！");
+		 alert("输入错误！");
 	 }
   return check; 
  } 
@@ -59,11 +100,11 @@
 <legend>
  登录
 </legend>
-<table align="left" style="background-image: url('img/4.jpg');" >
+<table align="center" style="background-image: url('img/4.jpg');" >
  <tr>
-  <td>用户名:</td>
+  <td>用户:</td>
   <td><input type="text" name="user_id" id="user_id" onchange="checkuse()"/></td>
-  <td id="checktext1">* 用户名由1-10位字符组成</td>
+  <td id="checktext1">* 用户名由1-3位字符组成</td>
  </tr>
  
 
@@ -74,9 +115,11 @@
  </tr>
 	<tr>
   <td colspan="2" align="center">
-   <input type="submit" name="submit" value="提交"/>
-   <input type="reset" name="reset" value="重置" />
+   <input type="submit" name="submit" value="登录" class="btn"/>
   </td>
+     <td>
+   <input type="reset" name="reset" value="重置"  class="btn"/>
+     </td>
  </tr>
 </table>
 </fieldset>

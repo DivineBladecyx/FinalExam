@@ -5,7 +5,45 @@
 <title>用户注册</title>
 <!-- 此处引用外部css样式 -->
 
- 
+ <style>
+  body{
+   background: url("/image/背景图7.jpg");
+   background-size: cover;
+
+  }
+
+  fieldset{
+   position: absolute;
+   top: 200px;
+   left: 650px;
+   width: 600px;
+
+   font-size: 21px;
+   font-family: "楷体";
+
+   border-radius: 3px;
+  }
+  .btn{
+
+   /*display: block;*/
+   /*width: 40px;*/
+   /*height: 25px;*/
+   background-color: rgba(208, 255, 118, 0.57);
+
+   border: 0;
+  }
+  .btn:hover{
+   background-color: rgba(156, 255, 133, 0.57);
+  }
+  input{
+   width: 200px;
+   height: 25px;
+   border: 0px;
+
+   border-radius: 3px;
+  }
+
+ </style>
  
 </head>
 <body >
@@ -15,13 +53,13 @@
    //在每个函数中定义check变量是为了在表单提交后，能够逐个验证每个函数是否通过，很好很好。（以下同理）
    var check= false;; 
    var username = document.getElementById("userid").value; 
-   if (username.length > 10 || username.length < 1) {
+   if (username.length > 3 || username.length < 1) {
 //    alert("用户名输入不合法，请重新输入！");
     //此处甚妙，既然你在此处输入错误，那么按理说当然要在此处继续输入了。（在此处继续获取焦点！）
     document.getElementById("userid").focus();
     check = false; 
    } else { 
-    document.getElementById("checktext1").innerHTML = "* 用户名由1-10位字符组成 √";
+    document.getElementById("checktext1").innerHTML = "* 用户名由1-3位字符组成 √";
     check = true; 
    } 
    return check; 
@@ -89,7 +127,7 @@
    document.getElementById("username").focus();
   
   } else { 
-   document.getElementById("checktext5").innerHTML = "* 昵称最多十位字符，且不能有中文 √"; 
+   document.getElementById("checktext5").innerHTML = "* 昵称最多十位字符，且不能有中文 √";
    check = true; 
   } 
   return check; 
@@ -113,11 +151,11 @@
  function check() { 
   var check = checkuse() && checkpwd() && checkpwdc()  && checkGender() && checkName()&&checkName();
 	 if(check==true){
-		 alert("注册成功！");
+		 alert("输入正确，正在链接...！");
 		 
 	 }
 	 else {
-		 alert("错误！");
+		 alert("输入错误！");
 	 }
   return check; 
  } 
@@ -130,11 +168,11 @@
 <legend>
  注册
 </legend>
-<table align="left" style="background-image: url('img/4.jpg');" >
+<table align="center" style="background-image: url('img/4.jpg');" >
  <tr>
-  <td>用户名:</td>
+  <td>用户:</td>
   <td><input type="text" name="user_id" id="userid" onchange="checkuse()"/></td>
-  <td id="checktext1">* 用户名由1-10位字符组成</td>
+  <td id="checktext1">* 用户名由1-3位字符组成</td>
  </tr>
  
  <!-- onblur 事件处理程序:当元素或窗口失去焦点时触发该事件 -->
@@ -156,8 +194,8 @@
  <tr>
   <td>性别：</td>
   <td>
-   <input type="radio" value="0" name="user_sex" onchange="checkGender()"/>男
-   <input type="radio" value="1" name="user_sex" onchange="checkGender()"/>女
+   <input type="radio" value="0" name="user_sex" onchange="checkGender()" style="width: 15px;height: 15px;"/>男
+   <input type="radio" value="1" name="user_sex" onchange="checkGender()" style="width: 15px;height: 15px;"/>女
   </td>
   <td id="checktext4">* 请选择你的性别</td>
  </tr>
@@ -178,8 +216,10 @@
  
  <tr>
   <td colspan="2" align="center">
-   <input type="submit" name="submit" value="提交"/>
-   <input type="reset" name="reset" value="重置" />
+   <input type="submit" name="submit" value="注册" class="btn"/>
+  </td>
+  <td>
+   <input type="reset" name="reset" value="重置" class="btn"/>
   </td>
  </tr>
 </table>
