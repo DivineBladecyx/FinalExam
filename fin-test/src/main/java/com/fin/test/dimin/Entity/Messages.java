@@ -17,15 +17,6 @@ public class Messages {
     private String message_type;
     private String message_infor;
 
-   /* public Messages(String message_fromuser_id, String message_touser_id, Date message_time, String message_type, String message_infor) {
-        this.message_fromuser_id = message_fromuser_id;
-        this.message_touser_id = message_touser_id;
-        this.message_time = message_time;
-        this.message_type = message_type;
-        this.message_infor = message_infor;
-
-    }*/
-
     public String getMessage_id() {
         return message_id;
     }

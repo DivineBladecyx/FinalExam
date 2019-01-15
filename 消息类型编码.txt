@@ -1,0 +1,23 @@
+1.单对单 		fromid|message|100001|sendid
+2.群聊消息接受   	100002|fromid|message|crowdid
+3.好友添加 		fromid|100003|sendid
+4.好友添加成功		sendid|100004|fromid
+5.删除好友		fromid|100005|sendid
+6.群添加		100006|fromid|crowdid
+7.加群成功		100007|fromid|crowdid
+8.图片消息		fromid|message|200001|sendid
+9.视频消息		fromid|message|200002|sendid
+10.拒绝添加             sendid|100008|fromid
+11.查询用户信息         fromid|100009|findid
+12.查询到的好友信息	fromid|100010|用户名|昵称|年龄|性别|注册时间|评价	
+13.查询群成员信息	100011|fromid|crowdid
+14.群成员信息		100012|fromid|crowdid|cowner|cm1|cm2.......
+16.拒绝添加群消息	100014|fromid|crowdid
+17.查询群资料           100015|fromid|crowdid
+18.查询到的群信息	100016|fromid|crowdid|cowner|cm1|cm2......
+19.查询离线时收到的消息 100017|fromid
+20.离线时收到的消息与未读消息 fromid|message|100018|sendid
+21.查询聊天记录		100019|fromid|sendid
+   我是发送者		100019|fromid|sendid|message|1
+   我是接收者		100019|fromid|sendid|message|2
+   群聊天记录接受	100019|fromid|sendid|message|0

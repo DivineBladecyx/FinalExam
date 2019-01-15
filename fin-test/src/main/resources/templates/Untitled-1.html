@@ -7,7 +7,7 @@
 
  <style>
   body{
-   background: url("/image/背景图7.jpg");
+   background: url("/image/背景图7.jpg") no-repeat;
    background-size: cover;
 
   }
@@ -105,7 +105,7 @@
   var sex = document.getElementsByName("user_sex");
   //遍历这些名称为sex的标签
 
-    gender = sex[i].value;  
+    gender = sex.value;
 
   if(gender == "")
    {
